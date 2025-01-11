@@ -6,13 +6,13 @@
   "absoluteEncoderOffset": 0,
   "drive": {
     "type": "falcon",
-    "id": 7,
-    "canbus": "gertrudegreyser"
+    "id": 3,
+    "canbus": ""
   },
   "angle": {
     "type": "falcon",
-    "id": 8,
-    "canbus": "gertrudegreyser"
+    "id": 4,
+    "canbus": ""
   },
   "encoder": {
     "type": "am_mag",

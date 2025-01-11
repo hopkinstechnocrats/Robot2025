@@ -7,12 +7,12 @@
   "drive": {
     "type": "falcon",
     "id": 1,
-    "canbus": "gertrudegreyser"
+    "canbus": ""
   },
   "angle": {
     "type": "falcon",
-    "id": 2,
-    "canbus": "gertrudegreyser"
+    "id": 8,
+    "canbus": ""
   },
   "encoder": {
     "type": "am_mag",
