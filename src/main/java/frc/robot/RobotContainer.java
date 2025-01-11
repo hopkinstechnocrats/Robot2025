@@ -33,6 +33,8 @@ import swervelib.SwerveInputStream;
 public class RobotContainer
 {
 
+    private final SendableChooser<Command> autoChooser;
+
   // Replace with CommandPS4Controller or CommandJoystick if needed
   final         CommandXboxController driverXbox = new CommandXboxController(0);
   // The robot's subsystems and commands are defined here...
@@ -40,7 +42,6 @@ public class RobotContainer
                                                                                 "swerve/neo"));
 
 
-    private final SendableChooser<Command> autoChooser;
   // Applies deadbands and inverts controls because joysticks
   // are back-right positive while robot
   // controls are front-left positive
