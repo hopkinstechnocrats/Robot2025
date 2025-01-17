@@ -6,16 +6,16 @@
   "absoluteEncoderOffset": 0,
   "drive": {
     "type": "falcon",
-    "id": 6,
+    "id": 9,
     "canbus": ""
   },
   "angle": {
     "type": "falcon",
-    "id": 7,
+    "id": 10,
     "canbus": ""
   },
   "encoder": {
-    "type": "am_mag",
+    "type": "thrifty",
     "id": 0,
     "canbus": null
   },
