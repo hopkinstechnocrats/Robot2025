@@ -22,6 +22,8 @@ import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+
+import java.util.Optional;
 import java.util.function.Supplier;
 import swervelib.encoders.SwerveAbsoluteEncoder;
 import swervelib.parser.PIDFConfig;
@@ -34,6 +36,10 @@ public class SparkFlexSwerve extends SwerveMotor
 {
 
   /**
+   * Config retry delay.
+   */
+  private final double configDelay = Milliseconds.of(5).in(Seconds);
+  /**
    * {@link SparkFlex} Instance.
    */
   private final SparkFlex                 motor;
@@ -44,7 +50,7 @@ public class SparkFlexSwerve extends SwerveMotor
   /**
    * Absolute encoder attached to the SparkFlex (if exists)
    */
-  public        SwerveAbsoluteEncoder     absoluteEncoder;
+  public        Optional<SwerveAbsoluteEncoder>    absoluteEncoder                = Optional.empty();
   /**
    * Closed-loop PID controller.
    */
@@ -58,17 +64,9 @@ public class SparkFlexSwerve extends SwerveMotor
    */
   private       Supplier<Double>          position;
   /**
-   * Factory default already occurred.
-   */
-  private       boolean                   factoryDefaultOccurred = false;
-  /**
    * An {@link Alert} for if there is an error configuring the motor.
    */
   private       Alert                     failureConfiguring;
-  /**
-   * An {@link Alert} for if the absolute encoder's offset is set in the json instead of the hardware client.
-   */
-  private       Alert                     absoluteEncoderOffsetWarning;
   /**
    * Configuration object for {@link SparkFlex} motor.
    */
@@ -99,10 +97,6 @@ public class SparkFlexSwerve extends SwerveMotor
                                    "Failure configuring motor " +
                                    motor.getDeviceId(),
                                    AlertType.kWarning);
-    absoluteEncoderOffsetWarning = new Alert("Motors",
-                                             "IF possible configure the duty cycle encoder offset in the REV Hardware Client instead of using the " +
-                                             "absoluteEncoderOffset in the Swerve Module JSON!",
-                                             AlertType.kWarning);
     velocity = encoder::getVelocity;
     position = encoder::getPosition;
   }
@@ -132,7 +126,7 @@ public class SparkFlexSwerve extends SwerveMotor
       {
         return;
       }
-      Timer.delay(Milliseconds.of(5).in(Seconds));
+      Timer.delay(configDelay);
     }
     failureConfiguring.set(true);
   }
@@ -232,7 +226,7 @@ public class SparkFlexSwerve extends SwerveMotor
   @Override
   public boolean isAttachedAbsoluteEncoder()
   {
-    return absoluteEncoder != null;
+    return absoluteEncoder.isPresent();
   }
 
   /**
@@ -264,7 +258,7 @@ public class SparkFlexSwerve extends SwerveMotor
   {
     if (encoder == null)
     {
-      absoluteEncoder = null;
+      this.absoluteEncoder = Optional.empty();
       cfg.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
 
       velocity = this.encoder::getVelocity;
@@ -272,11 +266,10 @@ public class SparkFlexSwerve extends SwerveMotor
     } else if (encoder.getAbsoluteEncoder() instanceof AbsoluteEncoder)
     {
       cfg.closedLoop.feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
-      absoluteEncoderOffsetWarning.set(true);
-      absoluteEncoder = encoder;
+      this.absoluteEncoder = Optional.of(encoder);
 
-      velocity = absoluteEncoder::getVelocity;
-      position = absoluteEncoder::getAbsolutePosition;
+      velocity = this.absoluteEncoder.get()::getVelocity;
+      position = this.absoluteEncoder.get()::getAbsolutePosition;
     }
     return this;
   }
@@ -303,7 +296,7 @@ public class SparkFlexSwerve extends SwerveMotor
         .appliedOutputPeriodMs(10)
         .faultsPeriodMs(20)
     ;
-    if (absoluteEncoder == null)
+    if (absoluteEncoder.isEmpty())
     {
       cfg.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
 
@@ -338,7 +331,7 @@ public class SparkFlexSwerve extends SwerveMotor
       // Some of the frames can probably be adjusted to decrease CAN utilization, with 65535 being the max.
       // From testing, 20ms on frame 5 sometimes returns the same value while constantly powering the azimuth but 8ms may be overkill,
       // with limited testing 19ms did not return the same value while the module was constatntly rotating.
-      if (absoluteEncoder.getAbsoluteEncoder() instanceof AbsoluteEncoder)
+      if (absoluteEncoder.get().getAbsoluteEncoder() instanceof AbsoluteEncoder)
       {
         cfg.closedLoop.feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
 
@@ -539,7 +532,7 @@ public class SparkFlexSwerve extends SwerveMotor
   @Override
   public void setPosition(double position)
   {
-    if (absoluteEncoder == null)
+    if (absoluteEncoder.isEmpty())
     {
       configureSparkFlex(() -> encoder.setPosition(position));
     }

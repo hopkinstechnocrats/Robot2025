@@ -114,6 +114,14 @@ public class SwerveInputStream implements Supplier<ChassisSpeeds>
    */
   private Optional<BooleanSupplier> allianceRelative     = Optional.empty();
   /**
+   * Heading offset enable state.
+   */
+  private Optional<BooleanSupplier> headingOffsetEnabled = Optional.empty();
+  /**
+   * Heading offset to apply during heading based control.
+   */
+  private Optional<Rotation2d>      headingOffset        = Optional.empty();
+  /**
    * {@link SwerveController} for simple control over heading.
    */
   private       SwerveController          swerveController       = null;
@@ -206,6 +214,8 @@ public class SwerveInputStream implements Supplier<ChassisSpeeds>
     newStream.translationCube = translationCube;
     newStream.robotRelative = robotRelative;
     newStream.allianceRelative = allianceRelative;
+    newStream.headingOffsetEnabled = headingOffsetEnabled;
+    newStream.headingOffset = headingOffset;
     return newStream;
   }
 
@@ -230,6 +240,42 @@ public class SwerveInputStream implements Supplier<ChassisSpeeds>
   public SwerveInputStream robotRelative(boolean enabled)
   {
     robotRelative = enabled ? Optional.of(() -> enabled) : Optional.empty();
+    return this;
+  }
+
+  /**
+   * Heading offset enabled boolean supplier.
+   *
+   * @param enabled Enable state
+   * @return self
+   */
+  public SwerveInputStream headingOffset(BooleanSupplier enabled)
+  {
+    headingOffsetEnabled = Optional.of(enabled);
+    return this;
+  }
+
+  /**
+   * Heading offset enable
+   *
+   * @param enabled Enable state
+   * @return self
+   */
+  public SwerveInputStream headingOffset(boolean enabled)
+  {
+    headingOffsetEnabled = enabled ? Optional.of(() -> enabled) : Optional.empty();
+    return this;
+  }
+
+  /**
+   * Set the heading offset angle.
+   *
+   * @param angle {@link Rotation2d} offset to apply
+   * @return self
+   */
+  public SwerveInputStream headingOffset(Rotation2d angle)
+  {
+    headingOffset = Optional.of(angle);
     return this;
   }
 
@@ -651,16 +697,16 @@ public class SwerveInputStream implements Supplier<ChassisSpeeds>
   }
 
   /**
-   * Change {@link ChassisSpeeds} to robot relative.
+   * Change {@link ChassisSpeeds} from robot relative if enabled.
    *
-   * @param fieldRelativeSpeeds Field relative speeds to translate into robot-relative speeds.
-   * @return Robot relative {@link ChassisSpeeds}.
+   * @param fieldRelativeSpeeds Field or robot relative speeds to translate into robot-relative speeds.
+   * @return Field relative {@link ChassisSpeeds}.
    */
   private ChassisSpeeds applyRobotRelativeTranslation(ChassisSpeeds fieldRelativeSpeeds)
   {
     if (robotRelative.isPresent() && robotRelative.get().getAsBoolean())
     {
-      return ChassisSpeeds.fromFieldRelativeSpeeds(fieldRelativeSpeeds, swerveDrive.getOdometryHeading());
+      return ChassisSpeeds.fromRobotRelativeSpeeds(fieldRelativeSpeeds, swerveDrive.getOdometryHeading());
     }
     return fieldRelativeSpeeds;
   }
@@ -704,6 +750,24 @@ public class SwerveInputStream implements Supplier<ChassisSpeeds>
       if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red)
       {
         return fieldRelativeRotation.rotateBy(Rotation2d.k180deg);
+      }
+    }
+    return fieldRelativeRotation;
+  }
+
+  /**
+   * Adds offset to rotation if one is set.
+   *
+   * @param fieldRelativeRotation Field-relative {@link Rotation2d} to offset
+   * @return Offsetted {@link Rotation2d}
+   */
+  private Rotation2d applyHeadingOffset(Rotation2d fieldRelativeRotation)
+  {
+    if (headingOffsetEnabled.isPresent() && headingOffsetEnabled.get().getAsBoolean())
+    {
+      if (headingOffset.isPresent())
+      {
+        return fieldRelativeRotation.rotateBy(headingOffset.get());
       }
     }
     return fieldRelativeRotation;
@@ -759,12 +823,14 @@ public class SwerveInputStream implements Supplier<ChassisSpeeds>
       case HEADING ->
       {
         omegaRadiansPerSecond = swerveController.headingCalculate(swerveDrive.getOdometryHeading().getRadians(),
-                                                                  applyAllianceAwareRotation(Rotation2d.fromRadians(
-                                                                      swerveController.getJoystickAngle(
-                                                                          controllerHeadingX.get()
-                                                                                            .getAsDouble(),
-                                                                          controllerHeadingY.get()
-                                                                                            .getAsDouble()))).getRadians());
+                                                                  applyHeadingOffset(
+                                                                      applyAllianceAwareRotation(
+                                                                          Rotation2d.fromRadians(
+                                                                              swerveController.getJoystickAngle(
+                                                                                  controllerHeadingX.get()
+                                                                                                    .getAsDouble(),
+                                                                                  controllerHeadingY.get()
+                                                                                                    .getAsDouble())))).getRadians());
         speeds = new ChassisSpeeds(vxMetersPerSecond, vyMetersPerSecond, omegaRadiansPerSecond);
         break;
       }
