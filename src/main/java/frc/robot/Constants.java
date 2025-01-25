@@ -48,4 +48,20 @@ public final class Constants
     public static final double RIGHT_X_DEADBAND = 0.1;
     public static final double TURN_CONSTANT    = 6;
   }
+
+  //CANdle stuff
+  public static final int CANdleID = 0;
+  public static final int JoystickId = 2;
+  public static final int IncrementAnimButton = XboxController.Button.kRightBumper.value;
+  public static final int DecrementAnimButton = XboxController.Button.kLeftBumper.value;
+  public static final int ResetAnimButton = XboxController.Button.kRightStick.value;
+  public static final int BlockButton = XboxController.Button.kStart.value;
+  public static final int MaxBrightnessAngle = 90;
+  public static final int MidBrightnessAngle = 180;
+  public static final int ZeroBrightnessAngle = 270;
+  public static final int ChangeDirectionAngle = 0;
+  public static final int VbatButton = XboxController.Button.kA.value;
+  public static final int V5Button = XboxController.Button.kB.value;
+  public static final int CurrentButton = XboxController.Button.kX.value;
+  public static final int TemperatureButton = XboxController.Button.kY.value;
 }
