@@ -11,11 +11,18 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.swervedrive.CANdleConfigCommands;
+import frc.robot.commands.swervedrive.CANdlePrintCommands;
+import frc.robot.subsystems.swervedrive.CANdleSystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
 import swervelib.SwerveInputStream;
@@ -133,6 +140,22 @@ public class RobotContainer
             driverXbox.back().whileTrue(Commands.none());
             driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
             driverXbox.rightBumper().onTrue(Commands.none());
+                        new POVButton(joy, Constants.MaxBrightnessAngle).onTrue(new CANdleConfigCommands.ConfigBrightness(m_candleSubsystem, 1.0));
+            new POVButton(joy, Constants.MidBrightnessAngle).onTrue(new CANdleConfigCommands.ConfigBrightness(m_candleSubsystem, 0.3));
+            new POVButton(joy, Constants.ZeroBrightnessAngle).onTrue(new CANdleConfigCommands.ConfigBrightness(m_candleSubsystem, 0));
+            new POVButton(joy, Constants.ChangeDirectionAngle).onTrue(new RunCommand(()->m_candleSubsystem.toggleAnimDirection(), m_candleSubsystem));
+        
+            new JoystickButton(joy, Constants.BlockButton).onTrue(setColors());
+            new JoystickButton(joy, Constants.IncrementAnimButton).onTrue(incrementAnimation());
+            new JoystickButton(joy, Constants.DecrementAnimButton).onTrue(decrementAnimation());
+            
+            new JoystickButton(joy, Constants.ResetAnimButton).onTrue(new RunCommand(()->m_candleSubsystem.clearAllAnims(), m_candleSubsystem));
+            new JoystickButton(joy, 10).onTrue(new RunCommand(()->m_candleSubsystem.toggle5VOverride(), m_candleSubsystem));
+        
+            new JoystickButton(joy, Constants.VbatButton).onTrue(new CANdlePrintCommands.PrintVBat(m_candleSubsystem));
+            new JoystickButton(joy, Constants.V5Button).onTrue(new CANdlePrintCommands.Print5V(m_candleSubsystem));
+            new JoystickButton(joy, Constants.CurrentButton).onTrue(new CANdlePrintCommands.PrintCurrent(m_candleSubsystem));
+            new JoystickButton(joy, Constants.TemperatureButton).onTrue(new CANdlePrintCommands.PrintTemperature(m_candleSubsystem));
         }
     }
 
@@ -149,4 +172,18 @@ public class RobotContainer
     public void setMotorBrake(boolean brake){
     drivebase.setMotorBrake(brake);
     }
+    private final XboxController joy = new XboxController(Constants.JoystickId);
+    private final CANdleSystem m_candleSubsystem = new CANdleSystem(joy);
+
+    public Command setColors() {
+        return m_candleSubsystem.runOnce(m_candleSubsystem::setColors);
+    }
+    public Command incrementAnimation() {
+        return m_candleSubsystem.runOnce(m_candleSubsystem::incrementAnimation);
+    }
+
+    public Command decrementAnimation() {
+        return m_candleSubsystem.runOnce(m_candleSubsystem::decrementAnimation);
+    }
+
 }
