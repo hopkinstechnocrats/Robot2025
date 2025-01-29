@@ -4,80 +4,75 @@
 
 package frc.robot.subsystems.swervedrive;
 
-import static edu.wpi.first.units.Units.Meter;
 
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.commands.PathPlannerAuto;
+import static edu.wpi.first.units.Units.Meter;import com.pathplanner.lib.commands.PathPlannerAuto;
+
 import com.pathplanner.lib.commands.PathfindingCommand;
-import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.RobotConfig;
-import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.path.PathConstraints;
-import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.util.DriveFeedforwards;
-import com.pathplanner.lib.util.swerve.SwerveSetpoint;
+import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.swerve.SwerveSetpointGenerator;
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
+import com.pathplanner.lib.util.swerve.SwerveSetpoint;
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
-import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
-//import frc.robot.subsystems.swervedrive.Vision.Cameras;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import java.io.File;
+import frc.robot.subsystems.swervedrive.Vision.Cameras;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Optional;
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.DoubleSupplier;
-import java.util.function.Supplier;
 import org.json.simple.parser.ParseException;
-//import org.photonvision.targeting.PhotonPipelineResult;
+import java.util.function.Supplier;
 import swervelib.SwerveController;
-import swervelib.SwerveDrive;
+import org.photonvision.targeting.PhotonPipelineResult;
 import swervelib.SwerveDriveTest;
-import swervelib.math.SwerveMath;
+import swervelib.SwerveDrive;
 import swervelib.parser.SwerveControllerConfiguration;
-import swervelib.parser.SwerveDriveConfiguration;
+import swervelib.math.SwerveMath;
 import swervelib.parser.SwerveParser;
-import swervelib.telemetry.SwerveDriveTelemetry;
-import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
+import swervelib.parser.SwerveDriveConfiguration;
 
-import frc.robot.limelightLib.LimelightHelpers;
+import swervelib.telemetry.SwerveDriveTelemetry;import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;import frc.robot.limelightLib.LimelightHelpers;
+
+
 
 public class SwerveSubsystem extends SubsystemBase
 {
 
-  /**
-   * Swerve drive object.
-   */
-  private final SwerveDrive         swerveDrive;
-  /**
-   * AprilTag field layout.
-   */
+  //Swerve drive object.
+  private final SwerveDrive swerveDrive;
+  
+  //AprilTag field layout.
   private final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2024Crescendo);
-  /**
-   * Enable vision odometry updates while driving.
-   */
-  private final boolean             visionDriveTest     = false;
-  /**
-   * PhotonVision class to keep an accurate odometry.
-   */
+  
+  //Enable vision odometry updates while driving.
+  private final boolean visionDriveTest = false;
+  
+  //PhotonVision class to keep an accurate odometry.
   //private Vision vision;
 
   /**
@@ -103,13 +98,11 @@ public class SwerveSubsystem extends SubsystemBase
     }
     swerveDrive.setHeadingCorrection(false); // Heading correction should only be used while controlling the robot via angle.
     swerveDrive.setCosineCompensator(false);//!SwerveDriveTelemetry.isSimulation); // Disables cosine compensation for simulations since it causes discrepancies not seen in real life.
-    swerveDrive.setAngularVelocityCompensation(true,
-                                               true,
-                                               0.1); //Correct for skew that gets worse as angular velocity increases. Start with a coefficient of 0.1.
-    swerveDrive.setModuleEncoderAutoSynchronize(false,
-                                                1); // Enable if you want to resynchronize your absolute encoders and motor encoders periodically when they are not moving.
+    swerveDrive.setAngularVelocityCompensation(true, true, 0.1); //Correct for skew that gets worse as angular velocity increases. Start with a coefficient of 0.1.
+    swerveDrive.setModuleEncoderAutoSynchronize(false, 1); // Enable if you want to resynchronize your absolute encoders and motor encoders periodically when they are not moving.
 //    swerveDrive.pushOffsetsToEncoders(); // Set the absolute encoder to be used over the internal encoder and push the offsets onto it. Throws warning if not possible
-    if (visionDriveTest)
+    
+if (visionDriveTest)
     {
       //setupPhotonVision();
       // Stop the odometry thread if we are using vision that way we can synchronize updates better.
@@ -141,20 +134,21 @@ public class SwerveSubsystem extends SubsystemBase
     vision = new Vision(swerveDrive::getPose, swerveDrive.field);
   }
 */
-private final DifferentialDrivePoseEstimator m_poseEstimator =
-    new DifferentialDrivePoseEstimator(
-        swerveDrive.kinematics,
-        swerveDrive.getOdometryHeading(),
-        m_leftEncoder.getDistance(),
-        m_rightEncoder.getDistance(),
-        new Pose2d(),
-        VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5)),
-        VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30))
-      );
-  
+
+public void updateVisionOdometry(){
+  LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
+  if(limelightMeasurement.tagCount >= 2)
+  {
+    swerveDrive.addVisionMeasurement(limelightMeasurement.pose, limelightMeasurement.timestampSeconds, VecBuilder.fill(.7,.7,9999999));
+  }
+}
+
   @Override
   public void periodic()
   {
+      // Update vision odometry
+      updateVisionOdometry();
+
       // First, tell Limelight your robot's current orientation
       double robotYaw = getHeading().getDegrees();  
       LimelightHelpers.SetRobotOrientation("", robotYaw, 0.0, 0.0, 0.0, 0.0, 0.0);
@@ -164,11 +158,7 @@ private final DifferentialDrivePoseEstimator m_poseEstimator =
 
 
       // Add it to your pose estimator
-      m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.5, .5, 9999999));
-      m_poseEstimator.addVisionMeasurement(
-          limelightMeasurement.pose,
-          limelightMeasurement.timestampSeconds
-      );
+
     // When vision is enabled we must manually update odometry in SwerveDrive
     if (visionDriveTest)
     {
@@ -176,6 +166,8 @@ private final DifferentialDrivePoseEstimator m_poseEstimator =
       //vision.updatePoseEstimation(swerveDrive);
     }
   }
+
+  
 
   @Override
   public void simulationPeriodic()
@@ -587,9 +579,8 @@ private final DifferentialDrivePoseEstimator m_poseEstimator =
     swerveDrive.postTrajectory(trajectory);
   }
 
-  /**
-   * Resets the gyro angle to zero and resets odometry to the same position, but facing toward 0.
-   */
+  //Resets the gyro angle to zero and resets odometry to the same position, but facing toward 0.
+
   public void zeroGyro()
   {
     swerveDrive.zeroGyro();
@@ -726,9 +717,7 @@ private final DifferentialDrivePoseEstimator m_poseEstimator =
     return swerveDrive.swerveDriveConfiguration;
   }
 
-  /**
-   * Lock the swerve drive to prevent it from moving.
-   */
+  //Lock the swerve drive to prevent it from moving.
   public void lock()
   {
     swerveDrive.lockPose();
@@ -744,9 +733,7 @@ private final DifferentialDrivePoseEstimator m_poseEstimator =
     return swerveDrive.getPitch();
   }
 
-  /**
-   * Add a fake vision reading for testing purposes.
-   */
+  //Add a fake vision reading for testing purposes.
   public void addFakeVisionReading()
   {
     swerveDrive.addVisionMeasurement(new Pose2d(3, 3, Rotation2d.fromDegrees(65)), Timer.getFPGATimestamp());

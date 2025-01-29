@@ -34,9 +34,7 @@ public class RobotContainer
     private final SwerveSubsystem drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
         "swerve"));
 
-    /**
-    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
-    */
+    // Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
     SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(),
         () -> driverXbox.getLeftY() * -1, () -> driverXbox.getLeftX() * -1)
             .withControllerRotationAxis(driverXbox::getRightX)
@@ -44,16 +42,12 @@ public class RobotContainer
             .scaleTranslation(0.8)
             .allianceRelativeControl(true);
 
-    /**
-    * Clone's the angular velocity input stream and converts it to a fieldRelative input stream.
-    */
+    // Clone's the angular velocity input stream and converts it to a fieldRelative input stream.
     SwerveInputStream driveDirectAngle = driveAngularVelocity.copy()
         .withControllerHeadingAxis(driverXbox::getRightX,driverXbox::getRightY)
         .headingWhile(true);
 
-    /**
-    * Clone's the angular velocity input stream and converts it to a robotRelative input stream.
-    */
+    // Clone's the angular velocity input stream and converts it to a robotRelative input stream.
     SwerveInputStream driveRobotOriented = driveAngularVelocity.copy()
         .robotRelative(true).allianceRelativeControl(false);
 
