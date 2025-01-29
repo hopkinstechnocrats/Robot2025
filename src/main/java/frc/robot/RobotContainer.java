@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -33,6 +34,8 @@ public class RobotContainer
 
     // Replace with CommandPS4Controller or CommandJoystick if needed
     final CommandXboxController driverXbox = new CommandXboxController(0);
+    final XboxController driverControllerHID = driverXbox.getHID();
+    
     // The robot's subsystems and commands are defined here...
     private final SwerveSubsystem drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
         "swerve"));
@@ -97,7 +100,7 @@ public class RobotContainer
             ? stream.filter(auto -> auto.getName().startsWith("comp"))
             : stream
         );
-
+ 
         SmartDashboard.putData("Auto Chooser", autoChooser);
     }
 
@@ -125,7 +128,16 @@ public class RobotContainer
             drivebase.setDefaultCommand(driveFieldOrientedDirectAngleKeyboard);
         }
         else{
-            drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
+           drivebase.setDefaultCommand(
+            new driveFieldOrientedAnglularVelocity(
+                SwerveSubsystem,
+                () -> driverController_HID.getLeftY(),
+                () -> driverController_HID.getLeftX(),
+                () -> driverController_HID.getRightX(),
+                () -> driverController_HID.getRightTriggerAxis() > OIConstants.kDeadband
+                
+            )
+        );
         }
 
         if(Robot.isSimulation()){
