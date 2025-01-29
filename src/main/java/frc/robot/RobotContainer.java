@@ -30,6 +30,7 @@ public class RobotContainer
 
     // Replace with CommandPS4Controller or CommandJoystick if needed
     final CommandXboxController driverXbox = new CommandXboxController(0);
+    final CommandXboxController operatorController = new CommandXboxController(1);
     // The robot's subsystems and commands are defined here...
     private final SwerveSubsystem drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
         "swerve"));
@@ -133,6 +134,8 @@ public class RobotContainer
             driverXbox.back().whileTrue(Commands.none());
             driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
             driverXbox.rightBumper().onTrue(Commands.none());
+            //operatorController.leftBumper().onTrue(MechanismCommands.climbUp(climb).withTimeout(1.75));
+            //operatorController.leftTrigger().onTrue(MechanismCommands.climbDown(climb).withTimeout(0.5).andThen(MechanismCommands.servoLock(servo)));
         }
     }
 
