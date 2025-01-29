@@ -113,7 +113,6 @@ public class SwerveSubsystem extends SubsystemBase
     }
     setupPathPlanner();
   }
-
   /**
    * Construct the swerve drive.
    *

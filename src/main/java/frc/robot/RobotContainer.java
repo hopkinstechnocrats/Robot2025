@@ -33,7 +33,7 @@ public class RobotContainer
 {
 
     // Replace with CommandPS4Controller or CommandJoystick if needed
-    final CommandXboxController driverXbox = new CommandXboxController(0);
+    final CommandXboxController driverXboxRaw = new CommandXboxController(0);
     final XboxController driverControllerHID = driverXbox.getHID();
     
     // The robot's subsystems and commands are defined here...
@@ -46,8 +46,8 @@ public class RobotContainer
     * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
     */
     SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(),
-        () -> driverXbox.getLeftY() * -1, () -> driverXbox.getLeftX() * -1)
-            .withControllerRotationAxis(driverXbox::getRightX)
+        () -> driverControllerHID.getLeftY() * -1, () -> driverControllerHID.getLeftX() * -1)
+            .withControllerRotationAxis(driverControllerHID::getRightX)
             .deadband(OperatorConstants.DEADBAND)
             .scaleTranslation(0.8)
             .allianceRelativeControl(true);
@@ -56,7 +56,7 @@ public class RobotContainer
     * Clone's the angular velocity input stream and converts it to a fieldRelative input stream.
     */
     SwerveInputStream driveDirectAngle = driveAngularVelocity.copy()
-        .withControllerHeadingAxis(driverXbox::getRightX,driverXbox::getRightY)
+        .withControllerHeadingAxis(driverControllerHID::getRightX,driverControllerHID::getRightY)
         .headingWhile(true);
 
     /**
@@ -67,17 +67,17 @@ public class RobotContainer
 
     SwerveInputStream driveAngularVelocityKeyboard = SwerveInputStream.of(
         drivebase.getSwerveDrive(),
-        () -> -driverXbox.getLeftY(), () -> -driverXbox.getLeftX())
-        .withControllerRotationAxis(() -> driverXbox.getRawAxis(2))
+        () -> -driverControllerHID.getLeftY(), () -> -driverControllerHID.getLeftX())
+        .withControllerRotationAxis(() -> driverControllerHID.getRawAxis(2))
         .deadband(OperatorConstants.DEADBAND)
         .scaleTranslation(0.8)
         .allianceRelativeControl(true);
     // Derive the heading axis with math!
     SwerveInputStream driveDirectAngleKeyboard = driveAngularVelocityKeyboard.copy()
-        .withControllerHeadingAxis(() ->
-            Math.sin(driverXbox.getRawAxis(2) * Math.PI) * (Math.PI *2),
+    .withControllerHeadingAxis(() ->
+    Math.sin(driverControllerHID.getRawAxis(2) * Math.PI) * (Math.PI *2),
         () ->
-            Math.cos(driverXbox.getRawAxis(2) * Math.PI) * (Math.PI *2))
+            Math.cos(driverControllerHID.getRawAxis(2) * Math.PI) * (Math.PI *2))
         .headingWhile(true);
 
     /**
@@ -128,41 +128,32 @@ public class RobotContainer
             drivebase.setDefaultCommand(driveFieldOrientedDirectAngleKeyboard);
         }
         else{
-           drivebase.setDefaultCommand(
-            new driveFieldOrientedAnglularVelocity(
-                SwerveSubsystem,
-                () -> driverController_HID.getLeftY(),
-                () -> driverController_HID.getLeftX(),
-                () -> driverController_HID.getRightX(),
-                () -> driverController_HID.getRightTriggerAxis() > OIConstants.kDeadband
-                
-            )
-        );
+           drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
         }
 
         if(Robot.isSimulation()){
-            driverXbox.start().onTrue(Commands.runOnce(() -> drivebase.resetOdometry(new Pose2d(3, 3, new Rotation2d()))));
-            driverXbox.button(1).whileTrue(drivebase.sysIdDriveMotorCommand());
+            driverControllerHID.start().onTrue(Commands.runOnce(() -> drivebase.resetOdometry(new Pose2d(3, 3, new Rotation2d()))));
+            driverControllerHID.button(1).whileTrue(drivebase.sysIdDriveMotorCommand());
         }
         if(DriverStation.isTest()){
             drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity); // Overrides drive command above!
 
-            driverXbox.x().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
-            driverXbox.y().whileTrue(drivebase.driveToDistanceCommand(1.0, 0.2));
-            driverXbox.start().onTrue((Commands.runOnce(drivebase::zeroGyro)));
-            driverXbox.back().whileTrue(drivebase.centerModulesCommand());
-            driverXbox.leftBumper().onTrue(Commands.none());
-            driverXbox.rightBumper().onTrue(Commands.none());
+            driverControllerHID.x().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
+            driverControllerHID.y().whileTrue(drivebase.driveToDistanceCommand(1.0, 0.2));
+            driverControllerHID.start().onTrue((Commands.runOnce(drivebase::zeroGyro)));
+            driverControllerHID.back().whileTrue(drivebase.centerModulesCommand());
+            driverControllerHID.leftBumper().onTrue(Commands.none());
+            driverControllerHID.rightBumper().onTrue(Commands.none());
         }else{
-            driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
-            driverXbox.x().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
-            driverXbox.b().whileTrue(
-                drivebase.driveToPose(
-                new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0))));
-            driverXbox.start().whileTrue(Commands.none());
-            driverXbox.back().whileTrue(Commands.none());
-            driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
-            driverXbox.rightBumper().onTrue(Commands.none());
+            driverControllerHID.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
+            driverControllerHID.x().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
+            driverControllerHID.b().whileTrue(
+             drivebase.driveToPose(
+            new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0))));
+            driverControllerHID.start().whileTrue(Commands.none());
+            driverControllerHID.back().whileTrue(Commands.none());
+            driverControllerHID.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
+            driverControllerHID.rightBumper().onTrue(Commands.none());
         }
     }
 
