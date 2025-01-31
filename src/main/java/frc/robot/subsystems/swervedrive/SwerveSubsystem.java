@@ -28,6 +28,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -65,6 +68,9 @@ public class SwerveSubsystem extends SubsystemBase
 
   //Swerve drive object.
   private final SwerveDrive swerveDrive;
+  NetworkTableEntry v_limeLightX;
+  NetworkTableEntry v_limeLightValidTarget;
+  NetworkTableEntry v_limeLightTargetID;
   
   //AprilTag field layout.
   private final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2024Crescendo);
@@ -100,15 +106,20 @@ public class SwerveSubsystem extends SubsystemBase
     swerveDrive.setCosineCompensator(false);//!SwerveDriveTelemetry.isSimulation); // Disables cosine compensation for simulations since it causes discrepancies not seen in real life.
     swerveDrive.setAngularVelocityCompensation(true, true, 0.1); //Correct for skew that gets worse as angular velocity increases. Start with a coefficient of 0.1.
     swerveDrive.setModuleEncoderAutoSynchronize(false, 1); // Enable if you want to resynchronize your absolute encoders and motor encoders periodically when they are not moving.
-//    swerveDrive.pushOffsetsToEncoders(); // Set the absolute encoder to be used over the internal encoder and push the offsets onto it. Throws warning if not possible
+    // swerveDrive.pushOffsetsToEncoders(); // Set the absolute encoder to be used over the internal encoder and push the offsets onto it. Throws warning if not possible
     
-if (visionDriveTest)
-    {
-      //setupPhotonVision();
-      // Stop the odometry thread if we are using vision that way we can synchronize updates better.
-      swerveDrive.stopOdometryThread();
-    }
-    setupPathPlanner();
+    if (visionDriveTest)
+      {
+        //setupPhotonVision();
+        // Stop the odometry thread if we are using vision that way we can synchronize updates better.
+        swerveDrive.stopOdometryThread();
+      }
+      setupPathPlanner();
+      //Limelight
+      NetworkTable limeLightTable = NetworkTableInstance.getDefault().getTable("limelight");
+      v_limeLightX = limeLightTable.getEntry("tx");
+      v_limeLightValidTarget = limeLightTable.getEntry("tv");
+      v_limeLightTargetID = limeLightTable.getEntry("priorityid");
   }
 
   /**
@@ -126,15 +137,30 @@ if (visionDriveTest)
                                              Rotation2d.fromDegrees(0)));
   }
 
-  /**
-   * Setup the photon vision class.
-   */
-  /*public void setupPhotonVision()
-  {
-    vision = new Vision(swerveDrive::getPose, swerveDrive.field);
-  }
+//Setup the photon vision class. 
+/**
+public void setupPhotonVision()
+{
+  vision = new Vision(swerveDrive::getPose, swerveDrive.field);
+}
 */
 
+// Limelight -- NetworkTables, targeting
+public SwerveDrive getSwerve(){
+  return swerveDrive;
+}
+//Limelight
+public double getVisionAngle(){
+  return v_limeLightX.getDouble(0.0);
+}
+public boolean isValidVisionTarget(){
+  return (v_limeLightValidTarget.getDouble(0.0) != 0); 
+}
+public void setVisionTargetID(int id){
+  v_limeLightTargetID.setInteger(id);
+}
+
+// Limelight -- updating odometry, measurements
 public void updateVisionOdometry(){
   LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
   if(limelightMeasurement.tagCount >= 2)

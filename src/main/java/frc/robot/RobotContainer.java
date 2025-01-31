@@ -5,12 +5,16 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.NamedCommands;
+
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -19,6 +23,8 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
 import swervelib.SwerveInputStream;
+import frc.robot.commands.swervedrive.limelight.*;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
@@ -29,7 +35,7 @@ public class RobotContainer
 {
 
     // Replace with CommandPS4Controller or CommandJoystick if needed
-    final CommandXboxController driverXbox = new CommandXboxController(0);
+    final static CommandXboxController driverXbox = new CommandXboxController(0);
     // The robot's subsystems and commands are defined here...
     private final SwerveSubsystem drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
         "swerve"));
@@ -84,6 +90,11 @@ public class RobotContainer
         * {@link CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller PS4}
         * controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight joysticks}.
     */
+
+    public static void setRightRumbleDriver(double rumble){
+        driverXbox.getHID().setRumble(RumbleType.kRightRumble, rumble);
+    }
+
     private void configureBindings()
     {
 
@@ -96,6 +107,8 @@ public class RobotContainer
         Command driveFieldOrientedAnglularVelocityKeyboard = drivebase.driveFieldOriented(driveAngularVelocityKeyboard);
         Command driveSetpointGenKeyboard = drivebase.driveWithSetpointGeneratorFieldRelative(
             driveDirectAngleKeyboard);
+
+        driverXbox.y().whileTrue(new driveAimAtTarget(drivebase, ()->MathUtil.applyDeadband(-driverXbox.getLeftY(), OperatorConstants.DEADBAND), ()->MathUtil.applyDeadband(-driverXbox.getLeftX(), OperatorConstants.DEADBAND)));
 
         if(RobotBase.isSimulation()){
             drivebase.setDefaultCommand(driveFieldOrientedDirectAngleKeyboard);
@@ -120,9 +133,9 @@ public class RobotContainer
         }else{
             driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
             driverXbox.x().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
-            driverXbox.b().whileTrue(
-                drivebase.driveToPose(
-                new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0))));
+            //driverXbox.b().whileTrue(
+            //    drivebase.driveToPose(
+            //    new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0))));
             driverXbox.start().whileTrue(Commands.none());
             driverXbox.back().whileTrue(Commands.none());
             driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
