@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
@@ -67,14 +68,12 @@ public class Robot extends TimedRobot
   @Override
   public void robotPeriodic()
   {
-
-    
-
     // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+
   }
 
   // This function is called once each time the robot enters Disabled mode.
