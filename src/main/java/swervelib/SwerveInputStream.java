@@ -872,4 +872,9 @@ public class SwerveInputStream implements Supplier<ChassisSpeeds>
      */
     AIM
   }
+
+public SwerveInputStream withControllerRotationAxis(Object rot) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'withControllerRotationAxis'");
+}
 }
