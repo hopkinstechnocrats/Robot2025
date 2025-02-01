@@ -6,6 +6,8 @@ package frc.robot;
 
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
@@ -135,6 +137,16 @@ public class Robot extends TimedRobot
   @Override
   public void teleopPeriodic()
   {
+    // Limelight distance targeting
+    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+    
+    double ta = table.getEntry("ta").getDouble(0.0); // Target area
+    double ty = table.getEntry("ty").getDouble(0.0); // Vert. offset from crosshair to target
+
+    double distance = 100.0 / ty; //Calibrate value
+    double desiredDistance = 50.0; //Desired distance
+    double distanceError = desiredDistance - distance; // Distance from desired
+    double driveSpeed = 0.5 * distanceError; // Drive to desired
   }
 
   @Override

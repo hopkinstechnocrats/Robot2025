@@ -76,18 +76,18 @@ public class SwerveSubsystem extends SubsystemBase
   NetworkTableEntry ty = table.getEntry("ty");
   double targetOffsetAngle_Vertical = ty.getDouble(0.0);
 
-  // April tag distances
+  // April tag distances from the ground in inches
   double reefAprilDis = 6.875; // CORAL REEF
   double procAprilDis = 45.875; // PROCESSOR
   double statAprilDis = 53.25; // CORAL STATION
   double bargAprilDis = 69; // BARGE
 
-  // Limelight angle
+  // Limelight angle from horizontal
   double limelightMountAngleDegrees = 0.0;            // FIND OUT ANGLE
   // Center of limelight lens to the floor
   double limelightLensHeightInches = 0.0;             // FIND OUT HEIGHT
   // Distance from target to floor
-  double goalHeightInches = reefAprilDis;
+  double goalHeightInches = reefAprilDis;             // CHANGE FOR MULTIPLE TARGETS
 
   double angleToGoalDegrees = limelightMountAngleDegrees + targetOffsetAngle_Vertical;
   double angleToGoalRadians = angleToGoalDegrees * (3.14159 / 180.0);
