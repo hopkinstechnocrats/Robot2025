@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
+import frc.robot.commands.swervedrive.ElevatorCommands;
 import java.io.File;
 import swervelib.SwerveInputStream;
 
@@ -134,8 +135,8 @@ public class RobotContainer
             driverXbox.back().whileTrue(Commands.none());
             driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
             driverXbox.rightBumper().onTrue(Commands.none());
-            //operatorController.leftBumper().onTrue(MechanismCommands.climbUp(climb).withTimeout(1.75));
-            //operatorController.leftTrigger().onTrue(MechanismCommands.climbDown(climb).withTimeout(0.5).andThen(MechanismCommands.servoLock(servo)));
+            operatorController.leftBumper().onTrue(ElevatorCommands.elevatorUp(elevator).withTimeout(1.75));
+            operatorController.leftTrigger().onTrue(MechanismCommands.climbDown(climb).withTimeout(0.5).andThen(MechanismCommands.servoLock(servo)));
         }
     }
 
