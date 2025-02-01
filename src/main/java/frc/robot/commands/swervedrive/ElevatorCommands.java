@@ -1,12 +1,13 @@
 package frc.robot.commands.swervedrive;
 
 import frc.robot.subsystems.swervedrive.ElevatorSubsystem;
-import frc.robot.Constants;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 
-public class MechanismCommands {
-    private MechanismCommands() {}
+public class ElevatorCommands {
+    private ElevatorCommands() {}
 
-    public static Command elevatorUp(Elevator elevator) {
+    public static Command elevatorUp(ElevatorSubsystem elevator) {
         return Commands.run(
             () -> {
               elevator.elevatorUp();
@@ -14,7 +15,7 @@ public class MechanismCommands {
             elevator);
       }
     
-      public static Command climbDown(Elevator elevator) {
+      public static Command elevatorDown(ElevatorSubsystem elevator) {
         return Commands.run(
             () -> {
               elevator.elevatorDown();

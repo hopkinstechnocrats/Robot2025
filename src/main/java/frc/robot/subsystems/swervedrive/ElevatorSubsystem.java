@@ -1,19 +1,16 @@
 package frc.robot.subsystems.swervedrive;
 
-
-import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.ClimbConstants;
-import com.ctre.phoenix6.configs;
+import frc.robot.Constants.ElevatorConstants;
 
-public class elevator extends SubsystemBase {
+public class ElevatorSubsystem extends SubsystemBase {
   private TalonFX elevatorMotor1;
   private TalonFX elevatorMotor2;
 
-  public Climb() {
+  public void Elevator() {
     elevatorMotor1 = new TalonFX(20, "Elevator Motor 1");
     elevatorMotor1.setVoltage(4);
     elevatorMotor1.setNeutralMode(NeutralModeValue.Brake);
@@ -23,13 +20,13 @@ public class elevator extends SubsystemBase {
   }
 
   public void elevatorUp() {
-    elevatorMotor1.set(ClimbConstants.climbSpeedUp);
-    elevatorMotor2.set(ClimbConstants.climbSpeedUp);
+    elevatorMotor1.set(ElevatorConstants.elevatorSpeedUp);
+    elevatorMotor2.set(ElevatorConstants.elevatorSpeedUp);
   }
 
-  public void climbDown() {
-    elevatorMotor1.set(ClimbConstants.climbSpeedDown);
-    elevatorMotor2.set(ClimbConstants.climbSpeedDown);
+  public void elevatorDown() {
+    elevatorMotor1.set(ElevatorConstants.elevatorSpeedDown);
+    elevatorMotor2.set(ElevatorConstants.elevatorSpeedDown);
   }
 
   public void noClimb() {

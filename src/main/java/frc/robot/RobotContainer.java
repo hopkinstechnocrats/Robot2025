@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.subsystems.swervedrive.ElevatorSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import frc.robot.commands.swervedrive.ElevatorCommands;
 import java.io.File;
@@ -35,6 +36,7 @@ public class RobotContainer
     // The robot's subsystems and commands are defined here...
     private final SwerveSubsystem drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
         "swerve"));
+        ElevatorSubsystem elevator = new ElevatorSubsystem();
 
     /**
     * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
@@ -136,7 +138,7 @@ public class RobotContainer
             driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
             driverXbox.rightBumper().onTrue(Commands.none());
             operatorController.leftBumper().onTrue(ElevatorCommands.elevatorUp(elevator).withTimeout(1.75));
-            operatorController.leftTrigger().onTrue(MechanismCommands.climbDown(climb).withTimeout(0.5).andThen(MechanismCommands.servoLock(servo)));
+            operatorController.leftTrigger().onTrue(ElevatorCommands.elevatorDown(elevator).withTimeout(0.5));
         }
     }
 
