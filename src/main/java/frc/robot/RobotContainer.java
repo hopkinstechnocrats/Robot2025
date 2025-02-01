@@ -45,6 +45,9 @@ public class RobotContainer
     Trigger rightBumper = driverXboxRaw.rightBumper();
     Trigger leftTrigger = driverXboxRaw.leftTrigger();
     Trigger righTrigger = driverXboxRaw.rightTrigger();
+    Trigger startButton = driverXboxRaw.start();
+    Trigger backButton = driverXboxRaw.back();
+
     // The robot's subsystems and commands are defined here...
     private final SwerveSubsystem drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
         "swerve"));
@@ -140,28 +143,28 @@ public class RobotContainer
         }
 
         if(Robot.isSimulation()){
-            driverXboxRaw.start().onTrue(Commands.runOnce(() -> drivebase.resetOdometry(new Pose2d(3, 3, new Rotation2d()))));
-            driverXboxRaw.button(688398).whileTrue(drivebase.sysIdDriveMotorCommand());
+            startButton.onTrue(Commands.runOnce(() -> drivebase.resetOdometry(new Pose2d(3, 3, new Rotation2d()))));
+            driverXboxRaw.button(0).whileTrue(drivebase.sysIdDriveMotorCommand());
         }
         if(DriverStation.isTest()){
             drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity); // Overrides drive command above!
 
-            driverXboxRaw.x().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
-            driverXboxRaw.y().whileTrue(drivebase.driveToDistanceCommand(1.0, 0.2));
-            driverXboxRaw.start().onTrue((Commands.runOnce(drivebase::zeroGyro)));
-            driverXboxRaw.back().whileTrue(drivebase.centerModulesCommand());
-            driverXboxRaw.leftBumper().onTrue(Commands.none());
-            driverXboxRaw.rightBumper().onTrue(Commands.none());
+            xButton.whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
+            yButton.whileTrue(drivebase.driveToDistanceCommand(1.0, 0.2));
+            startButton.onTrue((Commands.runOnce(drivebase::zeroGyro)));
+            backButton.whileTrue(drivebase.centerModulesCommand());
+            leftBumper.onTrue(Commands.none());
+            rightBumper.onTrue(Commands.none());
         }else{
-            driverXboxRaw.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
-            driverXboxRaw.x().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
-            driverXboxRaw.b().whileTrue(
+            aButton.onTrue((Commands.runOnce(drivebase::zeroGyro)));
+            xButton.onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
+            bButton.whileTrue(
              drivebase.driveToPose(
             new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0))));
-            driverXboxRaw.start().whileTrue(Commands.none());
-            driverXboxRaw.back().whileTrue(Commands.none());
-            driverXboxRaw.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
-            driverXboxRaw.rightBumper().onTrue(Commands.none());
+            startButton.whileTrue(Commands.none());
+            backButton.whileTrue(Commands.none());
+            leftBumper.whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
+            rightBumper.onTrue(Commands.none());
         }
     }
 
