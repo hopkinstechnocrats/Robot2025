@@ -22,4 +22,12 @@ public class ElevatorCommands {
             },
             elevator);
       }
+
+      public static Command stop(ElevatorSubsystem elevator) {
+        return Commands.run(
+            () -> {
+              elevator.stopElevator();
+            },
+            elevator);
+      }
     }

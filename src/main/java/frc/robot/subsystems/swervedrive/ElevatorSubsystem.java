@@ -20,8 +20,8 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public void elevatorUp() {
-    elevatorMotor1.set(ElevatorConstants.elevatorSpeedUp);
-    elevatorMotor2.set(ElevatorConstants.elevatorSpeedUp);
+      elevatorMotor1.set(ElevatorConstants.elevatorSpeedUp);
+      elevatorMotor2.set(ElevatorConstants.elevatorSpeedUp);
   }
 
   public void elevatorDown() {
@@ -29,7 +29,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     elevatorMotor2.set(ElevatorConstants.elevatorSpeedDown);
   }
 
-  public void noClimb() {
+  public void stopElevator() {
     elevatorMotor1.set(0);
     elevatorMotor2.set(0);
   }

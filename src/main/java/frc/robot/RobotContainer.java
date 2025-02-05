@@ -5,6 +5,8 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.NamedCommands;
+
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
