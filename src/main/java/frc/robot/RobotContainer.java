@@ -29,6 +29,9 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.swervedrive.limelight.driveAimAtTarget;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
+
+import org.dyn4j.geometry.Rotation;
+
 import swervelib.SwerveInputStream;
 
 /**
@@ -64,7 +67,6 @@ public class RobotContainer
     */
     SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(),
         () -> driverXboxRaw.getLeftY() * -1, () -> driverXboxRaw.getLeftX() * -1)
-            .withControllerRotationAxis(rightStick)
             .deadband(OperatorConstants.DEADBAND)
             .scaleTranslation(0.8)
             .allianceRelativeControl(true);
