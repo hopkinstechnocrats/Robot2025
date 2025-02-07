@@ -141,6 +141,7 @@ public class RobotContainer
             driverXbox.rightBumper().onTrue(Commands.none());
             operatorController.leftBumper().onTrue(ElevatorCommands.elevatorUp(elevator).withTimeout(1.75));
             operatorController.leftTrigger().onTrue(ElevatorCommands.elevatorDown(elevator).withTimeout(0.5));
+            operatorController.b().onTrue(ElevatorCommands.stop(elevator).withTimeout(10));
         }
     }
 

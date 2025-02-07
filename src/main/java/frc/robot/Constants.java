@@ -52,6 +52,8 @@ public final class Constants
   public static final class ElevatorConstants {
     public static final double elevatorSpeedUp = -0.5;
     public static final double elevatorSpeedDown = 1;
+    public static final double encoder1 = 3;
+
 
     
   }
