@@ -83,9 +83,9 @@ public class SwerveSubsystem extends SubsystemBase
   double bargAprilDis = 69; // BARGE
 
   // Limelight angle from horizontal
-  double limelightMountAngleDegrees = 0.0;            // FIND OUT ANGLE
+  double limelightMountAngleDegrees = 0.0;
   // Center of limelight lens to the floor
-  double limelightLensHeightInches = 0.0;             // FIND OUT HEIGHT
+  double limelightLensHeightInches = 16.0;
   // Distance from target to floor
   double goalHeightInches = reefAprilDis;             // CHANGE FOR MULTIPLE TARGETS
 
@@ -455,6 +455,7 @@ public void updateVisionOdometry(){
    * @return a Command that drives the swerve drive to a specific distance at a given speed
    */
   public Command driveToDistanceCommand(double distanceInMeters, double speedInMetersPerSecond)
+  
   {
     return run(() -> drive(new ChassisSpeeds(speedInMetersPerSecond, 0, 0)))
         .until(() -> swerveDrive.getPose().getTranslation().getDistance(new Translation2d(0, 0)) >

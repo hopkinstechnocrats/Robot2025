@@ -109,6 +109,17 @@ public class RobotContainer
             driveDirectAngleKeyboard);
 
         driverXbox.y().whileTrue(new driveAimAtTarget(drivebase, ()->MathUtil.applyDeadband(-driverXbox.getLeftY(), OperatorConstants.DEADBAND), ()->MathUtil.applyDeadband(-driverXbox.getLeftX(), OperatorConstants.DEADBAND)));
+        
+        // TODO
+        double KpDistance = -0.1f;
+
+        if (driverXbox.)
+        {
+            driving_adjust = KpDistance * distance_error;
+            
+            left_command += distance_adjust;
+            right_command += distance_adjust;
+        }
 
         if(RobotBase.isSimulation()){
             drivebase.setDefaultCommand(driveFieldOrientedDirectAngleKeyboard);
