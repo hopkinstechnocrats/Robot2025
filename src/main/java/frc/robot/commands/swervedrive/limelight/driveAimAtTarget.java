@@ -67,30 +67,30 @@ public class driveAimAtTarget extends Command {
     false);
     
     // April tag distances from the ground in inches
-  double reefAprilDis = 6.875; // CORAL REEF
-  double procAprilDis = 45.875; // PROCESSOR
-  double statAprilDis = 53.25; // CORAL STATION
-  double bargAprilDis = 69; // BARGE
+    double reefAprilDis = 6.875; // CORAL REEF
+    double procAprilDis = 45.875; // PROCESSOR
+    double statAprilDis = 53.25; // CORAL STATION
+    double bargAprilDis = 69; // BARGE
 
-  NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-  NetworkTableEntry ty = table.getEntry("ty");
-  double targetOffsetAngle_Vertical = ty.getDouble(0.0);
+    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+    NetworkTableEntry ty = table.getEntry("ty");
+    double targetOffsetAngle_Vertical = ty.getDouble(0.0);
 
-  // Limelight angle from horizontal
-  double limelightMountAngleDegrees = 0.0;
-  // Center of limelight lens to the floor
-  double limelightLensHeightInches = 16.0;
-  // Distance from target to floor
-  double goalHeightInches = reefAprilDis;      // CHANGE FOR MULTIPLE TARGETS
+    // Limelight angle from horizontal
+    double limelightMountAngleDegrees = 0.0;
+    // Center of limelight lens to the floor
+    double limelightLensHeightInches = 16.0;
+    // Distance from target to floor
+    double goalHeightInches = reefAprilDis;      // CHANGE FOR MULTIPLE TARGETS
+    
+    double angleToGoalDegrees = limelightMountAngleDegrees + targetOffsetAngle_Vertical;
+    double angleToGoalRadians = angleToGoalDegrees * (3.14159 / 180.0);
 
-  double angleToGoalDegrees = limelightMountAngleDegrees + targetOffsetAngle_Vertical;
-  double angleToGoalRadians = angleToGoalDegrees * (3.14159 / 180.0);
-
-  //calculate distance
-  double distanceFromLimelightToGoalInches = (goalHeightInches - limelightLensHeightInches) / Math.tan(angleToGoalRadians);
-  double distanceMeters = distanceFromLimelightToGoalInches * 0.0254;
-  double distanceAwayMeters = 1; // Desired distance from april tag
-  SwerveSub.driveToDistanceCommand(distanceMeters - distanceAwayMeters, 0.1);
+    //calculate distance
+    double distanceFromLimelightToGoalInches = (goalHeightInches - limelightLensHeightInches) / Math.tan(angleToGoalRadians);
+    double distanceMeters = distanceFromLimelightToGoalInches * 0.0254;
+    double distanceAwayMeters = 1; // Desired distance from april tag
+    SwerveSub.driveToDistanceCommand(distanceMeters - distanceAwayMeters, 0.1);
 
   }
 
