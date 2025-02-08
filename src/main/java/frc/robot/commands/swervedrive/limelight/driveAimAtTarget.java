@@ -5,16 +5,26 @@
 package frc.robot.commands.swervedrive.limelight;
 
 import java.lang.annotation.Target;
+import java.util.List;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.RobotContainer;
+import frc.robot.commands.swervedrive.drivebase.AbsoluteDrive;
+import frc.robot.commands.swervedrive.drivebase.AbsoluteDrive.*;
+import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
 import frc.robot.limelightLib.LimelightHelpers;
 import frc.robot.limelightLib.LimelightHelpers.*;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
+import swervelib.SwerveController;
+import swervelib.math.SwerveMath;
 import frc.robot.Constants;
 
 public class driveAimAtTarget extends Command {
@@ -42,27 +52,49 @@ public class driveAimAtTarget extends Command {
   @Override
   public void execute() {
     if(SwerveSub.isValidVisionTarget()){
-      System.out.println("April Tag Seen!" + LimelightHelpers.getFiducialID("limelight"));
+      System.out.println("April Tag Seen: " + LimelightHelpers.getFiducialID("limelight"));
       //heading = Math.pow(-SwerveSub.getVisionAngle()/30,3);
       heading = SwerveSub.getVisionAngle()/70;
       RobotContainer.setRightRumbleDriver(0);
     }else{
-      //System.out.println("Warning: Swerve Aim: Lost Target!");
-      RobotContainer.setRightRumbleDriver(1);
+      RobotContainer.setRightRumbleDriver(1); // This is a warning--if it's not detecting the april tag the controller will rumble
       heading = 0;
     }
     lastGoodHeading = heading;
 
-    //System.out.println("Target is: " + heading);
-    //SwerveSub.driveCommand(translationX, translationY, heading);
-
-
-    SwerveSub.getSwerve().drive(new Translation2d(Math.pow(-0.4, 3)
+    SwerveSub.getSwerve().drive(new Translation2d(Math.pow(-translationX.getAsDouble(), 3)
     * SwerveSub.getSwerve().getMaximumChassisVelocity(),
-    Math.pow(-0.4, 3) * SwerveSub.getSwerve().getMaximumChassisVelocity()),
+    Math.pow(translationY.getAsDouble(), 3) * SwerveSub.getSwerve().getMaximumChassisVelocity()),
     heading * SwerveSub.getSwerve().getMaximumChassisAngularVelocity(),
     true,
     false);
+
+    // April tag distances from the ground in inches
+  double reefAprilDis = 6.875; // CORAL REEF
+  double procAprilDis = 45.875; // PROCESSOR
+  double statAprilDis = 53.25; // CORAL STATION
+  double bargAprilDis = 69; // BARGE
+
+  NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+  NetworkTableEntry ty = table.getEntry("ty");
+  double targetOffsetAngle_Vertical = ty.getDouble(0.0);
+
+  // Limelight angle from horizontal
+  double limelightMountAngleDegrees = 0.0;
+  // Center of limelight lens to the floor
+  double limelightLensHeightInches = 16.0;
+  // Distance from target to floor
+  double goalHeightInches = reefAprilDis;      // CHANGE FOR MULTIPLE TARGETS
+
+  double angleToGoalDegrees = limelightMountAngleDegrees + targetOffsetAngle_Vertical;
+  double angleToGoalRadians = angleToGoalDegrees * (3.14159 / 180.0);
+
+  //calculate distance
+  double distanceFromLimelightToGoalInches = (goalHeightInches - limelightLensHeightInches) / Math.tan(angleToGoalRadians);
+  double distanceMeters = distanceFromLimelightToGoalInches * 0.0254;
+  double distanceAwayMeters = 1; // Desired distance from april tag
+  SwerveSub.driveToDistanceCommand(distanceMeters - distanceAwayMeters, 0.1);
+
   }
 
   // Called once the command ends or is interrupted.
