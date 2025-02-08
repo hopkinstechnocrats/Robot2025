@@ -4,12 +4,18 @@
 
 package frc.robot.commands.swervedrive.limelight;
 
+import java.lang.annotation.Target;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
+import frc.robot.limelightLib.LimelightHelpers;
+import frc.robot.limelightLib.LimelightHelpers.*;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
+import frc.robot.Constants;
 
 public class driveAimAtTarget extends Command {
   private final SwerveSubsystem SwerveSub;
@@ -30,18 +36,18 @@ public class driveAimAtTarget extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    SwerveSub.setVisionTargetID(7);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     if(SwerveSub.isValidVisionTarget()){
+      System.out.println("April Tag Seen!" + LimelightHelpers.getFiducialID("limelight"));
       //heading = Math.pow(-SwerveSub.getVisionAngle()/30,3);
-      heading = -SwerveSub.getVisionAngle()/70;
+      heading = SwerveSub.getVisionAngle()/70;
       RobotContainer.setRightRumbleDriver(0);
     }else{
-      System.out.println("Warning: Swerve Aim: Lost Target!");
+      //System.out.println("Warning: Swerve Aim: Lost Target!");
       RobotContainer.setRightRumbleDriver(1);
       heading = 0;
     }
@@ -51,11 +57,12 @@ public class driveAimAtTarget extends Command {
     //SwerveSub.driveCommand(translationX, translationY, heading);
 
 
-    SwerveSub.getSwerve().drive(new Translation2d(Math.pow(translationX.getAsDouble(), 3) * SwerveSub.getSwerve().getMaximumChassisVelocity(),
-    Math.pow(translationY.getAsDouble(), 3) * SwerveSub.getSwerve().getMaximumChassisVelocity()),
+    SwerveSub.getSwerve().drive(new Translation2d(Math.pow(-0.4, 3)
+    * SwerveSub.getSwerve().getMaximumChassisVelocity(),
+    Math.pow(-0.4, 3) * SwerveSub.getSwerve().getMaximumChassisVelocity()),
     heading * SwerveSub.getSwerve().getMaximumChassisAngularVelocity(),
-true,
-false);
+    true,
+    false);
   }
 
   // Called once the command ends or is interrupted.

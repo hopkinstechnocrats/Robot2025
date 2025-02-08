@@ -108,19 +108,6 @@ public class RobotContainer
         Command driveSetpointGenKeyboard = drivebase.driveWithSetpointGeneratorFieldRelative(
             driveDirectAngleKeyboard);
 
-        driverXbox.y().whileTrue(new driveAimAtTarget(drivebase, ()->MathUtil.applyDeadband(-driverXbox.getLeftY(), OperatorConstants.DEADBAND), ()->MathUtil.applyDeadband(-driverXbox.getLeftX(), OperatorConstants.DEADBAND)));
-        
-        // TODO
-        double KpDistance = -0.1f;
-
-        if (driverXbox.)
-        {
-            driving_adjust = KpDistance * distance_error;
-            
-            left_command += distance_adjust;
-            right_command += distance_adjust;
-        }
-
         if(RobotBase.isSimulation()){
             drivebase.setDefaultCommand(driveFieldOrientedDirectAngleKeyboard);
         }
@@ -142,6 +129,7 @@ public class RobotContainer
             driverXbox.leftBumper().onTrue(Commands.none());
             driverXbox.rightBumper().onTrue(Commands.none());
         }else{
+            driverXbox.y().whileTrue(new driveAimAtTarget(drivebase, ()->MathUtil.applyDeadband(-driverXbox.getLeftY(), OperatorConstants.DEADBAND), ()->MathUtil.applyDeadband(-driverXbox.getLeftX(), OperatorConstants.DEADBAND)));
             driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
             driverXbox.x().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
             //driverXbox.b().whileTrue(
