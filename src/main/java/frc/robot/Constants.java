@@ -48,4 +48,12 @@ public final class Constants
     public static final double RIGHT_X_DEADBAND = 0.1;
     public static final double TURN_CONSTANT    = 6;
   }
+
+  public static class endEffectorConstants{
+    public static final double kp = 0.1;
+    public static final double ki = 0;
+    public static final double kd = 0;
+
+    public static final double kEEAbsEncoderOffset = 0;
+  }
 }
