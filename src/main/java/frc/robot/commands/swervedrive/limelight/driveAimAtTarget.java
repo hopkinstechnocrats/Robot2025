@@ -57,12 +57,14 @@ public class driveAimAtTarget extends Command {
     //SwerveSub.driveCommand(translationX, translationY, heading);
 
 
-    SwerveSub.getSwerve().drive(new Translation2d(Math.pow(-0.4, 3)
-    * SwerveSub.getSwerve().getMaximumChassisVelocity(),
-    Math.pow(-0.4, 3) * SwerveSub.getSwerve().getMaximumChassisVelocity()),
+    SwerveSub.getSwerve().drive(new Translation2d(Math.pow(translationX.getAsDouble(), 3) * SwerveSub.getSwerve().getMaximumChassisVelocity(),
+    Math.pow(translationY.getAsDouble(), 3) * SwerveSub.getSwerve().getMaximumChassisVelocity()),
     heading * SwerveSub.getSwerve().getMaximumChassisAngularVelocity(),
-    true,
-    false);
+true,
+false);
+
+    
+
   }
 
   // Called once the command ends or is interrupted.
