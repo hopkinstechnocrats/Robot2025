@@ -170,15 +170,16 @@ public class RobotContainer
             driverXboxRaw.leftBumper().onTrue(Commands.none());
             driverXboxRaw.rightBumper().onTrue(Commands.none());
         }else{
-            driverXboxRaw.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
-            driverXboxRaw.x().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
-            driverXboxRaw.b().whileTrue(
-             drivebase.driveToPose(
-            new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0))));
-            driverXboxRaw.start().whileTrue(Commands.none());
-            driverXboxRaw.back().whileTrue(Commands.none());
-            driverXboxRaw.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
-            driverXboxRaw.rightBumper().onTrue(Commands.none());
+            driverXbox.y().whileTrue(new driveAimAtTarget(drivebase, ()->MathUtil.applyDeadband(-driverXbox.getLeftY(), OperatorConstants.DEADBAND), ()->MathUtil.applyDeadband(-driverXbox.getLeftX(), OperatorConstants.DEADBAND)));
+            driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
+            driverXbox.x().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
+            //driverXbox.b().whileTrue(
+            //    drivebase.driveToPose(
+            //    new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0))));
+            driverXbox.start().whileTrue(Commands.none());
+            driverXbox.back().whileTrue(Commands.none());
+            driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
+            driverXbox.rightBumper().onTrue(Commands.none());
         }
     }
 
