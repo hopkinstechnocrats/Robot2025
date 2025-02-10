@@ -30,4 +30,8 @@ public class  EndEffector extends SubsystemBase{
     public void moveToSetpoint(double setpoint){
         eeMotor.set(pid.calculate(throughBore.getPosition(), setpoint));
     }
+
+    public void brake(){
+        eeMotor.set(0);
+    }
 } 
