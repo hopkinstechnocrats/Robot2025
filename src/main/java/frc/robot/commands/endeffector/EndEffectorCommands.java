@@ -6,13 +6,22 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.EndEffector;
 
 public class EndEffectorCommands extends Command {
-    public static Command move1(EndEffector endEffector){
+    public static Command moveLeft(EndEffector endEffector){
         return Commands.run(
                 () -> {
-                    endEffector.moveToSetpoint(0.1);
+                    endEffector.moveLeft();
                 },
             endEffector);
     }
+
+    public static Command moveRight(EndEffector endEffector){
+        return Commands.run(
+                () -> {
+                    endEffector.moveRight();
+                },
+            endEffector);
+    }
+
 
     public static Command brake(EndEffector endEffector){
         return Commands.run(

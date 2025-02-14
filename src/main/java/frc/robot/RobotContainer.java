@@ -76,22 +76,13 @@ public class RobotContainer
                                                                     .scaleTranslation(0.8)
                                                                     .allianceRelativeControl(true);
   // Derive the heading axis with math!
-  SwerveInputStream driveDirectAngleKeyboard     = driveAngularVelocityKeyboard.copy()
-                                                                               .withControllerHeadingAxis(() ->
-                                                                                                              Math.sin(
-                                                                                                                  driverXbox.getRawAxis(
-                                                                                                                      2) *
-                                                                                                                  Math.PI) *
-                                                                                                              (Math.PI *
-                                                                                                               2),
-                                                                                                          () ->
-                                                                                                              Math.cos(
-                                                                                                                  driverXbox.getRawAxis(
-                                                                                                                      2) *
-                                                                                                                  Math.PI) *
-                                                                                                              (Math.PI *
-                                                                                                               2))
-                                                                               .headingWhile(true);
+  SwerveInputStream driveDirectAngleKeyboard = driveAngularVelocityKeyboard.copy()
+                        .withControllerHeadingAxis(() ->Math.sin(
+                            driverXbox.getRawAxis(2) * Math.PI) *
+                            (Math.PI * 2),
+                        () -> Math.cos(
+                            driverXbox.getRawAxis(2) * Math.PI) *
+                            (Math.PI * 2)).headingWhile(true);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -171,7 +162,9 @@ public class RobotContainer
     }
 
     endEffector.setDefaultCommand(EndEffectorCommands.brake(endEffector));
-    operatorController.a().onTrue(EndEffectorCommands.move1(endEffector));
+    operatorController.povLeft().whileTrue(EndEffectorCommands.moveLeft(endEffector));
+    operatorController.povRight().whileTrue(EndEffectorCommands.moveRight(endEffector));
+
   }
 
   /**
