@@ -7,6 +7,7 @@ package frc.robot.commands.swervedrive.limelight;
 import java.lang.annotation.Target;
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.networktables.NetworkTable;
@@ -18,6 +19,8 @@ import frc.robot.RobotContainer;
 import frc.robot.limelightLib.LimelightHelpers;
 import frc.robot.limelightLib.LimelightHelpers.*;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
+import frc.robot.subsystems.swervedrive.SwerveSubsystem.*;
+import swervelib.math.SwerveMath;
 import frc.robot.Constants;
 
 public class driveAimAtTarget extends Command {
@@ -58,15 +61,7 @@ public class driveAimAtTarget extends Command {
 
     //System.out.println("Target is: " + heading);
     //SwerveSub.driveCommand(translationX, translationY, heading);
-
-
-    SwerveSub.getSwerve().drive(new Translation2d(Math.pow(translationX.getAsDouble(), 3) * SwerveSub.getSwerve().getMaximumChassisVelocity(),
-    Math.pow(translationY.getAsDouble(), 3) * SwerveSub.getSwerve().getMaximumChassisVelocity()),
-    heading * SwerveSub.getSwerve().getMaximumChassisAngularVelocity(),
-    true,
-    false);
     
-    // START OF OLD CODE
     // April tag distances from the ground in inches
     double reefAprilDis = 6.875; // CORAL REEF
     double procAprilDis = 45.875; // PROCESSOR
@@ -82,19 +77,39 @@ public class driveAimAtTarget extends Command {
     // Center of limelight lens to the floor
     double limelightLensHeightInches = 16.0;
     // Distance from target to floor
-    double goalHeightInches = reefAprilDis;      // CHANGE FOR MULTIPLE TARGETS
-
-    double angleToGoalDegrees = limelightMountAngleDegrees + targetOffsetAngle_Vertical;
-    double angleToGoalRadians = angleToGoalDegrees * (3.14159 / 180.0);
+    //double goalHeightInches = reefAprilDis;     // CHANGE FOR MULTIPLE TARGETS
+    double goalHeightInches = 12.1; // TEST DISTANCE GET RID OF WHEN DONE
 
     //calculate distance
-    double distanceFromLimelightToGoalInches = (goalHeightInches - limelightLensHeightInches) / Math.tan(angleToGoalRadians);
-    double distanceMeters = distanceFromLimelightToGoalInches * 0.0254;
-    double distanceAwayMeters = 1; // Desired distance from april tag
-    SwerveSub.driveToDistanceCommand(distanceMeters - distanceAwayMeters, 0.1);
-    // END OF OLD CODE
 
-  }
+    
+    double distanceFromLimelightToGoalInches = ((goalHeightInches - limelightLensHeightInches));
+    double distanceMeters = distanceFromLimelightToGoalInches * 0.0254;
+    double targetDistance = distanceMeters - 1; // Desired distance from april tag -- change the 1 value if needed
+    //SwerveSub.driveToDistanceCommand(targetDistance, 0.1); // old drive code
+    System.out.println("Distance to limelight: " + distanceMeters);
+    System.out.println("Distance from limelight to goal: " + distanceFromLimelightToGoalInches);
+    System.out.println("Distance to drive: " + targetDistance);
+
+    if (distanceMeters != targetDistance && LimelightHelpers.getFiducialID("limelight") == 2) {
+      if (distanceMeters > targetDistance) {
+        //SwerveSub.drive(SwerveMath.scaleTranslation(new Translation2d(0.1, 0.1), 1), 0, false);
+        SwerveSub.getSwerve().drive(new Translation2d(0.1 * SwerveSub.getSwerve().getMaximumChassisVelocity(),
+          0 * SwerveSub.getSwerve().getMaximumChassisVelocity()),
+          heading * SwerveSub.getSwerve().getMaximumChassisAngularVelocity(),
+          false,
+          false);
+      } else {
+        //SwerveSub.drive(SwerveMath.scaleTranslation(new Translation2d(-0.1, -0.1), 1), 0, false);
+        SwerveSub.getSwerve().drive(new Translation2d(0.1 * SwerveSub.getSwerve().getMaximumChassisVelocity(),
+          0 * SwerveSub.getSwerve().getMaximumChassisVelocity()),
+          heading * SwerveSub.getSwerve().getMaximumChassisAngularVelocity(),
+          false,
+          false);
+      }
+    }
+
+    }
 
   // Called once the command ends or is interrupted.
   @Override
