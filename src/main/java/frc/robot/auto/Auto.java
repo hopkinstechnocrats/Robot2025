@@ -12,7 +12,7 @@ public class Auto {
 
     public Command runAuto(SwerveSubsystem swerveSubsystem) {
         return new SequentialCommandGroup(
-            driveForwards(swerveSubsystem)
+            driveForwards(swerveSubsystem).withTimeout(5)
         );
     }
 
