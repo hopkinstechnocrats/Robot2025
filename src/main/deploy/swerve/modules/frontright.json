@@ -13,7 +13,6 @@
     "type": "falcon",
     "id": 6,
     "canbus": "GertrudeGreyser"
-
   },
   "encoder": {
     "type": "thrifty",

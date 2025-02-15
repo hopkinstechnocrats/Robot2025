@@ -19,6 +19,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.endeffector.EndEffectorCommands;
+import frc.robot.subsystems.EndEffector;
 import frc.robot.commands.ElevatorCommands;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
@@ -34,12 +36,15 @@ public class RobotContainer
 {
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  final         CommandXboxController driverXbox = new CommandXboxController(0);
+  final CommandXboxController driverXbox = new CommandXboxController(0);
   final CommandXboxController operatorController = new CommandXboxController(1);
   // The robot's subsystems and commands are defined here...
-  private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
-                                                                                "swerve"));
+  private final SwerveSubsystem drivebase  = new SwerveSubsystem(new File(
+                    Filesystem.getDeployDirectory(),
+                    "swerve"));
+  private final EndEffector endEffector = new EndEffector();
   private final ElevatorSubsystem elevator = new ElevatorSubsystem();
+
 
   private final SendableChooser<Command> autoChooser;
   /**
@@ -75,22 +80,13 @@ public class RobotContainer
                                                                     .scaleTranslation(0.8)
                                                                     .allianceRelativeControl(true);
   // Derive the heading axis with math!
-  SwerveInputStream driveDirectAngleKeyboard     = driveAngularVelocityKeyboard.copy()
-                                                                               .withControllerHeadingAxis(() ->
-                                                                                                              Math.sin(
-                                                                                                                  driverXbox.getRawAxis(
-                                                                                                                      2) *
-                                                                                                                  Math.PI) *
-                                                                                                              (Math.PI *
-                                                                                                               2),
-                                                                                                          () ->
-                                                                                                              Math.cos(
-                                                                                                                  driverXbox.getRawAxis(
-                                                                                                                      2) *
-                                                                                                                  Math.PI) *
-                                                                                                              (Math.PI *
-                                                                                                               2))
-                                                                               .headingWhile(true);
+  SwerveInputStream driveDirectAngleKeyboard = driveAngularVelocityKeyboard.copy()
+                        .withControllerHeadingAxis(() ->Math.sin(
+                            driverXbox.getRawAxis(2) * Math.PI) *
+                            (Math.PI * 2),
+                        () -> Math.cos(
+                            driverXbox.getRawAxis(2) * Math.PI) *
+                            (Math.PI * 2)).headingWhile(true);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -171,6 +167,10 @@ public class RobotContainer
       operatorController.povUp().whileTrue(ElevatorCommands.up(elevator));
       operatorController.povDown().whileTrue(ElevatorCommands.down(elevator));
     }
+
+    endEffector.setDefaultCommand(EndEffectorCommands.brake(endEffector));
+    operatorController.povLeft().whileTrue(EndEffectorCommands.moveLeft(endEffector));
+    operatorController.povRight().whileTrue(EndEffectorCommands.moveRight(endEffector));
 
   }
 
