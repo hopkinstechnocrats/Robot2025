@@ -9,7 +9,7 @@ public class  EndEffector extends SubsystemBase{
     TalonFX eeMotor;
 
     public EndEffector(){
-        eeMotor = new TalonFX(20);
+        eeMotor = new TalonFX(13);
         eeMotor.setNeutralMode(NeutralModeValue.Brake);
         eeMotor.setVoltage(1);
     }
