@@ -19,6 +19,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.ElevatorCommands;
+import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
 import swervelib.SwerveInputStream;
@@ -33,9 +35,11 @@ public class RobotContainer
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   final         CommandXboxController driverXbox = new CommandXboxController(0);
+  final CommandXboxController operatorController = new CommandXboxController(1);
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve"));
+  private final ElevatorSubsystem elevator = new ElevatorSubsystem();
 
   private final SendableChooser<Command> autoChooser;
   /**
@@ -133,6 +137,7 @@ public class RobotContainer
     } else
     {
       drivebase.setDefaultCommand(driveRobotOrientedAngularVelocity);
+      elevator.setDefaultCommand(ElevatorCommands.brake(elevator));
     }
 
     if (Robot.isSimulation())
@@ -163,6 +168,8 @@ public class RobotContainer
       driverXbox.back().whileTrue(Commands.none());
       driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
       driverXbox.rightBumper().onTrue(Commands.none());
+      operatorController.povUp().whileTrue(ElevatorCommands.up(elevator));
+      operatorController.povDown().whileTrue(ElevatorCommands.down(elevator));
     }
 
   }
