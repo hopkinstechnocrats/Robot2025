@@ -21,6 +21,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.endeffector.EndEffectorCommands;
 import frc.robot.subsystems.EndEffector;
+import frc.robot.commands.ElevatorCommands;
+import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
 import swervelib.SwerveInputStream;
@@ -41,6 +43,8 @@ public class RobotContainer
                     Filesystem.getDeployDirectory(),
                     "swerve"));
   private final EndEffector endEffector = new EndEffector();
+  private final ElevatorSubsystem elevator = new ElevatorSubsystem();
+
 
   private final SendableChooser<Command> autoChooser;
   /**
@@ -129,6 +133,7 @@ public class RobotContainer
     } else
     {
       drivebase.setDefaultCommand(driveRobotOrientedAngularVelocity);
+      elevator.setDefaultCommand(ElevatorCommands.brake(elevator));
     }
 
     if (Robot.isSimulation())
@@ -159,6 +164,8 @@ public class RobotContainer
       driverXbox.back().whileTrue(Commands.none());
       driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
       driverXbox.rightBumper().onTrue(Commands.none());
+      operatorController.povUp().whileTrue(ElevatorCommands.up(elevator));
+      operatorController.povDown().whileTrue(ElevatorCommands.down(elevator));
     }
 
     endEffector.setDefaultCommand(EndEffectorCommands.brake(endEffector));
