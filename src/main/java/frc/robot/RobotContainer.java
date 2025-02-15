@@ -22,6 +22,7 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
 import swervelib.SwerveInputStream;
+import frc.robot.auto.Auto;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
@@ -31,13 +32,14 @@ import swervelib.SwerveInputStream;
 public class RobotContainer
 {
 
+  final private Auto auto = new Auto();
+
   // Replace with CommandPS4Controller or CommandJoystick if needed
   final         CommandXboxController driverXbox = new CommandXboxController(0);
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve"));
 
-  private final SendableChooser<Command> autoChooser;
   /**
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
    */
@@ -98,13 +100,6 @@ public class RobotContainer
     DriverStation.silenceJoystickConnectionWarning(true);
     NamedCommands.registerCommand("test", Commands.print("I EXIST"));
     boolean isCompetition = false;
-    autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier(
-            (stream) -> isCompetition
-            ? stream.filter(auto -> auto.getName().startsWith("comp"))
-            : stream
-        );
-
-        SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
   /**
@@ -175,7 +170,7 @@ public class RobotContainer
   public Command getAutonomousCommand()
   {
     // An example command will be run in autonomous
-    return autoChooser.getSelected();
+    return auto.runAuto(drivebase);
   }
 
   public void setMotorBrake(boolean brake)
