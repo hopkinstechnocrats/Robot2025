@@ -23,6 +23,6 @@ public class  EndEffector extends SubsystemBase{
     }
 
     public void brake(){
-        eeMotor.set(0);
+        eeMotor.stopMotor();
     }
 } 
