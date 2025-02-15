@@ -1,5 +1,6 @@
 package frc.robot.subsystems.elevator;
 
+import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
@@ -18,14 +19,16 @@ public class ElevatorSubsystem extends SubsystemBase{
 
         rightMotor.setNeutralMode(NeutralModeValue.Brake);
         leftMotor.setNeutralMode(NeutralModeValue.Brake);
+
+        leftMotor.setControl(new Follower(rightMotor.getDeviceID(), true));
     }
 
     public void up(){
-        rightMotor.set(0.5);
+        rightMotor.set(-0.05);
     }
 
     public void down(){
-        rightMotor.set(-0.5);
+        rightMotor.set(0.05);
     }
 
     public void brake(){
