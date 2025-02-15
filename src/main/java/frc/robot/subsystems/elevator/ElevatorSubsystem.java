@@ -32,6 +32,6 @@ public class ElevatorSubsystem extends SubsystemBase{
     }
 
     public void brake(){
-        rightMotor.set(0);
+        rightMotor.stopMotor();
     }
 }
