@@ -56,4 +56,13 @@ public final class Constants
 
     public static final double kEEAbsEncoderOffset = 0;
   }
+  public final class elevatorConstants{
+    public static final double kP = 0.1;
+    public static final double kI = 0;
+    public static final double kD = 0;
+    public static final double inchesPerRevolution = 1.751 * Math.PI;
+    public static final double ticksPerRevolution = 2048/*counts per revolutio*/ * 12/*gear ratio*/ * inchesPerRevolution;
+    public static final double ticksPerInch = ticksPerRevolution/inchesPerRevolution; //how many encoder ticks per inch of chain
+    //TODO: add a constant for elevator per inch of chain
+  }
 }

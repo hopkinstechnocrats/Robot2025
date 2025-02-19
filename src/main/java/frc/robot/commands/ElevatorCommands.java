@@ -26,4 +26,56 @@ public class ElevatorCommands extends Command{
                 elevatorSubsystem.brake();
             }, elevatorSubsystem);
     }
+    public static Command level1(ElevatorSubsystem elevator) {
+        return Commands.run(
+          () ->   {
+          
+            while (elevator.encoderRotation() != 1.5) 
+              elevator.level1();
+            }
+            ,
+
+            
+            elevator);
+          }
+
+          public static Command level2(ElevatorSubsystem elevator) {
+        return Commands.run(
+          () ->   {
+          
+            if (elevator.encoderRotation() != 2.5) 
+              elevator.level2();
+            }
+            ,
+
+            
+            elevator);
+          }
+
+          public static Command level3(ElevatorSubsystem elevator) {
+        return Commands.run(
+          () ->   {
+          
+            if (elevator.encoderRotation() != 3.5) 
+              elevator.level3();
+            }
+            ,
+
+            
+            elevator);
+          }
+
+          public static Command level4(ElevatorSubsystem elevator) {
+        return Commands.run(
+          () ->   {
+          
+            if (elevator.encoderRotation() != 4.5) 
+              elevator.level4();
+            }
+            ,
+
+            
+            elevator);
+          }
+
 } 
