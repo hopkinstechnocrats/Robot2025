@@ -20,7 +20,9 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.endeffector.EndEffectorCommands;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.EndEffector;
+import frc.robot.commands.ClimbCommands;
 import frc.robot.commands.ElevatorCommands;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
@@ -44,6 +46,7 @@ public class RobotContainer
                     "swerve"));
   private final EndEffector endEffector = new EndEffector();
   private final ElevatorSubsystem elevator = new ElevatorSubsystem();
+  private final Climber climber = new Climber();
 
 
   private final SendableChooser<Command> autoChooser;
@@ -134,6 +137,9 @@ public class RobotContainer
     {
       drivebase.setDefaultCommand(driveRobotOrientedAngularVelocity);
       elevator.setDefaultCommand(ElevatorCommands.brake(elevator));
+      climber.setDefaultCommand(ClimbCommands.brake(climber));
+      endEffector.setDefaultCommand(EndEffectorCommands.brake(endEffector));
+
     }
 
     if (Robot.isSimulation())
@@ -166,12 +172,10 @@ public class RobotContainer
       driverXbox.rightBumper().onTrue(Commands.none());
       operatorController.povUp().whileTrue(ElevatorCommands.up(elevator));
       operatorController.povDown().whileTrue(ElevatorCommands.down(elevator));
+      operatorController.povLeft().whileTrue(EndEffectorCommands.moveLeft(endEffector));
+      operatorController.povRight().whileTrue(EndEffectorCommands.moveRight(endEffector));
+      operatorController.leftTrigger().whileTrue(ClimbCommands.climb(climber));
     }
-
-    endEffector.setDefaultCommand(EndEffectorCommands.brake(endEffector));
-    operatorController.povLeft().whileTrue(EndEffectorCommands.moveLeft(endEffector));
-    operatorController.povRight().whileTrue(EndEffectorCommands.moveRight(endEffector));
-
   }
 
   /**
