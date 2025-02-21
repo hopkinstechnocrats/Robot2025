@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import swervelib.math.Matter;
@@ -61,8 +62,10 @@ public final class Constants
     public static final double kI = 0;
     public static final double kD = 0;
     public static final double inchesPerRevolution = 1.751 * Math.PI;
-    public static final double ticksPerRevolution = 2048/*counts per revolutio*/ * 12/*gear ratio*/ * inchesPerRevolution;
-    public static final double ticksPerInch = ticksPerRevolution/inchesPerRevolution; //how many encoder ticks per inch of chain
-    //TODO: add a constant for elevator per inch of chain
+    public static final double rotationsPerRevolution = 12/*gear ratio*/;
+    public static final double rotationsPerInch = rotationsPerRevolution/inchesPerRevolution / 3 /*elevator stages (divided by 3 because its a cascade elevator)*/; //how many encoder ticks per inch of elevator movement
+    public static final double L2Height = 7.625;
+    public static final double L3Height = 13.25;
+    public static final double L4Height = 21.75;
   }
 }

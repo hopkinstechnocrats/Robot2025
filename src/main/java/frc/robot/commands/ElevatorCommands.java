@@ -1,6 +1,7 @@
 package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.Constants.elevatorConstants;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 
 public class ElevatorCommands extends Command{
@@ -30,8 +31,7 @@ public class ElevatorCommands extends Command{
         return Commands.run(
           () ->   {
           
-            while (elevator.encoderRotation() != 1.5) 
-              elevator.level1();
+              elevator.moveToSetpoint(0);
             }
             ,
 
@@ -43,8 +43,8 @@ public class ElevatorCommands extends Command{
         return Commands.run(
           () ->   {
           
-            if (elevator.encoderRotation() != 2.5) 
-              elevator.level2();
+             
+              elevator.moveToSetpoint(elevatorConstants.L2Height);
             }
             ,
 
@@ -56,8 +56,8 @@ public class ElevatorCommands extends Command{
         return Commands.run(
           () ->   {
           
-            if (elevator.encoderRotation() != 3.5) 
-              elevator.level3();
+            
+              elevator.moveToSetpoint(elevatorConstants.L3Height);
             }
             ,
 
@@ -69,8 +69,7 @@ public class ElevatorCommands extends Command{
         return Commands.run(
           () ->   {
           
-            if (elevator.encoderRotation() != 4.5) 
-              elevator.level4();
+              elevator.moveToSetpoint(elevatorConstants.L4Height);
             }
             ,
 

@@ -1,7 +1,6 @@
 package frc.robot.subsystems.elevator;
 
 import com.ctre.phoenix6.controls.Follower;
-import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
@@ -45,11 +44,12 @@ public class ElevatorSubsystem extends SubsystemBase{
          
     }
      public void moveToSetpoint(double setpoint){
+        setpoint = setpoint * elevatorConstants.rotationsPerInch; //setpoint is in rotations
         state.setDouble(rightMotor.getPosition().getValueAsDouble());
         desiredState.setDouble(setpoint);
         while(!pidController.atSetpoint()){
             rightMotor.set(MathUtil.clamp(
-                pidController.calculate(setpoint), -1, 1));}
+                pidController.calculate(setpoint), -0.2, 0.2));}
         
         }
     
@@ -66,17 +66,21 @@ public class ElevatorSubsystem extends SubsystemBase{
     }
     
     
-    //final PositionVoltage m_request = new PositionVoltage(0).withSlot(0);
-  public void level1(){
+    /*//final PositionVoltage m_request = new PositionVoltage(0).withSlot(0);
+  public void bottom(){
     //rightMotor.setControl(m_request.withPosition(1.5));
+    moveToSetpoint(0);
   }
   public void level2(){
     //rightMotor.setControl(/m_request.withPosition(2.5));
+    moveToSetpoint(10);
   }
   public void level3(){
     //rightMotor.setControl(m_request.withPosition(3.5));
+    moveToSetpoint(20);
   }
   public void level4(){
     //rightMotor.setControl(m_request.withPosition(4.5));
+    moveToSetpoint(30); */
   }
-}
+
