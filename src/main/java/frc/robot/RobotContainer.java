@@ -171,7 +171,7 @@ public class RobotContainer
     endEffector.setDefaultCommand(EndEffectorCommands.brake(endEffector));
     operatorController.povLeft().whileTrue(EndEffectorCommands.moveLeft(endEffector));
     operatorController.povRight().whileTrue(EndEffectorCommands.moveRight(endEffector));
-    operatorController.a().onTrue(ElevatorCommands.level1(elevator));           
+    operatorController.a().onTrue(ElevatorCommands.bottom(elevator));           
     operatorController.b().onTrue(ElevatorCommands.level2(elevator));
     operatorController.x().onTrue(ElevatorCommands.level3(elevator));
     operatorController.y().onTrue(ElevatorCommands.level4(elevator));

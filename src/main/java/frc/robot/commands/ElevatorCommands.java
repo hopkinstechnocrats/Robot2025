@@ -27,7 +27,7 @@ public class ElevatorCommands extends Command{
                 elevatorSubsystem.brake();
             }, elevatorSubsystem);
     }
-    public static Command level1(ElevatorSubsystem elevator) {
+    public static Command bottom(ElevatorSubsystem elevator) {
         return Commands.run(
           () ->   {
           

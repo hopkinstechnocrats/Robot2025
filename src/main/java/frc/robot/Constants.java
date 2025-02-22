@@ -58,8 +58,8 @@ public final class Constants
     public static final double kEEAbsEncoderOffset = 0;
   }
   public final class elevatorConstants{
-    public static final double kP = 0.1;
-    public static final double kI = 0;
+    public static final double kP = 0.4;
+    public static final double kI = 0.00005;
     public static final double kD = 0;
     public static final double inchesPerRevolution = 1.751 * Math.PI;
     public static final double rotationsPerRevolution = 12/*gear ratio*/;

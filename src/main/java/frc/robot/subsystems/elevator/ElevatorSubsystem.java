@@ -3,8 +3,9 @@ package frc.robot.subsystems.elevator;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -27,12 +28,16 @@ public class ElevatorSubsystem extends SubsystemBase{
         table = inst.getTable("Elevator");
         state = table.getEntry("Current State");
         desiredState = table.getEntry("Desired State");
+        private  ElevatorFeedforward ff;
 
         rightMotor = new TalonFX(11);
         leftMotor = new TalonFX(12);
 
         rightMotor.setVoltage(4);
         leftMotor.setVoltage(4);
+
+        rightMotor.setPosition(0.0);
+        leftMotor.setPosition(0.0);
 
         rightMotor.setNeutralMode(NeutralModeValue.Brake);
         leftMotor.setNeutralMode(NeutralModeValue.Brake);
@@ -41,17 +46,25 @@ public class ElevatorSubsystem extends SubsystemBase{
         pidController = new PIDController(Constants.elevatorConstants.kP,
             Constants.elevatorConstants.kI, Constants.elevatorConstants.kD);
         pidController.setTolerance(0.1);
-         
+         ff = new ElevatorFeedforward(Constants.endEffectorConstants.kS,
+                Constants.endEffectorConstants.kV,
+                Constants.endEffectorConstants.kA);
+     //FIX FF    
     }
      public void moveToSetpoint(double setpoint){
-        setpoint = setpoint * elevatorConstants.rotationsPerInch; //setpoint is in rotations
-        state.setDouble(rightMotor.getPosition().getValueAsDouble());
-        desiredState.setDouble(setpoint);
-        while(!pidController.atSetpoint()){
-            rightMotor.set(MathUtil.clamp(
-                pidController.calculate(setpoint), -0.2, 0.2));}
+        setpoint = -setpoint * elevatorConstants.rotationsPerInch; //setpoint is in rotations
+        pidController.setSetpoint(setpoint);
+        do{
+            final double measurement = rightMotor.getPosition().getValueAsDouble();
+            final double command = MathUtil.clamp(
+              pidController.calculate(measurement), -0.1, 0.1);
+              rightMotor.set(command);
+              state.setDouble(rightMotor.getPosition().getValueAsDouble());
+                desiredState.setDouble(setpoint);
+        } while(!pidController.atSetpoint());
+        rightMotor.set(0);
+    }
         
-        }
     
     public void up(){
         rightMotor.set(-0.05);
