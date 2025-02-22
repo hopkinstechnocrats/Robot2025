@@ -176,6 +176,7 @@ public class RobotContainer
       operatorController.povRight().whileTrue(EndEffectorCommands.moveRight(endEffector));
       operatorController.leftTrigger().whileTrue(ClimbCommands.climb(climber));
       operatorController.rightTrigger().whileTrue(ClimbCommands.extendClimber(climber));
+      operatorController.rightTrigger().whileTrue(ClimbCommands.retractClimber(climber));
     }
   }
 
