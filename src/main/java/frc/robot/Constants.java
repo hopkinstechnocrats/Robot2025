@@ -5,6 +5,8 @@
 package frc.robot;
 
 
+import java.util.concurrent.ConcurrentHashMap.KeySetView;
+
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import swervelib.math.Matter;
@@ -58,8 +60,8 @@ public final class Constants
     public static final double kEEAbsEncoderOffset = 0;
   }
   public final class elevatorConstants{
-    public static final double kP = 0.4;
-    public static final double kI = 0.00005;
+    public static final double kP = 0.0;
+    public static final double kI = 0.0;
     public static final double kD = 0;
     public static final double inchesPerRevolution = 1.751 * Math.PI;
     public static final double rotationsPerRevolution = 12/*gear ratio*/;
@@ -67,5 +69,8 @@ public final class Constants
     public static final double L2Height = 7.625; //position when scoring on L2
     public static final double L3Height = 13.25; //position when scoring on L3
     public static final double L4Height = 21.75; //position when scoring on L4
+    public static final double kS = 0;
+    public static final double kG = 0.22;
+    public static final double kV = 10.66;
   }
 }

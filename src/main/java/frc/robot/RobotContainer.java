@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
@@ -44,7 +45,8 @@ public class RobotContainer
                     "swerve"));
   private final EndEffector endEffector = new EndEffector();
   private final ElevatorSubsystem elevator = new ElevatorSubsystem();
-
+  
+  
 
   private final SendableChooser<Command> autoChooser;
   /**
@@ -133,7 +135,7 @@ public class RobotContainer
     } else
     {
       drivebase.setDefaultCommand(driveRobotOrientedAngularVelocity);
-      elevator.setDefaultCommand(ElevatorCommands.brake(elevator));
+      elevator.setDefaultCommand(ElevatorCommands.setpointMove(elevator));
     }
 
     if (Robot.isSimulation())
@@ -171,10 +173,11 @@ public class RobotContainer
     endEffector.setDefaultCommand(EndEffectorCommands.brake(endEffector));
     operatorController.povLeft().whileTrue(EndEffectorCommands.moveLeft(endEffector));
     operatorController.povRight().whileTrue(EndEffectorCommands.moveRight(endEffector));
-    operatorController.a().onTrue(ElevatorCommands.bottom(elevator));           
-    operatorController.b().onTrue(ElevatorCommands.level2(elevator));
-    operatorController.x().onTrue(ElevatorCommands.level3(elevator));
-    operatorController.y().onTrue(ElevatorCommands.level4(elevator));
+    operatorController.a().onTrue(ElevatorCommands.setSetpoint(elevator, 0.0));
+    operatorController.b().onTrue(ElevatorCommands.setSetpoint(elevator, Constants.elevatorConstants.L2Height));  
+    operatorController.x().onTrue(ElevatorCommands.setSetpoint(elevator, Constants.elevatorConstants.L3Height));  
+    operatorController.y().onTrue(ElevatorCommands.setSetpoint(elevator, Constants.elevatorConstants.L4Height));  
+    operatorController.leftBumper().onTrue(ElevatorCommands.zeroMotors(elevator));
   }
 
   /**

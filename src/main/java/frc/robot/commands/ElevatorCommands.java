@@ -27,54 +27,30 @@ public class ElevatorCommands extends Command{
                 elevatorSubsystem.brake();
             }, elevatorSubsystem);
     }
-    public static Command bottom(ElevatorSubsystem elevator) {
+
+
+    public static Command setpointMove(ElevatorSubsystem elevator){
         return Commands.run(
           () ->   {
-          
-              elevator.moveToSetpoint(0);
-            }
-            ,
-
-            
+              elevator.moveToSetpoint();
+          },
             elevator);
-          }
+    }
 
-          public static Command level2(ElevatorSubsystem elevator) {
-        return Commands.run(
-          () ->   {
-          
-             
-              elevator.moveToSetpoint(elevatorConstants.L2Height);
-            }
-            ,
+    public static Command setSetpoint(ElevatorSubsystem elevator, Double setpoint){
+      return Commands.run(
+        () ->   {
+            elevator.changeSetpoint(setpoint);
+        },
+         elevator);
+    }
 
-            
-            elevator);
-          }
-
-          public static Command level3(ElevatorSubsystem elevator) {
-        return Commands.run(
-          () ->   {
-          
-            
-              elevator.moveToSetpoint(elevatorConstants.L3Height);
-            }
-            ,
-
-            
-            elevator);
-          }
-
-          public static Command level4(ElevatorSubsystem elevator) {
-        return Commands.run(
-          () ->   {
-          
-              elevator.moveToSetpoint(elevatorConstants.L4Height);
-            }
-            ,
-
-            
-            elevator);
-          }
-
+    public static Command zeroMotors(ElevatorSubsystem elevator){
+      return Commands.run(
+        () -> {
+       elevator.zeroMotors();
+        },
+      elevator);
+    }
+      
 } 
