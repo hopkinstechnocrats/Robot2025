@@ -13,7 +13,7 @@ public class Autos {
     //move straight forward
     public Command forwardAuto(SwerveSubsystem swerveSubsystem) {
         return new SequentialCommandGroup(
-            driveForwards(swerveSubsystem).withTimeout(1.5) 
+            drive(swerveSubsystem, 1 ,0).withTimeout(1.5) 
             //3 seconds = a little over 9 feet
             //1.5 seconds = 4 and 1/3 feet
         );
@@ -21,22 +21,21 @@ public class Autos {
 
     public Command pushLeftAuto(SwerveSubsystem swerveSubsystem) {
         return new SequentialCommandGroup(
-            driveLeft(swerveSubsystem).withTimeout(1),
-            driveForwards(swerveSubsystem).withTimeout(1)
+            //TODO: use gyroscope to drive in auto
+            drive(swerveSubsystem, -1,0 ).withTimeout(1.5),
+            drive(swerveSubsystem, 0, 0).withTimeout(.5),
+            drive(swerveSubsystem, 0, .1).withTimeout(.5),
+            drive(swerveSubsystem, 0, 1).withTimeout(2), //2 seconds = about 5.5 feet 
+            drive(swerveSubsystem, 0, 0).withTimeout(.5),
+            drive(swerveSubsystem, .1, 0).withTimeout(.5),
+            drive(swerveSubsystem, 1, 0).withTimeout(4)
         );
     }
 
-    public Command driveForwards(SwerveSubsystem swerveSubsystem){
+    public Command drive(SwerveSubsystem swerveSubsystem, double vx, double vy){
         return new RunCommand(
             () -> {
-                swerveSubsystem.drive(new Translation2d(1,0), 0, false);
-            }, swerveSubsystem);
-    }
-
-    public Command driveLeft(SwerveSubsystem swerveSubsystem){
-        return new RunCommand(
-            () -> {
-                swerveSubsystem.drive(new Translation2d(0,.5), 0, false);
+                swerveSubsystem.drive(new Translation2d(vx,vy), 0, false);
             }, swerveSubsystem);
     }
     
