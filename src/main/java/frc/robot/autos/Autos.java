@@ -13,14 +13,16 @@ public class Autos {
     //move straight forward
     public Command forwardAuto(SwerveSubsystem swerveSubsystem) {
         return new SequentialCommandGroup(
-            driveForwards(swerveSubsystem).withTimeout(5)
+            driveForwards(swerveSubsystem).withTimeout(1.5) 
+            //3 seconds = a little over 9 feet
+            //1.5 seconds = 4 and 1/3 feet
         );
     }
 
     public Command pushLeftAuto(SwerveSubsystem swerveSubsystem) {
         return new SequentialCommandGroup(
-            driveLeft(swerveSubsystem).withTimeout(5),
-            driveForwards(swerveSubsystem).withTimeout(5)
+            driveLeft(swerveSubsystem).withTimeout(1),
+            driveForwards(swerveSubsystem).withTimeout(1)
         );
     }
 
@@ -34,7 +36,7 @@ public class Autos {
     public Command driveLeft(SwerveSubsystem swerveSubsystem){
         return new RunCommand(
             () -> {
-                swerveSubsystem.drive(new Translation2d(0,1), 0, false);
+                swerveSubsystem.drive(new Translation2d(0,.5), 0, false);
             }, swerveSubsystem);
     }
     

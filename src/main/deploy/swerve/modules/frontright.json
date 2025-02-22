@@ -3,17 +3,16 @@
     "front": 10.5,
     "left": -10.5
   },
-  "absoluteEncoderOffset": 89,
+  "absoluteEncoderOffset": 262.9,
   "drive": {
     "type": "falcon",
     "id": 5,
-    "canbus": "GertrudeGreyser"
+    "canbus": null
   },
   "angle": {
     "type": "falcon",
     "id": 6,
-    "canbus": "GertrudeGreyser"
-
+    "canbus": null
   },
   "encoder": {
     "type": "thrifty",
