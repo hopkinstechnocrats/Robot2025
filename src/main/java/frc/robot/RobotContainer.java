@@ -1,6 +1,12 @@
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
+//TODO: add position between L2 and bottom for elevator
+//TODO: corrections offset for elevator
+//TODO: end effector keep steady whiile driving
+//TODO: add climber
+//TODO: merge in auto branch
+//TODO: use absolute encoder for end effector
 
 package frc.robot;
 
