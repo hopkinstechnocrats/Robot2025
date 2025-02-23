@@ -7,6 +7,7 @@
 //TODO: add climber
 //TODO: merge in auto branch
 //TODO: use absolute encoder for end effector
+//TODO: make end effector rights deeper
 
 package frc.robot;
 
