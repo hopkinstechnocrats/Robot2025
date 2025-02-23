@@ -174,6 +174,8 @@ public class RobotContainer
     operatorController.povLeft().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.LeftScore));
     operatorController.povRight().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.RightScore));
     operatorController.povUp().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.Stowage));
+    operatorController.leftBumper().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.LeftScoreL4));
+    operatorController.rightBumper().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.RightScoreL4));
     operatorController.a().onTrue(ElevatorCommands.setSetpoint(elevator, 0.07));
     operatorController.b().onTrue(ElevatorCommands.setSetpoint(elevator, Constants.elevatorConstants.L2Height));  
     operatorController.x().onTrue(ElevatorCommands.setSetpoint(elevator, Constants.elevatorConstants.L3Height));  

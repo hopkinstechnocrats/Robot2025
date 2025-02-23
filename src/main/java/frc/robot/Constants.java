@@ -56,10 +56,12 @@ public final class Constants
     public static final double kP = 0.2;
     public static final double kI = 0.025 / 10;
     public static final double kD = 0;
-    public static final double motorPowerLimit = .05; //percent of max 1 (DO NOT SET TO NEAR 1)
+    public static final double motorPowerLimit = .1; //percent of max 1 (DO NOT SET TO NEAR 1)
     public static final double rotationsPerRevolution = 16*2*2 /*gear ratio, 16:1 gear box and 2 2:1 belts*/;
     public static final double LeftScore = 0.125; //position when scoring on left
     public static final double RightScore = -0.125; //position when scoring on right
+    public static final double LeftScoreL4 = 0.15; //position when scoring on left
+    public static final double RightScoreL4 = -0.2; //position when scoring on left
     public static final double Stowage = 0.0; //stowage position for driving
     public static final int eeCANID = 13;
   }
@@ -74,7 +76,7 @@ public final class Constants
     public static final double rotationsPerInch = rotationsPerRevolution/inchesPerRevolution / 3 /*elevator stages (divided by 3 because its a cascade elevator)*/; //how many encoder ticks per inch of elevator movement
     public static final double L2Height = 7.625 + 13; //position when scoring on L2 inches
     public static final double L3Height = 13.25 + 23; //position when scoring on L3 inches
-    public static final double L4Height = 21.75; //position when scoring on L4 inches
+    public static final double L4Height = 21.75 + 38 + 6; //position when scoring on L4 inches
     public static final double kS = 0;
     public static final double kG = 0.22;
     public static final double kV = 10.66;
