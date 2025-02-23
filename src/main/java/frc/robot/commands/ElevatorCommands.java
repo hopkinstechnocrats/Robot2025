@@ -38,19 +38,11 @@ public class ElevatorCommands extends Command{
     }
 
     public static Command setSetpoint(ElevatorSubsystem elevator, Double setpoint){
-      return Commands.run(
+      return Commands.runOnce(
         () ->   {
             elevator.changeSetpoint(setpoint);
         },
          elevator);
     }
 
-    public static Command zeroMotors(ElevatorSubsystem elevator){
-      return Commands.run(
-        () -> {
-       elevator.zeroMotors();
-        },
-      elevator);
-    }
-      
 } 

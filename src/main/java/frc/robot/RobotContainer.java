@@ -173,11 +173,10 @@ public class RobotContainer
     endEffector.setDefaultCommand(EndEffectorCommands.brake(endEffector));
     operatorController.povLeft().whileTrue(EndEffectorCommands.moveLeft(endEffector));
     operatorController.povRight().whileTrue(EndEffectorCommands.moveRight(endEffector));
-    operatorController.a().onTrue(ElevatorCommands.setSetpoint(elevator, 0.0));
+    operatorController.a().onTrue(ElevatorCommands.setSetpoint(elevator, 0.07));
     operatorController.b().onTrue(ElevatorCommands.setSetpoint(elevator, Constants.elevatorConstants.L2Height));  
     operatorController.x().onTrue(ElevatorCommands.setSetpoint(elevator, Constants.elevatorConstants.L3Height));  
     operatorController.y().onTrue(ElevatorCommands.setSetpoint(elevator, Constants.elevatorConstants.L4Height));  
-    operatorController.leftBumper().onTrue(ElevatorCommands.zeroMotors(elevator));
   }
 
   /**
