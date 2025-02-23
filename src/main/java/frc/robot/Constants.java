@@ -77,6 +77,7 @@ public final class Constants
     public static final double L2Height = 7.625 + 13; //position when scoring on L2 inches
     public static final double L3Height = 13.25 + 23; //position when scoring on L3 inches
     public static final double L4Height = 21.75 + 38 + 6; //position when scoring on L4 inches
+    public static final double L2HeightEnd = 10; //position when scoring on L2 inches
     public static final double kS = 0;
     public static final double kG = 0.22;
     public static final double kV = 10.66;
