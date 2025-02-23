@@ -3,20 +3,20 @@
     "front": -10.5,
     "left": -10.5
   },
-  "absoluteEncoderOffset": 288.5,
+  "absoluteEncoderOffset": 341.2,
   "drive": {
     "type": "falcon",
     "id": 7,
-    "canbus": null
+    "canbus": "GertrudeGreyser"
   },
   "angle": {
     "type": "falcon",
     "id": 8,
-    "canbus": null
+    "canbus": "GertrudeGreyser"
   },
   "encoder": {
     "type": "thrifty",
-    "id": 2,
+    "id": 0,
     "canbus": null
   },
   "inverted": {
