@@ -21,7 +21,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.endeffector.EndEffectorCommands;
-import frc.robot.subsystems.EndEffector;
+import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.commands.ElevatorCommands;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
@@ -43,7 +43,7 @@ public class RobotContainer
   private final SwerveSubsystem drivebase  = new SwerveSubsystem(new File(
                     Filesystem.getDeployDirectory(),
                     "swerve"));
-  private final EndEffector endEffector = new EndEffector();
+  private final EndEffectorSubsystem endEffector = new EndEffectorSubsystem();
   private final ElevatorSubsystem elevator = new ElevatorSubsystem();
   
   
@@ -136,6 +136,7 @@ public class RobotContainer
     {
       drivebase.setDefaultCommand(driveRobotOrientedAngularVelocity);
       elevator.setDefaultCommand(ElevatorCommands.setpointMove(elevator));
+      endEffector.setDefaultCommand(EndEffectorCommands.moveToSetpointCommand(endEffector));
     }
 
     if (Robot.isSimulation())
@@ -166,13 +167,13 @@ public class RobotContainer
       driverXbox.back().whileTrue(Commands.none());
       driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
       driverXbox.rightBumper().onTrue(Commands.none());
-      operatorController.povUp().whileTrue(ElevatorCommands.up(elevator));
-      operatorController.povDown().whileTrue(ElevatorCommands.down(elevator));
+//      operatorController.povUp().whileTrue(ElevatorCommands.up(elevator));
+//      operatorController.povDown().whileTrue(ElevatorCommands.down(elevator));
     }
 
-    endEffector.setDefaultCommand(EndEffectorCommands.brake(endEffector));
-    operatorController.povLeft().whileTrue(EndEffectorCommands.moveLeft(endEffector));
-    operatorController.povRight().whileTrue(EndEffectorCommands.moveRight(endEffector));
+    operatorController.povLeft().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.LeftScore));
+    operatorController.povRight().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.RightScore));
+    operatorController.povUp().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.Stowage));
     operatorController.a().onTrue(ElevatorCommands.setSetpoint(elevator, 0.07));
     operatorController.b().onTrue(ElevatorCommands.setSetpoint(elevator, Constants.elevatorConstants.L2Height));  
     operatorController.x().onTrue(ElevatorCommands.setSetpoint(elevator, Constants.elevatorConstants.L3Height));  
