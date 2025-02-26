@@ -2,6 +2,8 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.reduxrobotics.sensors.canandmag.Canandmag;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTable;
@@ -18,6 +20,7 @@ public class EndEffectorSubsystem extends SubsystemBase{
     private Double m_offset = 0.0; //Also rotations
     private Long m_counter = 0L;
     private final PIDController pidController;
+    private Canandmag throughbore;
     NetworkTableInstance inst;
          NetworkTable table;
          NetworkTableEntry nt_measurement;
@@ -38,12 +41,14 @@ public class EndEffectorSubsystem extends SubsystemBase{
         nt_object_a = table.getEntry("Points North");
         nt_object_b = table.getEntry("Points South");
 
-
         motor = new TalonFX(endEffectorConstants.eeCANID);
-        
         motor.setVoltage(4);
 
-        m_offset = motor.getPosition().getValueAsDouble(); //trough must be flat on startup
+        throughbore = new Canandmag(25);
+        throughbore.setPosition(throughbore.getAbsPosition() - 
+                Constants.endEffectorConstants.kEEAbsEncoderOffset);
+
+        m_offset = throughbore.getPosition();
 
         motor.setNeutralMode(NeutralModeValue.Brake);
       

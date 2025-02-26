@@ -64,6 +64,8 @@ public final class Constants
     public static final double RightScoreL4 = -0.2; //position when scoring on right
     public static final double Stowage = 0.0; //stowage position for driving
     public static final int eeCANID = 13;
+    public static final int throughboreCANID = 25;
+    public static final double kEEAbsEncoderOffset = 0.0;
   }
   public final class elevatorConstants{
     public static final double kP = 0.2;
