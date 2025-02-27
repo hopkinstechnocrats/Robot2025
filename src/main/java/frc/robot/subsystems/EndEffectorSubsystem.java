@@ -32,6 +32,7 @@ public class EndEffectorSubsystem extends SubsystemBase{
          NetworkTableEntry nt_object_a;
          NetworkTableEntry nt_object_b;
          NetworkTableEntry nt_absolute;
+         NetworkTableEntry nt_motor_position;
     public EndEffectorSubsystem(){
         inst = NetworkTableInstance.getDefault();
         table = inst.getTable("EndEffector");
@@ -43,6 +44,7 @@ public class EndEffectorSubsystem extends SubsystemBase{
         nt_object_a = table.getEntry("Points North");
         nt_object_b = table.getEntry("Points South");
         nt_absolute = table.getEntry("Absolute Encoder Position [rot]");
+        nt_motor_position = table.getEntry("Position of Motor [rot]");
 
         motor = new TalonFX(endEffectorConstants.eeCANID);
         motor.setVoltage(4);
@@ -74,6 +76,8 @@ public class EndEffectorSubsystem extends SubsystemBase{
         nt_command.setDouble(command);
         nt_object_a.setInteger(m_counter);
         nt_absolute.setDouble(throughbore.getAbsolutePosition().getValueAsDouble());
+        nt_motor_position.setDouble(motor.getPosition().getValueAsDouble()
+                / Constants.endEffectorConstants.rotationsPerRevolution);
     }
 
     public void changeSetpoint(double setpoint){
