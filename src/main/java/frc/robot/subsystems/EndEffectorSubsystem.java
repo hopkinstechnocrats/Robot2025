@@ -50,8 +50,6 @@ public class EndEffectorSubsystem extends SubsystemBase{
         motor.setVoltage(4);
 
         throughbore = new CANcoder(21);
-        throughbore.setPosition(throughbore.getAbsolutePosition().getValueAsDouble() - 
-                Constants.endEffectorConstants.kEEAbsEncoderOffset);
 
         motor.setNeutralMode(NeutralModeValue.Brake);
       
@@ -69,7 +67,7 @@ public class EndEffectorSubsystem extends SubsystemBase{
         
          pidController.calculate(measurement), -endEffectorConstants.motorPowerLimit, endEffectorConstants.motorPowerLimit);  
          m_counter++;
-        motor.set(0/*command*/);
+        motor.set(command);
         nt_measurement.setDouble(measurement);
         nt_setpoint.setDouble(m_setpoint);
         nt_offset.setDouble(m_offset);
