@@ -64,7 +64,7 @@ public class EndEffectorSubsystem extends SubsystemBase{
     }
      public void moveToSetpoint(){
         pidController.setSetpoint(m_setpoint);
-        final double measurement = motor.getPosition().getValueAsDouble();
+        final double measurement = throughbore.getPosition().getValueAsDouble();
         double command = MathUtil.clamp(
         
          pidController.calculate(measurement), -endEffectorConstants.motorPowerLimit, endEffectorConstants.motorPowerLimit);  
