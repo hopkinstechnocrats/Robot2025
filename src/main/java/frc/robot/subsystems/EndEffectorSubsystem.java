@@ -49,7 +49,7 @@ public class EndEffectorSubsystem extends SubsystemBase{
         motor = new TalonFX(endEffectorConstants.eeCANID);
         motor.setVoltage(4);
 
-        throughbore = new CANcoder(25);
+        throughbore = new CANcoder(21);
         throughbore.setPosition(throughbore.getAbsolutePosition().getValueAsDouble() - 
                 Constants.endEffectorConstants.kEEAbsEncoderOffset);
 
