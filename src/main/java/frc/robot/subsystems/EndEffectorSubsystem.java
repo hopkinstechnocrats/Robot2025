@@ -67,7 +67,7 @@ public class EndEffectorSubsystem extends SubsystemBase{
         
          pidController.calculate(measurement), -endEffectorConstants.motorPowerLimit, endEffectorConstants.motorPowerLimit);  
          m_counter++;
-        motor.set(command);
+        motor.set(0/*command*/);
         nt_measurement.setDouble(measurement);
         nt_setpoint.setDouble(m_setpoint);
         nt_offset.setDouble(m_offset);
