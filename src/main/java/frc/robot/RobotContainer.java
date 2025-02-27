@@ -33,6 +33,7 @@ import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
 import swervelib.SwerveInputStream;
+import frc.robot.autos.Autos;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
@@ -41,6 +42,8 @@ import swervelib.SwerveInputStream;
  */
 public class RobotContainer
 {
+
+  final private Autos autos = new Autos();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   final CommandXboxController driverXbox = new CommandXboxController(0);
@@ -53,6 +56,10 @@ public class RobotContainer
                                                                                 
                                                                                 
 
+  final Command m_forwardAuto = autos.forwardAuto(drivebase);
+  final Command m_pushLeftAuto = autos.pushLeftAuto(drivebase);
+
+  SendableChooser<Command> m_chooser = new SendableChooser<>();
   /**
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
    */
@@ -103,6 +110,13 @@ public class RobotContainer
     configureBindings();
     DriverStation.silenceJoystickConnectionWarning(true);
     NamedCommands.registerCommand("test", Commands.print("I EXIST"));
+    boolean isCompetition = false;
+
+
+    m_chooser.setDefaultOption("Move Forward", m_forwardAuto);
+    m_chooser.addOption("Push robot to left out", m_pushLeftAuto);
+    SmartDashboard.putData(m_chooser);
+
   }
 
   /**
@@ -194,6 +208,7 @@ public class RobotContainer
     operatorController.a().onTrue(ElevatorCommands.setSetpoint(elevator, Constants.elevatorConstants.L2HeightEnd));  
     operatorController.povDown().onTrue(ElevatorCommands.setSetpoint(elevator, 0.07));
   }
+  
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -202,8 +217,9 @@ public class RobotContainer
    */
   public Command getAutonomousCommand()
   {
-    // An example command will be run in autonomous
-    return drivebase.getAutonomousCommand("New Auto");
+    // Run selected auto
+    return m_chooser.getSelected();
+
   }
 
   public void setMotorBrake(boolean brake)
