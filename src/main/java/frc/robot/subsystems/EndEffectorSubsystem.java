@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.reduxrobotics.sensors.canandmag.Canandmag;
@@ -20,7 +21,7 @@ public class EndEffectorSubsystem extends SubsystemBase{
     private Double m_offset = 0.0; //Also rotations
     private Long m_counter = 0L;
     private final PIDController pidController;
-    private Canandmag throughbore;
+    private CANcoder throughbore;
     NetworkTableInstance inst;
          NetworkTable table;
          NetworkTableEntry nt_measurement;
@@ -30,6 +31,7 @@ public class EndEffectorSubsystem extends SubsystemBase{
          NetworkTableEntry nt_changed;
          NetworkTableEntry nt_object_a;
          NetworkTableEntry nt_object_b;
+         NetworkTableEntry nt_absolute;
     public EndEffectorSubsystem(){
         inst = NetworkTableInstance.getDefault();
         table = inst.getTable("EndEffector");
@@ -40,15 +42,14 @@ public class EndEffectorSubsystem extends SubsystemBase{
         nt_changed = table.getEntry("Setpoint set [rot]");
         nt_object_a = table.getEntry("Points North");
         nt_object_b = table.getEntry("Points South");
+        nt_absolute = table.getEntry("Absolute Encoder Position [rot]");
 
         motor = new TalonFX(endEffectorConstants.eeCANID);
         motor.setVoltage(4);
 
-        throughbore = new Canandmag(25);
-        throughbore.setPosition(throughbore.getAbsPosition() - 
+        throughbore = new CANcoder(25);
+        throughbore.setPosition(throughbore.getAbsolutePosition().getValueAsDouble() - 
                 Constants.endEffectorConstants.kEEAbsEncoderOffset);
-
-        m_offset = throughbore.getPosition();
 
         motor.setNeutralMode(NeutralModeValue.Brake);
       
@@ -61,22 +62,23 @@ public class EndEffectorSubsystem extends SubsystemBase{
     }
      public void moveToSetpoint(){
         pidController.setSetpoint(m_setpoint);
-        final double measurement = motor.getPosition().getValueAsDouble() - m_offset;
+        final double measurement = motor.getPosition().getValueAsDouble();
         double command = MathUtil.clamp(
         
          pidController.calculate(measurement), -endEffectorConstants.motorPowerLimit, endEffectorConstants.motorPowerLimit);  
          m_counter++;
-        motor.set(command);
+        motor.set(0/*command*/);
         nt_measurement.setDouble(measurement);
         nt_setpoint.setDouble(m_setpoint);
         nt_offset.setDouble(m_offset);
         nt_command.setDouble(command);
         nt_object_a.setInteger(m_counter);
+        nt_absolute.setDouble(throughbore.getAbsolutePosition().getValueAsDouble());
     }
 
     public void changeSetpoint(double setpoint){
       
-      m_setpoint = setpoint * endEffectorConstants.rotationsPerRevolution; //setpoint is in rotations
+      m_setpoint = setpoint; //setpoint is in rotations
       nt_changed.setDouble(m_setpoint);
       nt_object_b.setInteger(m_counter);
       
