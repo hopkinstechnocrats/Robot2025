@@ -14,22 +14,22 @@ public class ClimbCommands extends Command{
         }, climbSubsystem);
     }
 
-    public static Command climb(Climber climbSubsystem){
-        return Commands.run(() -> {
-            climbSubsystem.climb();
-        }, climbSubsystem);
-    }
-
     public static Command extendClimber(Climber climbSubsystem){
         return Commands.run(() -> {
-            climbSubsystem.extendClimber();
+            climbSubsystem.extend();
         }, climbSubsystem);
     }
 
     public static Command retractClimber(Climber climbSubsystem){
         return Commands.run(() -> {
-            climbSubsystem.retractClimber();
+            climbSubsystem.retract();
         }, climbSubsystem);
+    }
+
+    public static Command spinVictor(Climber climbSubsystem){
+        return Commands.runOnce(() -> {
+            climbSubsystem.spinVictor();
+        }, climbSubsystem).withTimeout(2);
     }
 
    

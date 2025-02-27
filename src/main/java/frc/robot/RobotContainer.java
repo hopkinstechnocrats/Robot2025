@@ -170,13 +170,16 @@ public class RobotContainer
       driverXbox.back().whileTrue(Commands.none());
       driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
       driverXbox.rightBumper().onTrue(Commands.none());
+
+      operatorController.leftTrigger().whileTrue(ClimbCommands.extendClimber(climber));
+      operatorController.rightTrigger().whileTrue(ClimbCommands.retractClimber(climber));
+
+      operatorController.rightBumper().onTrue(ClimbCommands.spinVictor(climber));
+
       operatorController.povUp().whileTrue(ElevatorCommands.up(elevator));
       operatorController.povDown().whileTrue(ElevatorCommands.down(elevator));
       operatorController.povLeft().whileTrue(EndEffectorCommands.moveLeft(endEffector));
       operatorController.povRight().whileTrue(EndEffectorCommands.moveRight(endEffector));
-      operatorController.leftTrigger().whileTrue(ClimbCommands.climb(climber));
-      operatorController.rightTrigger().whileTrue(ClimbCommands.extendClimber(climber));
-      operatorController.rightTrigger().whileTrue(ClimbCommands.retractClimber(climber));
     }
   }
 
