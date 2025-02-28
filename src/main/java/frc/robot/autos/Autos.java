@@ -13,7 +13,7 @@ public class Autos {
     //move straight forward
     public Command forwardAuto(SwerveSubsystem swerveSubsystem) {
         return new SequentialCommandGroup(
-            drive(swerveSubsystem, 1 ,0).withTimeout(1.5) 
+            drive(swerveSubsystem, -1 ,0).withTimeout(1.5) 
             //3 seconds = a little over 9 feet
             //1.5 seconds = 4 and 1/3 feet
         );
