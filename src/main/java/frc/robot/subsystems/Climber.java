@@ -19,11 +19,11 @@ public class Climber extends SubsystemBase{
     }
 
     public void extend(){
-        climbMotor.set(-1);
+        climbMotor.set(-0.4);
     }
 
     public void retract(){
-        climbMotor.set(1);
+        climbMotor.set(0.4);
     }
 
     public void brake(){
