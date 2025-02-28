@@ -29,7 +29,7 @@ public class ClimbCommands extends Command{
     public static Command spinVictor(Climber climbSubsystem){
         return Commands.runOnce(() -> {
             climbSubsystem.spinVictor();
-        }, climbSubsystem).withTimeout(2);
+        }, climbSubsystem);
     }
 
    
