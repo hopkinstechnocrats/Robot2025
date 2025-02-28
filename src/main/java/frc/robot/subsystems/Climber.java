@@ -35,6 +35,6 @@ public class Climber extends SubsystemBase{
     }
 
     public void brakeVictor(){
-        victorsp.set(.5);
+        victorsp.set(0);
     }
 }
