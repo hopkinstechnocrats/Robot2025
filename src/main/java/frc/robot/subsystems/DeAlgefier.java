@@ -12,7 +12,7 @@ public class DeAlgefier extends SubsystemBase{
     }
 
     public void extend(){
-        extender.set(0.3);
+        extender.set(0.1);
     }
 
     public void retract(){

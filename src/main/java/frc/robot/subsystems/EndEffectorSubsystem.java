@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class EndEffectorSubsystem extends SubsystemBase{
     private TalonFX motor;
-    private Double m_setpoint = 0.0; // Rotations pre-gearbox
+    private Double m_setpoint = Constants.endEffectorConstants.Stowage; // Rotations pre-gearbox
     private Double m_offset = 0.0; //Also rotations
     private Long m_counter = 0L;
     private final PIDController pidController;
