@@ -31,6 +31,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.endeffector.EndEffectorCommands;
+import frc.robot.subsystems.Climber;
+import frc.robot.commands.ClimbCommands;
 import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.commands.ElevatorCommands;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
@@ -57,8 +59,7 @@ public class RobotContainer
                                                                                 "swerve"));
   private final EndEffectorSubsystem endEffector = new EndEffectorSubsystem();
   private final ElevatorSubsystem elevator = new ElevatorSubsystem();
-                                                                                
-                                                                                
+  private final Climber climber = new Climber();
 
   final Command m_forwardAuto = autos.forwardAuto(drivebase);
   final Command m_pushLeftAuto = autos.pushLeftAuto(drivebase);
@@ -148,6 +149,8 @@ public class RobotContainer
       drivebase.setDefaultCommand(driveFieldOrientedDirectAngleKeyboard);
     } else
     {
+
+      climber.setDefaultCommand(ClimbCommands.brake(climber));
       drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
       elevator.setDefaultCommand(ElevatorCommands.setpointMove(elevator));
       endEffector.setDefaultCommand(EndEffectorCommands.moveToSetpointCommand(endEffector));
@@ -198,8 +201,11 @@ public class RobotContainer
       driverXbox.back().whileTrue(Commands.none());
       driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
       driverXbox.rightBumper().onTrue(Commands.none());
-//      operatorController.povUp().whileTrue(ElevatorCommands.up(elevator));
-//      operatorController.povDown().whileTrue(ElevatorCommands.down(elevator));
+
+      driverXbox.leftTrigger().whileTrue(ClimbCommands.extendClimber(climber));
+      driverXbox.rightTrigger().whileTrue(ClimbCommands.retractClimber(climber));
+
+      driverXbox.rightBumper().onTrue(ClimbCommands.spinVictor(climber));
     }
 
     operatorController.leftBumper().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.LeftScore));
