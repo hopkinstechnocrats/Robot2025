@@ -4,10 +4,6 @@
 //TODO: add position between L2 and bottom for elevator
 //TODO: corrections offset for elevator
 //TODO: end effector keep steady whiile driving
-//TODO: add climber
-//TODO: merge in auto branch
-//TODO: use absolute encoder for end effector
-//TODO: make end effector rights deeper
 
 package frc.robot;
 
@@ -32,7 +28,9 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.endeffector.EndEffectorCommands;
 import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.DeAlgefier;
 import frc.robot.commands.ClimbCommands;
+import frc.robot.commands.DeAlgaefierCommands;
 import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.commands.ElevatorCommands;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
@@ -60,6 +58,7 @@ public class RobotContainer
   private final EndEffectorSubsystem endEffector = new EndEffectorSubsystem();
   private final ElevatorSubsystem elevator = new ElevatorSubsystem();
   private final Climber climber = new Climber();
+  private final DeAlgefier deAlgefier = new DeAlgefier();
 
   final Command m_forwardAuto = autos.forwardAuto(drivebase);
   final Command m_pushLeftAuto = autos.pushLeftAuto(drivebase);
@@ -154,6 +153,7 @@ public class RobotContainer
       drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
       elevator.setDefaultCommand(ElevatorCommands.setpointMove(elevator));
       endEffector.setDefaultCommand(EndEffectorCommands.moveToSetpointCommand(endEffector));
+      deAlgefier.setDefaultCommand(DeAlgaefierCommands.stop(deAlgefier));
     }
 
     if (Robot.isSimulation())
@@ -215,6 +215,7 @@ public class RobotContainer
     operatorController.y().onTrue(ElevatorCommands.setSetpoint(elevator, Constants.elevatorConstants.L4Height));  
     operatorController.a().onTrue(ElevatorCommands.setSetpoint(elevator, Constants.elevatorConstants.L2HeightEnd));  
     operatorController.povDown().onTrue(ElevatorCommands.setSetpoint(elevator, 0.07));
+    operatorController.povDownRight().whileTrue(DeAlgaefierCommands.deAlgaefy(deAlgefier));
   }
   
 
