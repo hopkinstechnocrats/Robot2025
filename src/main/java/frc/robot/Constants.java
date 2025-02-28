@@ -25,7 +25,7 @@ public final class Constants
   public static final double ROBOT_MASS = (148 - 20.3) * 0.453592; // 32lbs * kg per pound
   public static final Matter CHASSIS    = new Matter(new Translation3d(0, 0, Units.inchesToMeters(8)), ROBOT_MASS);
   public static final double LOOP_TIME  = 0.13; //s, 20ms + 110ms sprk max velocity lag
-  public static final double MAX_SPEED  = Units.feetToMeters(14.5);
+  public static final double MAX_SPEED  = Units.feetToMeters(8);
 
   //TODO: put actual servo id here
   public static final int servoID = 2;
@@ -61,10 +61,10 @@ public final class Constants
     public static final double kD = 0;
     public static final double motorPowerLimit = .1; //percent of max 1 (DO NOT SET TO NEAR 1)
     public static final double rotationsPerRevolution = 16*2*2 /*gear ratio, 16:1 gear box and 2 2:1 belts*/;
-    public static final double LeftScore = 0.243; //position when scoring on left
-    public static final double RightScore = -0.193; //position when scoring on right
-    public static final double LeftScoreL4 = 0.27; //position when scoring on left
-    public static final double RightScoreL4 = -0.226; //position when scoring on right
+    public static final double LeftScore = 0.243 - 0.01; //position when scoring on left in rotations
+    public static final double RightScore = -0.193 - 1.9/360; //position when scoring on right in rotations
+    public static final double LeftScoreL4 = 0.27; //position when scoring on left in rotations
+    public static final double RightScoreL4 = -0.226 + 1/360; //position when scoring on right in rotations
     public static final double Stowage = 0.0; //stowage position for driving
     public static final int eeCANID = 13;
     public static final int throughboreCANID = 25;
@@ -75,7 +75,7 @@ public final class Constants
     public static final double kI = 0.025 / 10;
     public static final double kD = 0;
     public static final double minMotorHeight = 0.5; //rotations below which we stop down power (actually positive)
-    public static final double motorPowerLimit = .3; //percent of max 1 (DO NOT SET TO NEAR 1)
+    public static final double motorPowerLimit = .2; //percent of max 1 (DO NOT SET TO NEAR 1)
     public static final double inchesPerRevolution = 1.751 * Math.PI;
     public static final double rotationsPerRevolution = 12/*gear ratio*/;
     public static final double rotationsPerInch = rotationsPerRevolution/inchesPerRevolution / 3 /*elevator stages (divided by 3 because its a cascade elevator)*/; //how many encoder ticks per inch of elevator movement
