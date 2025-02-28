@@ -13,17 +13,17 @@ public class Climber extends SubsystemBase{
     VictorSP victorsp = new VictorSP(2);
 
     public Climber(){
-        climbMotor = new TalonFX(16);
+        climbMotor = new TalonFX(14);
         climbMotor.setNeutralMode(NeutralModeValue.Brake);
         climbMotor.setVoltage(4);
     }
 
     public void extend(){
-        climbMotor.set(1);
+        climbMotor.set(-1);
     }
 
     public void retract(){
-        climbMotor.set(-1);
+        climbMotor.set(1);
     }
 
     public void brake(){
@@ -32,5 +32,9 @@ public class Climber extends SubsystemBase{
 
     public void spinVictor(){
         victorsp.set(.5);
+    }
+
+    public void brakeVictor(){
+        victorsp.set(0);
     }
 }

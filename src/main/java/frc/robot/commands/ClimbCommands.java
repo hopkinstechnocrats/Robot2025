@@ -11,6 +11,7 @@ public class ClimbCommands extends Command{
     public static Command brake(Climber climbSubsystem){
         return Commands.run(() -> {
             climbSubsystem.brake();
+            climbSubsystem.brakeVictor();
         }, climbSubsystem);
     }
 
@@ -29,7 +30,7 @@ public class ClimbCommands extends Command{
     public static Command spinVictor(Climber climbSubsystem){
         return Commands.runOnce(() -> {
             climbSubsystem.spinVictor();
-        }, climbSubsystem).withTimeout(2);
+        }, climbSubsystem);
     }
 
    
