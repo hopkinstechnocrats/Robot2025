@@ -6,6 +6,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.reduxrobotics.sensors.canandmag.Canandmag;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -21,6 +22,7 @@ public class EndEffectorSubsystem extends SubsystemBase{
     private Double m_offset = 0.0; //Also rotations
     private Long m_counter = 0L;
     private final PIDController pidController;
+    private final ArmFeedforward feedforwards;
     private CANcoder throughbore;
     NetworkTableInstance inst;
          NetworkTable table;
@@ -58,14 +60,14 @@ public class EndEffectorSubsystem extends SubsystemBase{
             Constants.endEffectorConstants.kI, Constants.endEffectorConstants.kD);
         pidController.setTolerance(0.1);
 
-     
+        feedforwards = new ArmFeedforward(0.05, 0.19, 1.26); 
     }
      public void moveToSetpoint(){
         pidController.setSetpoint(m_setpoint);
         final double measurement = throughbore.getPosition().getValueAsDouble();
         double command = MathUtil.clamp(
         
-         pidController.calculate(measurement), -endEffectorConstants.motorPowerLimit, endEffectorConstants.motorPowerLimit);  
+         pidController.calculate(measurement) + feedforwards.calculate(measurement * 2 * Math.PI, 0), -endEffectorConstants.motorPowerLimit, endEffectorConstants.motorPowerLimit);  
          m_counter++;
         motor.set(command);
         nt_measurement.setDouble(measurement);
