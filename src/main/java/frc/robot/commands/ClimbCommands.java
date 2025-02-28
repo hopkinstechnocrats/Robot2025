@@ -11,6 +11,7 @@ public class ClimbCommands extends Command{
     public static Command brake(Climber climbSubsystem){
         return Commands.run(() -> {
             climbSubsystem.brake();
+            climbSubsystem.brakeVictor();
         }, climbSubsystem);
     }
 
