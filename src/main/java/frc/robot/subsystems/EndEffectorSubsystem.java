@@ -22,7 +22,7 @@ public class EndEffectorSubsystem extends SubsystemBase{
     private Double m_offset = 0.0; //Also rotations
     private Long m_counter = 0L;
     private final PIDController pidController;
-    private final ArmFeedforward feedforwards;
+//    private final ArmFeedforward feedforwards;
     private CANcoder throughbore;
     NetworkTableInstance inst;
          NetworkTable table;
@@ -64,15 +64,15 @@ public class EndEffectorSubsystem extends SubsystemBase{
             Constants.endEffectorConstants.kI, Constants.endEffectorConstants.kD);
         pidController.setTolerance(0.1);
 
-        feedforwards = new ArmFeedforward(0.05, 0.19, 1.26); 
+//        feedforwards = new ArmFeedforward(0.05, 0.19, 1.26); 
     }
      public void moveToSetpoint(){
         pidController.setSetpoint(m_setpoint);
         final double measurement = throughbore.getPosition().getValueAsDouble();
         final double PIDcommand = pidController.calculate(measurement);
-        final double FFcommand =  feedforwards.calculate(measurement * 2 * Math.PI, 0);
+        final double FFcommand =  Math.sin(measurement * 2 * Math.PI) * 0.03054;
         double command = MathUtil.clamp( 
-        PIDcommand  + FFcommand, -endEffectorConstants.motorPowerLimit, endEffectorConstants.motorPowerLimit);  
+        PIDcommand  + -FFcommand, -endEffectorConstants.motorPowerLimit, endEffectorConstants.motorPowerLimit);  
 
          m_counter++;
         motor.set(command);
