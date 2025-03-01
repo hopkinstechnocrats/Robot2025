@@ -35,6 +35,8 @@ public class EndEffectorSubsystem extends SubsystemBase{
          NetworkTableEntry nt_object_b;
          NetworkTableEntry nt_absolute;
          NetworkTableEntry nt_motor_position;
+         NetworkTableEntry nt_feed_forwards;
+         NetworkTableEntry nt_PID;
     public EndEffectorSubsystem(){
         inst = NetworkTableInstance.getDefault();
         table = inst.getTable("EndEffector");
@@ -47,6 +49,8 @@ public class EndEffectorSubsystem extends SubsystemBase{
         nt_object_b = table.getEntry("Points South");
         nt_absolute = table.getEntry("Absolute Encoder Position [rot]");
         nt_motor_position = table.getEntry("Position of Motor [rot]");
+        nt_feed_forwards = table.getEntry("Feed Forwards command [-1 to 1]");
+        nt_PID = table.getEntry("PID command [-1 to 1]");
 
         motor = new TalonFX(endEffectorConstants.eeCANID);
         motor.setVoltage(4);
@@ -65,9 +69,11 @@ public class EndEffectorSubsystem extends SubsystemBase{
      public void moveToSetpoint(){
         pidController.setSetpoint(m_setpoint);
         final double measurement = throughbore.getPosition().getValueAsDouble();
-        double command = MathUtil.clamp(
-        
-         pidController.calculate(measurement) + feedforwards.calculate(measurement * 2 * Math.PI, 0), -endEffectorConstants.motorPowerLimit, endEffectorConstants.motorPowerLimit);  
+        final double PIDcommand = pidController.calculate(measurement);
+        final double FFcommand =  feedforwards.calculate(measurement * 2 * Math.PI, 0);
+        double command = MathUtil.clamp( 
+        PIDcommand  + FFcommand, -endEffectorConstants.motorPowerLimit, endEffectorConstants.motorPowerLimit);  
+
          m_counter++;
         motor.set(command);
         nt_measurement.setDouble(measurement);
@@ -78,6 +84,8 @@ public class EndEffectorSubsystem extends SubsystemBase{
         nt_absolute.setDouble(throughbore.getAbsolutePosition().getValueAsDouble());
         nt_motor_position.setDouble(motor.getPosition().getValueAsDouble()
                 / Constants.endEffectorConstants.rotationsPerRevolution);
+        nt_PID.setDouble(PIDcommand);
+        nt_feed_forwards.setDouble(FFcommand);
     }
 
     public void changeSetpoint(double setpoint){
