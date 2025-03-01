@@ -63,8 +63,8 @@ public final class Constants
     public static final double rotationsPerRevolution = 16*2*2 /*gear ratio, 16:1 gear box and 2 2:1 belts*/;
     public static final double LeftScore = 0.243 - 0.01; //position when scoring on left in rotations
     public static final double RightScore = -0.193 - 1.9/360; //position when scoring on right in rotations
-    public static final double LeftScoreL4 = 0.27 + 2/360; //position when scoring on left in rotations
-    public static final double RightScoreL4 = -0.226 + 6/360; //position when scoring on right in rotations
+    public static final double LeftScoreL4 = .285;//0.27 + 2/360; //position when scoring on left in rotations
+    public static final double RightScoreL4 = .235;//-0.226 + 6/360; //position when scoring on right in rotations
     public static final double Stowage = 0.0; //stowage position for driving
     public static final int eeCANID = 13;
     public static final int throughboreCANID = 25;
