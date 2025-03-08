@@ -19,6 +19,9 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -38,6 +41,8 @@ import frc.robot.commands.ElevatorCommands;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
+import java.util.function.DoubleSupplier;
+
 import swervelib.SwerveInputStream;
 import frc.robot.autos.Autos;
 
@@ -60,6 +65,8 @@ public class RobotContainer
   private final EndEffectorSubsystem endEffector = new EndEffectorSubsystem();
   private final ElevatorSubsystem elevator = new ElevatorSubsystem();
   private final Climber climber = new Climber();
+  
+ 
 
   final Command m_forwardAuto = autos.forwardAuto(drivebase);
   final Command m_pushLeftAuto = autos.pushLeftAuto(drivebase);
@@ -80,7 +87,7 @@ public class RobotContainer
    * Clone's the angular velocity input stream and converts it to a fieldRelative input stream.
    */
   SwerveInputStream driveDirectAngle = driveAngularVelocity.copy().withControllerHeadingAxis(driverXbox::getRightX,
-                                                                                             driverXbox::getRightY)
+  driverXbox::getRightY)
                                                            .headingWhile(true);
 
   /**
@@ -105,19 +112,20 @@ public class RobotContainer
                         () -> Math.cos(
                             driverXbox.getRawAxis(2) * Math.PI) *
                             (Math.PI * 2)).headingWhile(true);
+  
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer()
   {
+
     // Configure the trigger bindings
     CanandEventLoop.getInstance();
     configureBindings();
     DriverStation.silenceJoystickConnectionWarning(true);
     NamedCommands.registerCommand("test", Commands.print("I EXIST"));
     boolean isCompetition = false;
-
 
     m_chooser.setDefaultOption("Move Forward", m_forwardAuto);
     m_chooser.addOption("Push robot to left out", m_pushLeftAuto);
@@ -199,10 +207,10 @@ public class RobotContainer
                               );
       driverXbox.start().whileTrue(Commands.none());
       driverXbox.back().whileTrue(Commands.none());
-
+      
       driverXbox.rightTrigger().whileTrue(ClimbCommands.retractClimber(climber));
-
       driverXbox.rightBumper().whileTrue(ClimbCommands.spinVictor(climber));
+      
     }
 
     operatorController.leftBumper().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.LeftScore));
