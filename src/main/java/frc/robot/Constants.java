@@ -61,10 +61,10 @@ public final class Constants
     public static final double kD = 0;
     public static final double motorPowerLimit = .1; //percent of max 1 (DO NOT SET TO NEAR 1)
     public static final double rotationsPerRevolution = 16*2*2 /*gear ratio, 16:1 gear box and 2 2:1 belts*/;
-    public static final double LeftScore = 0.243 - 0.01; //position when scoring on left in rotations
-    public static final double RightScore = -0.193 - 1.9/360; //position when scoring on right in rotations
-    public static final double LeftScoreL4 = 0.27; //position when scoring on left in rotations
-    public static final double RightScoreL4 = -0.226 + 1/360; //position when scoring on right in rotations
+    public static final double LeftScore = 0.247; //position when scoring on left in rotations
+    public static final double RightScore = -.215; //-0.193 - 1.9/360; //position when scoring on right in rotations
+    public static final double LeftScoreL4 = .285;//0.27 + 2/360; //position when scoring on left in rotations
+    public static final double RightScoreL4 = -.245;//-0.226 + 6/360; //position when scoring on right in rotations
     public static final double Stowage = 0.0; //stowage position for driving
     public static final int eeCANID = 13;
     public static final int throughboreCANID = 25;
@@ -81,7 +81,7 @@ public final class Constants
     public static final double rotationsPerInch = rotationsPerRevolution/inchesPerRevolution / 3 /*elevator stages (divided by 3 because its a cascade elevator)*/; //how many encoder ticks per inch of elevator movement
     public static final double L2Height = 7.625 + 13 + 2; //position when scoring on L2 inches
     public static final double L3Height = 13.25 + 23 + 2; //position when scoring on L3 inches
-    public static final double L4Height = 21.75 + 38 + 6 + 2; //position when scoring on L4 inches
+    public static final double L4Height = 21.75 + 38 + 6 + 0.8; //position when scoring on L4 inches
     public static final double L2HeightEnd = 11; //position when scoring on L2 inches
     public static final double kS = 0;
     public static final double kG = 0.22;

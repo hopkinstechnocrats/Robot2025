@@ -6,6 +6,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.reduxrobotics.sensors.canandmag.Canandmag;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -21,6 +22,7 @@ public class EndEffectorSubsystem extends SubsystemBase{
     private Double m_offset = 0.0; //Also rotations
     private Long m_counter = 0L;
     private final PIDController pidController;
+//    private final ArmFeedforward feedforwards;
     private CANcoder throughbore;
     NetworkTableInstance inst;
          NetworkTable table;
@@ -33,6 +35,8 @@ public class EndEffectorSubsystem extends SubsystemBase{
          NetworkTableEntry nt_object_b;
          NetworkTableEntry nt_absolute;
          NetworkTableEntry nt_motor_position;
+         NetworkTableEntry nt_feed_forwards;
+         NetworkTableEntry nt_PID;
     public EndEffectorSubsystem(){
         inst = NetworkTableInstance.getDefault();
         table = inst.getTable("EndEffector");
@@ -45,6 +49,8 @@ public class EndEffectorSubsystem extends SubsystemBase{
         nt_object_b = table.getEntry("Points South");
         nt_absolute = table.getEntry("Absolute Encoder Position [rot]");
         nt_motor_position = table.getEntry("Position of Motor [rot]");
+        nt_feed_forwards = table.getEntry("Feed Forwards command [-1 to 1]");
+        nt_PID = table.getEntry("PID command [-1 to 1]");
 
         motor = new TalonFX(endEffectorConstants.eeCANID);
         motor.setVoltage(4);
@@ -58,14 +64,16 @@ public class EndEffectorSubsystem extends SubsystemBase{
             Constants.endEffectorConstants.kI, Constants.endEffectorConstants.kD);
         pidController.setTolerance(0.1);
 
-     
+//        feedforwards = new ArmFeedforward(0.05, 0.19, 1.26); 
     }
      public void moveToSetpoint(){
         pidController.setSetpoint(m_setpoint);
         final double measurement = throughbore.getPosition().getValueAsDouble();
-        double command = MathUtil.clamp(
-        
-         pidController.calculate(measurement), -endEffectorConstants.motorPowerLimit, endEffectorConstants.motorPowerLimit);  
+        final double PIDcommand = pidController.calculate(measurement);
+        final double FFcommand =  Math.sin(measurement * 2 * Math.PI) * 0.03054;
+        double command = MathUtil.clamp( 
+        PIDcommand  + -FFcommand, -endEffectorConstants.motorPowerLimit, endEffectorConstants.motorPowerLimit);  
+
          m_counter++;
         motor.set(command);
         nt_measurement.setDouble(measurement);
@@ -76,6 +84,8 @@ public class EndEffectorSubsystem extends SubsystemBase{
         nt_absolute.setDouble(throughbore.getAbsolutePosition().getValueAsDouble());
         nt_motor_position.setDouble(motor.getPosition().getValueAsDouble()
                 / Constants.endEffectorConstants.rotationsPerRevolution);
+        nt_PID.setDouble(PIDcommand);
+        nt_feed_forwards.setDouble(FFcommand);
     }
 
     public void changeSetpoint(double setpoint){
