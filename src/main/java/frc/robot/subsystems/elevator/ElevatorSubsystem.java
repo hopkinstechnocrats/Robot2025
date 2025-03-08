@@ -20,7 +20,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class ElevatorSubsystem extends SubsystemBase{
-    final CommandXboxController driverXbox = new CommandXboxController(0);
     private TalonFX rightMotor;
     private TalonFX leftMotor;
     private Double m_setpoint = 0.0; // Rotations pre-gearbox
@@ -39,7 +38,6 @@ public class ElevatorSubsystem extends SubsystemBase{
          NetworkTableEntry nt_changed;
          NetworkTableEntry nt_object_a;
          NetworkTableEntry nt_object_b;
-         NetworkTableEntry nt_rightstick;
     public ElevatorSubsystem(){
         inst = NetworkTableInstance.getDefault();
         table = inst.getTable("Elevator");
@@ -50,9 +48,7 @@ public class ElevatorSubsystem extends SubsystemBase{
         nt_changed = table.getEntry("Setpoint set [rot]");
         nt_object_a = table.getEntry("Points North");
         nt_object_b = table.getEntry("Points South");
-        nt_rightstick = table.getEntry("Right_Trigger");
         final ElevatorFeedforward ff;
- DoubleSupplier rightstickangle = () -> Math.atan2(-driverXbox.getRightY(), driverXbox.getRightX());
         rightMotor = new TalonFX(11);
         leftMotor = new TalonFX(12);
 
@@ -63,7 +59,7 @@ public class ElevatorSubsystem extends SubsystemBase{
         //leftMotor.setPosition(0.0);
 
         m_offset = rightMotor.getPosition().getValueAsDouble();
-        nt_rightstick.getDouble(rightstickangle.getAsDouble());
+
 
         rightMotor.setNeutralMode(NeutralModeValue.Brake);
         leftMotor.setNeutralMode(NeutralModeValue.Brake);

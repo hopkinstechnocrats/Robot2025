@@ -53,7 +53,9 @@ import frc.robot.autos.Autos;
  */
 public class RobotContainer
 {
-
+  NetworkTableInstance inst;
+  NetworkTable table;
+  NetworkTableEntry nt_rightstick;
   final private Autos autos = new Autos();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -66,6 +68,7 @@ public class RobotContainer
   private final ElevatorSubsystem elevator = new ElevatorSubsystem();
   private final Climber climber = new Climber();
   
+ DoubleSupplier rightstickangle = () -> Math.atan2(-driverXbox.getRightY(), driverXbox.getRightX());
  
 
   final Command m_forwardAuto = autos.forwardAuto(drivebase);
@@ -119,7 +122,9 @@ public class RobotContainer
    */
   public RobotContainer()
   {
-
+    
+    nt_rightstick = table.getEntry("Right_Trigger");
+        nt_rightstick.getDouble(rightstickangle.getAsDouble());
     // Configure the trigger bindings
     CanandEventLoop.getInstance();
     configureBindings();
