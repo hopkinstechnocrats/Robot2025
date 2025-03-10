@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems.swervedrive;
 
+import static edu.wpi.first.units.Units.DegreesPerSecond;
 import static edu.wpi.first.units.Units.Meter;
 
 import frc.robot.LimelightHelpers;
@@ -49,6 +50,7 @@ import org.photonvision.targeting.PhotonPipelineResult;
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
 import swervelib.SwerveDriveTest;
+import swervelib.imu.SwerveIMU;
 import swervelib.math.SwerveMath;
 import swervelib.parser.SwerveControllerConfiguration;
 import swervelib.parser.SwerveDriveConfiguration;
@@ -71,6 +73,7 @@ public class SwerveSubsystem extends SubsystemBase
    * PhotonVision class to keep an accurate odometry.
    */
   private Vision vision;
+
 
   /**
    * Initialize {@link SwerveDrive} with the directory provided.
@@ -728,7 +731,7 @@ public class SwerveSubsystem extends SubsystemBase
         LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
 
         // if our angular velocity is greater than 360 degrees per second, ignore vision updates
-        if(Math.abs(swerveDrive.getGyro().getYawAngularVelocity().magnitude()) > 360)
+        if(Math.abs(swerveDrive.getGyro().getYawAngularVelocity().in(DegreesPerSecond)) > 360)
         {
             doRejectUpdate = true;
         }
