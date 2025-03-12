@@ -77,12 +77,12 @@ public class RobotContainer
                                                             .allianceRelativeControl(false);
 
   SwerveInputStream driveAngularVelocity_slow = SwerveInputStream.of(drivebase.getSwerveDrive(),
-                                                            () -> driverXbox.getLeftY() * -1 * 0.5,
-                                                            () -> driverXbox.getLeftX() * -1 * 0.5)
+                                                            () -> driverXbox.getLeftY() * -1 * 0.5 ,
+                                                            () -> driverXbox.getLeftX() * -1 * 0.5 )
                                                         .withControllerRotationAxis(driverXbox::getRightX)
                                                         .deadband(OperatorConstants.DEADBAND)
                                                         .scaleTranslation(0.8)
-                                                        .allianceRelativeControl(true);
+                                                        .allianceRelativeControl(false);
                                                       
   /**
    * Clone's the angular velocity input stream and converts it to a fieldRelative input stream.
@@ -208,7 +208,7 @@ public class RobotContainer
     {
       driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
       driverXbox.x().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
-     driverXbox.y().whileTrue((driveFieldOrientedAnglularVelocity)); //UNTESTED!!!
+     driverXbox.y().whileTrue((driveFieldOrientedAnglularVelocity_slow));
       driverXbox.b().whileTrue(
           drivebase.driveToPose(
               new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))
