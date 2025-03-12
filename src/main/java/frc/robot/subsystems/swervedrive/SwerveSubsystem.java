@@ -68,7 +68,7 @@ public class SwerveSubsystem extends SubsystemBase
   /**
    * Enable vision odometry updates while driving.
    */
-  private final boolean             visionDriveTest     = false;
+  private final boolean             visionDriveTest     = true;
   /**
    * PhotonVision class to keep an accurate odometry.
    */
@@ -106,8 +106,6 @@ public class SwerveSubsystem extends SubsystemBase
 //    swerveDrive.pushOffsetsToEncoders(); // Set the absolute encoder to be used over the internal encoder and push the offsets onto it. Throws warning if not possible
     if (visionDriveTest)
     {
-      setupPhotonVision();
-      // Stop the odometry thread if we are using vision that way we can synchronize updates better.
       swerveDrive.stopOdometryThread();
     }
     setupPathPlanner();
@@ -142,11 +140,6 @@ public class SwerveSubsystem extends SubsystemBase
       swerveDrive.updateOdometry();
       updateVisionReading();
     // When vision is enabled we must manually update odometry in SwerveDrive
-    if (visionDriveTest)
-    {
-      swerveDrive.updateOdometry();
-      vision.updatePoseEstimation(swerveDrive);
-    }
   }
 
   @Override
@@ -729,6 +722,7 @@ public class SwerveSubsystem extends SubsystemBase
 
         LimelightHelpers.SetRobotOrientation("limelight", swerveDrive.getPose().getRotation().getDegrees(), 0, 0, 0, 0, 0);
         LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
+        LimelightHelpers.SetIMUMode("limelight", 0);
 
         // if our angular velocity is greater than 360 degrees per second, ignore vision updates
         if(Math.abs(swerveDrive.getGyro().getYawAngularVelocity().in(DegreesPerSecond)) > 360)
