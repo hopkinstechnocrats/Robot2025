@@ -20,6 +20,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.DriverStation;
+import frc.robot.subsystems.ControllerSubsystem;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -34,6 +35,7 @@ import frc.robot.commands.endeffector.EndEffectorCommands;
 import frc.robot.subsystems.Climber;
 import frc.robot.commands.ClimbCommands;
 import frc.robot.subsystems.EndEffectorSubsystem;
+import frc.robot.subsystems.ControllerSubsystem;
 import frc.robot.commands.ElevatorCommands;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
@@ -60,6 +62,7 @@ public class RobotContainer
   private final EndEffectorSubsystem endEffector = new EndEffectorSubsystem();
   private final ElevatorSubsystem elevator = new ElevatorSubsystem();
   private final Climber climber = new Climber();
+  private final ControllerSubsystem controllerSubsystem = new ControllerSubsystem(driverXbox); 
 
   final Command m_forwardAuto = autos.forwardAuto(drivebase);
   final Command m_pushLeftAuto = autos.pushLeftAuto(drivebase);
@@ -151,6 +154,11 @@ public class RobotContainer
     {
 
       climber.setDefaultCommand(ClimbCommands.brake(climber));
+  //    controllerSubsystem.setDefaultCommand(
+   //new RunCommand(() -> {
+    // double targetHeading = controllerSubsystem.getTargetHeading();
+  // }, controllerSubsystem)
+// );
       drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
       elevator.setDefaultCommand(ElevatorCommands.setpointMove(elevator));
       endEffector.setDefaultCommand(EndEffectorCommands.moveToSetpointCommand(endEffector));
