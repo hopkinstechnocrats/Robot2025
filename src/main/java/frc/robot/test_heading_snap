@@ -1,0 +1,25 @@
+We want to be able to snap the robot to a specific heading
+The reef has 6 sections of wall we can score points on.  We want to be able to line up the heading (left/right spin) of the robot to these locations
+
+Task 1: We want to make sure that we can get the robot to snap to any heading.  Lets try 90 degrees as an example.
+YAGSL has some built in stuff for this.  Here are the first things I would try.  You can take a look at the YAGSL methods in our code to learn more about them
+
+Option1: driveToPose(new pose(parameters))_
+    i think there is a .getPose() method you can use to get the robots pose...
+
+Option2: setHeading()
+    make a setheading method using drivetopose and a target heading
+
+
+Expected outcome: the robot snaps to any new heading.  IT's fine if this isnt the degree amount you want it to.
+
+Task2: now we need to make sure that the snaping we are doing is good.
+make another button bind that snaps to heading of 0
+
+Expected outcome: you have a button that sets heading to 90 degrees, and sets heading to 0 degrees.  The robot front should consistently snap to a 90 degree difference
+
+
+Task3: now we need to see what is actually useful on the field.  Get the angles from the field cad (prefered), or measure out our reef and see what works.
+Then incorporate 2 heading snaps that would be useful in an actual match.
+
+Expected outcome.  We test the robot on the field and it snaps the heading to 2 different headings around the reef and we are (left/right spin) lined up
