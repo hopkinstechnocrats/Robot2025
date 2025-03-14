@@ -65,6 +65,9 @@ public class RobotContainer
   final Command m_pushLeftAuto = autos.pushLeftAuto(drivebase);
 
   private final SendableChooser<Command> m_chooser = new SendableChooser<>();
+
+  private Boolean robot_score_left = true;
+  private Boolean field_score_left = true;
   /**
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
    */
@@ -205,17 +208,25 @@ public class RobotContainer
       driverXbox.rightBumper().whileTrue(ClimbCommands.spinVictor(climber));
     }
 
-    operatorController.leftBumper().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.LeftScore));
-    operatorController.rightBumper().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.RightScore));
-    operatorController.leftTrigger().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.LeftScoreL4));
-    operatorController.rightTrigger().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.RightScoreL4));
+    if (operatorController.getLeftX() != 0) {
+      if (operatorController.getLeftX() <= 0) robot_score_left = true; else robot_score_left = false;
+    }
+    if (operatorController.getRightX() != 0) {
+      if (operatorController.getRightX() <= 0) field_score_left = true; else field_score_left = false;
+    }
+    System.out.println("Hi I'm working");
+
+    //operatorController.leftBumper().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.LeftScore));
+    //operatorController.rightBumper().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.RightScore));
+    //operatorController.leftTrigger().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.LeftScoreL4));
+    //operatorController.rightTrigger().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.RightScoreL4));
     operatorController.povUp().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.Stowage));
     operatorController.b().onTrue(ElevatorCommands.setSetpoint(elevator, Constants.elevatorConstants.L2Height));  
     operatorController.x().onTrue(ElevatorCommands.setSetpoint(elevator, Constants.elevatorConstants.L3Height));  
     operatorController.y().onTrue(ElevatorCommands.setSetpoint(elevator, Constants.elevatorConstants.L4Height));  
     operatorController.a().onTrue(ElevatorCommands.setSetpoint(elevator, Constants.elevatorConstants.L2HeightEnd));  
     operatorController.povDown().onTrue(ElevatorCommands.setSetpoint(elevator, 0.07));
-  }
+    }
   
 
   /**
