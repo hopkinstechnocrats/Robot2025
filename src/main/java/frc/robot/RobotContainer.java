@@ -56,13 +56,14 @@ public class RobotContainer
   // Replace with CommandPS4Controller or CommandJoystick if needed
   final CommandXboxController driverXbox = new CommandXboxController(0);
   final CommandXboxController operatorController = new CommandXboxController(1);
+  final CommandXboxController driver_orientation = new CommandXboxController(2); 
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve"));
   private final EndEffectorSubsystem endEffector = new EndEffectorSubsystem();
   private final ElevatorSubsystem elevator = new ElevatorSubsystem();
   private final Climber climber = new Climber();
-  private final ControllerSubsystem controllerSubsystem = new ControllerSubsystem(driverXbox); 
+  private final ControllerSubsystem controllerSubsystem = new ControllerSubsystem(driver_orientation); 
 
   final Command m_forwardAuto = autos.forwardAuto(drivebase);
   final Command m_pushLeftAuto = autos.pushLeftAuto(drivebase);
@@ -154,11 +155,11 @@ public class RobotContainer
     {
 
       climber.setDefaultCommand(ClimbCommands.brake(climber));
-  //    controllerSubsystem.setDefaultCommand(
-   //new RunCommand(() -> {
-    // double targetHeading = controllerSubsystem.getTargetHeading();
-  // }, controllerSubsystem)
-// );
+  //     controllerSubsystem.setDefaultCommand(
+  //  new RunCommand(() -> {
+  //    double targetHeading = controllerSubsystem.getTargetHeading();
+  //  }, controllerSubsystem)
+//  );
       drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
       elevator.setDefaultCommand(ElevatorCommands.setpointMove(elevator));
       endEffector.setDefaultCommand(EndEffectorCommands.moveToSetpointCommand(endEffector));
