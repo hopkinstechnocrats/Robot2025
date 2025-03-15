@@ -21,6 +21,7 @@ import com.pathplanner.lib.util.swerve.SwerveSetpoint;
 import com.pathplanner.lib.util.swerve.SwerveSetpointGenerator;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -30,6 +31,9 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -74,6 +78,10 @@ public class SwerveSubsystem extends SubsystemBase
    */
   private Vision vision;
 
+  private NetworkTableInstance inst;
+  private NetworkTable table;
+  private NetworkTableEntry robotYaw;
+
 
   /**
    * Initialize {@link SwerveDrive} with the directory provided.
@@ -82,6 +90,10 @@ public class SwerveSubsystem extends SubsystemBase
    */
   public SwerveSubsystem(File directory)
   {
+    inst = NetworkTableInstance.getDefault();
+    table = inst.getTable("ll_debug");
+    robotYaw = table.getEntry("Robot Yaw Degrees");
+
     // Configure the Telemetry before creating the SwerveDrive to avoid unnecessary objects being created.
     SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
     try
@@ -719,10 +731,11 @@ public class SwerveSubsystem extends SubsystemBase
 
     public void updateVisionReading(){
         boolean doRejectUpdate = false;
-
-        LimelightHelpers.SetRobotOrientation("limelight", swerveDrive.getPose().getRotation().getDegrees(), 0, 0, 0, 0, 0);
-        LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
         LimelightHelpers.SetIMUMode("limelight", 0);
+
+        robotYaw.setDouble(swerveDrive.getYaw().getDegrees());
+        LimelightHelpers.SetRobotOrientation("limelight", swerveDrive.getYaw().getDegrees(),0, 0, 0, 0, 0);
+        LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
 
         // if our angular velocity is greater than 360 degrees per second, ignore vision updates
         if(Math.abs(swerveDrive.getGyro().getYawAngularVelocity().in(DegreesPerSecond)) > 360)
@@ -735,6 +748,7 @@ public class SwerveSubsystem extends SubsystemBase
         }
         if(!doRejectUpdate)
         {
+            swerveDrive.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,999999));
             swerveDrive.addVisionMeasurement(mt2.pose, mt2.timestampSeconds);
         }
     }
