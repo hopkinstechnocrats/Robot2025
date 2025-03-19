@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -8,6 +10,7 @@ import com.reduxrobotics.sensors.canandmag.Canandmag;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -18,10 +21,17 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class EndEffectorSubsystem extends SubsystemBase{
     private TalonFX motor;
-    private Double m_setpoint = 0.0; // Rotations pre-gearbox
-    private Double m_offset = 0.0; //Also rotations
-    private Long m_counter = 0L;
-    private final PIDController pidController;
+    //private final PIDController pidController;
+    // class member variable
+    final PositionVoltage m_position = new PositionVoltage(0);
+    // Trapezoid profile with max velocity 80 rps, max accel 160 rps/s
+    final TrapezoidProfile m_profile = new TrapezoidProfile(
+        new TrapezoidProfile.Constraints(8, 16)
+    );
+  
+    // Final target of 200 rot, 0 rps
+    TrapezoidProfile.State m_goal = new TrapezoidProfile.State(0, 0);
+    TrapezoidProfile.State m_setpoint = new TrapezoidProfile.State();
 //    private final ArmFeedforward feedforwards;
     private CANcoder throughbore;
     NetworkTableInstance inst;
@@ -58,24 +68,29 @@ public class EndEffectorSubsystem extends SubsystemBase{
         throughbore = new CANcoder(21);
 
         motor.setNeutralMode(NeutralModeValue.Brake);
-      
 
-        pidController = new PIDController(Constants.endEffectorConstants.kP,
-            Constants.endEffectorConstants.kI, Constants.endEffectorConstants.kD);
-        pidController.setTolerance(0.1);
+
+
+
+        var slot0Configs = new TalonFXConfiguration().Slot0;
+        slot0Configs.kP = 0; // An error of 1 rotation results in 2.4 V output
+        slot0Configs.kI = 0; // no output for integrated error
+        slot0Configs.kD = 0; // A velocity of 1 rps results in 0.1 V output
+
+        motor.getConfigurator().apply(slot0Configs);
+
 
 //        feedforwards = new ArmFeedforward(0.05, 0.19, 1.26); 
     }
      public void moveToSetpoint(){
-        pidController.setSetpoint(m_setpoint);
-        final double measurement = throughbore.getPosition().getValueAsDouble();
-        final double PIDcommand = pidController.calculate(measurement);
-        final double FFcommand =  Math.sin(measurement * 2 * Math.PI) * 0.03054;
-        double command = MathUtil.clamp( 
-        PIDcommand  + -FFcommand, -endEffectorConstants.motorPowerLimit, endEffectorConstants.motorPowerLimit);  
-
-         m_counter++;
-        motor.set(command);
+        // periodic, update the profile setpoint for 20 ms loop time
+        m_setpoint = m_profile.calculate(0.020, m_setpoint, m_goal);
+        // apply the setpoint to the control request
+        m_position.Position = m_setpoint.position;
+        m_position.Velocity = m_setpoint.velocity;
+        motor.setControl(m_position);
+        
+        /**
         nt_measurement.setDouble(measurement);
         nt_setpoint.setDouble(m_setpoint);
         nt_offset.setDouble(m_offset);
@@ -86,13 +101,17 @@ public class EndEffectorSubsystem extends SubsystemBase{
                 / Constants.endEffectorConstants.rotationsPerRevolution);
         nt_PID.setDouble(PIDcommand);
         nt_feed_forwards.setDouble(FFcommand);
+        */
     }
 
+    
+
     public void changeSetpoint(double setpoint){
+      m_goal = new TrapezoidProfile.State(setpoint, .1);
       
-      m_setpoint = setpoint; //setpoint is in rotations
-      nt_changed.setDouble(m_setpoint);
-      nt_object_b.setInteger(m_counter);
+      //m_setpoint = setpoint; //setpoint is in rotations
+      //nt_changed.setDouble(m_setpoint);
+      //nt_object_b.setInteger(m_counter);
       
     }
 

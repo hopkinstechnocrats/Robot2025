@@ -17,14 +17,6 @@ public class Climber extends SubsystemBase{
         climbMotor = new TalonFX(14);
         climbMotor.setNeutralMode(NeutralModeValue.Brake);
         climbMotor.setVoltage(4);
-
-        var slot0Configs = new TalonFXConfiguration().Slot0;
-        slot0Configs.kP = 2.4; // An error of 1 rotation results in 2.4 V output
-        slot0Configs.kI = 0; // no output for integrated error
-        slot0Configs.kD = 0.1; // A velocity of 1 rps results in 0.1 V output
-
-        climbMotor.getConfigurator().apply(slot0Configs);
-
     }
 
     public void extend(){
