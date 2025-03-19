@@ -31,7 +31,26 @@ public class ControllerSubsystem{
     Math.hypot(controller.getRightX(),-controller.getRightY()) <= deadbandLimit)
    System.out.println("deadband area");
 
-//  if (0 <= angle <= 60  return null);
+if(angle <= 30 && angle <= 330)
+System.out.println("Section 1");
+if(angle >= 270 && angle <= 329)
+System.out.println("Section 2");
+if(angle >= 210 && angle <= 269)
+System.out.println("Section 3");
+if(angle >= 150 && angle <= 209)
+System.out.println("Section 4");
+if(angle >= 90 && angle <= 149)
+System.out.println("Section 5");
+if(angle >= 31 && angle <=89)
+System.out.println("Section 6");
+
+
+//double gettargetheading;
+// x = controller right x  //same y
+// int section = joysticksection(x,y)
+// return section
+//nt_drive_stick_section.setDouble(section);
+
  }
  
 }
