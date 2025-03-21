@@ -37,6 +37,7 @@ import frc.robot.commands.ClimbCommands;
 import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.ControllerSubsystem;
 import frc.robot.commands.ElevatorCommands;
+import frc.robot.commands.controllerCommands;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
@@ -155,11 +156,7 @@ public class RobotContainer
     {
 
       climber.setDefaultCommand(ClimbCommands.brake(climber));
-  //     controllerSubsystem.setDefaultCommand(
-  //  new RunCommand(() -> {
-  //    double targetHeading = controllerSubsystem.getTargetHeading();
-  //  }, controllerSubsystem)
-//  );
+   controllerSubsystem.setDefaultCommand(controllerCommands.getTargetHeading(controllerSubsystem, driver_orientation));
       drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
       elevator.setDefaultCommand(ElevatorCommands.setpointMove(elevator));
       endEffector.setDefaultCommand(EndEffectorCommands.moveToSetpointCommand(endEffector));
