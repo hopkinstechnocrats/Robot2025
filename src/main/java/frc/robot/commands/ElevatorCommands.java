@@ -45,4 +45,13 @@ public class ElevatorCommands extends Command{
          elevator);
     }
 
+    public static Command setSetpointAndMove(ElevatorSubsystem elevator, Double setpoint){
+        return Commands.runOnce(
+          () ->   {
+              elevator.changeSetpoint(setpoint);
+              elevator.moveToSetpoint();
+          },
+           elevator);
+      }
+
 } 

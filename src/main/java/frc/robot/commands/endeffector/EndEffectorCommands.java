@@ -21,4 +21,13 @@ public class EndEffectorCommands extends Command {
                 },
             endEffector);
     }
+
+    public static Command setAndMoveCommand(EndEffectorSubsystem endEffector, double setpoint, boolean left, boolean level){
+        return Commands.run(
+                () -> {
+                    endEffector.changeSetpointComplex(setpoint, left, level);
+                    endEffector.moveToSetpoint();
+                },
+            endEffector);
+    }
 } 

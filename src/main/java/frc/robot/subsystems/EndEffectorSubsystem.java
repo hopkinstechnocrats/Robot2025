@@ -90,9 +90,21 @@ public class EndEffectorSubsystem extends SubsystemBase{
 
     public void changeSetpoint(double setpoint){
       
-      m_setpoint = setpoint; //setpoint is in rotations
-      nt_changed.setDouble(m_setpoint);
-      nt_object_b.setInteger(m_counter);
+        m_setpoint = setpoint; //setpoint is in rotations
+        nt_changed.setDouble(m_setpoint);
+        nt_object_b.setInteger(m_counter);
+      
+    }
+
+    public void changeSetpointComplex(double score, boolean left, boolean level){
+
+        //setpoint is in rotations
+        if (level = true) {
+            if (left = true) m_setpoint = Constants.endEffectorConstants.LeftScoreL4; 
+            else m_setpoint = Constants.endEffectorConstants.RightScoreL4;
+        } else m_setpoint = score;
+        nt_changed.setDouble(m_setpoint);
+        nt_object_b.setInteger(m_counter);
       
     }
 
