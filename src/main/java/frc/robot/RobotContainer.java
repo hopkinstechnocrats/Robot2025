@@ -152,7 +152,7 @@ public class RobotContainer
     {
 
       climber.setDefaultCommand(ClimbCommands.brake(climber));
-      drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
+      drivebase.setDefaultCommand(driveFieldOrientedDirectAngle);
       elevator.setDefaultCommand(ElevatorCommands.setpointMove(elevator));
       endEffector.setDefaultCommand(EndEffectorCommands.moveToSetpointCommand(endEffector));
     }
@@ -182,7 +182,7 @@ public class RobotContainer
     }
     if (DriverStation.isTest())
     {
-      drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity); // Overrides drive command above!
+      drivebase.setDefaultCommand(driveFieldOrientedDirectAngle); // Overrides drive command above!
 
       driverXbox.x().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
       driverXbox.y().whileTrue(drivebase.driveToDistanceCommand(1.0, 0.2));
