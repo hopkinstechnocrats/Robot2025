@@ -66,7 +66,6 @@ public class RobotContainer
 
   private final SendableChooser<Command> m_chooser = new SendableChooser<>();
 
-  private double robot_score_pos = Constants.endEffectorConstants.LeftScore;
   private Boolean robot_score_left = true;
   /**
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
@@ -208,76 +207,33 @@ public class RobotContainer
       driverXbox.rightBumper().whileTrue(ClimbCommands.spinVictor(climber));
     }
 
-    if (operatorController.getLeftX() != 0) {
-      System.out.println("Running robot");
+    /*if (operatorController.getLeftX() != 0) { // Function to toggle ee scoring direction
+      System.out.println("LR -- Left/right input initiated");
       if (operatorController.getLeftX() <= 0) 
       {
         robot_score_left = true; 
-        System.out.println("Robot left");
+        System.out.println("LR -- Robot goes left");
       } else 
       {
         robot_score_left = false;
-        System.out.println("Robot right");
+        System.out.println("LR -- Robot goes right");
       }
-    }
+    }*/
 
-/* // OLD CONTROLS START
+    operatorController.rightBumper().onTrue(EndEffectorCommands.test(endEffector, operatorController, robot_score_left));
 
-    operatorController.leftBumper().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.LeftScore));
+/*  operatorController.leftBumper().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.LeftScore));
     operatorController.rightBumper().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.RightScore));
     operatorController.leftTrigger().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.LeftScoreL4));
     operatorController.rightTrigger().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.RightScoreL4));
 
-    operatorController.povUp().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.Stowage));
+*/  operatorController.povUp().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.Stowage));
 
-    operatorController.b().onTrue(ElevatorCommands.setSetpoint(elevator, Constants.elevatorConstants.L2Height));
-    operatorController.a().onTrue(ElevatorCommands.setSetpoint(elevator, Constants.elevatorConstants.L2HeightEnd));
-    operatorController.x().onTrue(ElevatorCommands.setSetpoint(elevator, Constants.elevatorConstants.L3Height)); 
-    operatorController.y().onTrue(ElevatorCommands.setSetpoint(elevator, Constants.elevatorConstants.L4Height));
-
-*/ // OLD CONTROLS END
-    
- // TEST CODE START
-    
-    operatorController.b().onTrue(Commands.sequence(
-      ElevatorCommands.setSetpoint(elevator, Constants.elevatorConstants.L2Height),
-      ElevatorCommands.setpointMove(elevator),
-      ElevatorCommands.setSetpoint(elevator, 0.07),
-      ElevatorCommands.setpointMove(elevator)
-      )); // Test to make elevator go to L2 then reset -- CONTROL
-    operatorController.x().onTrue(Commands.sequence(
-      ElevatorCommands.setSetpoint(elevator, Constants.elevatorConstants.L3Height),
-      ElevatorCommands.setpointMove(elevator),
-      Commands.waitSeconds(1),
-      ElevatorCommands.setSetpoint(elevator, 0.07),
-      ElevatorCommands.setpointMove(elevator)
-      )); // Test to make elevator go to L3, then wait 1 sec, then reset -- TEST WAIT
-    operatorController.y().onTrue(Commands.sequence(
-      ElevatorCommands.setSetpointAndMove(elevator, Constants.elevatorConstants.L4Height),
-      ElevatorCommands.setSetpointAndMove(elevator, 0.07)
-      )); // Test to make elevator go to L4, then reset -- TEST NEW COMMANDS
+    operatorController.b().onTrue(ElevatorCommands.twoPointMove(elevator, Constants.elevatorConstants.L2Height, 0.07, 1.0));
+    operatorController.x().onTrue(ElevatorCommands.twoPointMove(elevator, Constants.elevatorConstants.L3Height, 0.07, 1.0));
+    operatorController.y().onTrue(ElevatorCommands.twoPointMove(elevator, Constants.elevatorConstants.L4Height, 0.07, 1.0));
     operatorController.povDown().onTrue(ElevatorCommands.setSetpoint(elevator, 0.07));
-  
- // TEST CODE END
-
- // TEST FUNCTIONAL CODE START
-
-    //operatorController.b().onTrue(Commands.sequence());
-    operatorController.x().onTrue(Commands.sequence(
-      ElevatorCommands.setSetpointAndMove(elevator, Constants.elevatorConstants.L3Height),
-      EndEffectorCommands.setAndMoveCommand(endEffector, robot_score_pos, robot_score_left, false)
-      ));
-    operatorController.y().onTrue(Commands.sequence(
-      ElevatorCommands.setSetpointAndMove(elevator, Constants.elevatorConstants.L3Height),
-      EndEffectorCommands.setAndMoveCommand(endEffector, robot_score_pos, robot_score_left, true)
-      ));
-
- // TEST FUNCTIONAL CODE END
-
 }
-
-
-
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *

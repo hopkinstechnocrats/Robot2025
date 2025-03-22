@@ -11,10 +11,14 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.endEffectorConstants;
+import frc.robot.RobotContainer.*;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class EndEffectorSubsystem extends SubsystemBase{
     private TalonFX motor;
@@ -96,15 +100,36 @@ public class EndEffectorSubsystem extends SubsystemBase{
       
     }
 
-    public void changeSetpointComplex(double score, boolean left, boolean level){
+    public void changeSetpointComplex(boolean left, boolean level){
 
         //setpoint is in rotations
-        if (level = true) {
+        System.out.println("CS Initiate");
+        if (level = true) { //This is checking if the elevator is going to level 4
             if (left = true) m_setpoint = Constants.endEffectorConstants.LeftScoreL4; 
             else m_setpoint = Constants.endEffectorConstants.RightScoreL4;
-        } else m_setpoint = score;
+            System.out.println("CS -- Change to l4");
+        } else {
+            if (left = true) m_setpoint = Constants.endEffectorConstants.LeftScore;
+            else m_setpoint = Constants.endEffectorConstants.RightScore;
+            System.out.println("CS -- Normal change left/right");
+        }
         nt_changed.setDouble(m_setpoint);
         nt_object_b.setInteger(m_counter);
+      
+    }
+
+    public void test(CommandXboxController operator, boolean left){
+
+        System.out.println("TS -- Left/right input");
+        if (operator.getLeftX() <= -0.1) 
+        {
+        left = true; 
+        System.out.println("TS -- Left send");
+        } else if (operator.getLeftX() >= -0.1)
+        {
+        left = false;
+        System.out.println("TS -- Right send");
+        }
       
     }
 
