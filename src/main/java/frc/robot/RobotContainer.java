@@ -156,13 +156,13 @@ public class RobotContainer
     {
 
       climber.setDefaultCommand(ClimbCommands.brake(climber));
-   controllerSubsystem.setDefaultCommand(controllerCommands.getTargetHeading(controllerSubsystem, driver_orientation));
+   controllerSubsystem.setDefaultCommand(driveDirectAngleFieldOriented);
       drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
       elevator.setDefaultCommand(ElevatorCommands.setpointMove(elevator));
       endEffector.setDefaultCommand(EndEffectorCommands.moveToSetpointCommand(endEffector));
     }
 
-    if (Robot.isSimulation())
+    if (Robot.isSimulation())  
     {
       driveDirectAngleKeyboard.driveToPose(() -> new Pose2d(new Translation2d(9, 3),
                                                             Rotation2d.fromDegrees(90)),

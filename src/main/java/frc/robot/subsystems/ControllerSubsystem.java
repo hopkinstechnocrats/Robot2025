@@ -39,6 +39,8 @@ public class ControllerSubsystem extends SubsystemBase{
      } else {
    if(angle >= 30 && angle < 90)
       System.out.println("section 2");
+      double targetX = Math.sqrt(2)/2;
+      double targetY  = Math.sqrt(2)/2;
    if(angle >= 90 && angle < 150)
       System.out.println("section 3");
    if(angle >= 150 && angle < 210)
