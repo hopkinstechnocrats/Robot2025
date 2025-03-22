@@ -87,8 +87,8 @@ public class RobotContainer
   /**
    * Clone's the angular velocity input stream and converts it to a fieldRelative input stream.
    */
-  SwerveInputStream driveDirectAngle = driveAngularVelocity.copy().withControllerHeadingAxis(driverXbox::getRightX,
-                                                                                             driverXbox::getRightY)
+  SwerveInputStream driveDirectAngle = driveAngularVelocity.copy().withControllerHeadingAxis(() -> headingX(),
+                                                                                             () -> headingY())
                                                            .headingWhile(true);
 
   SwerveInputStream driveDirectAngle_slow = driveAngularVelocity.copy().withControllerHeadingAxis(driverXbox::getRightX,
@@ -166,7 +166,7 @@ public class RobotContainer
     {
 
       climber.setDefaultCommand(ClimbCommands.brake(climber));
-      drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
+      drivebase.setDefaultCommand(driveFieldOrientedDirectAngle);
       elevator.setDefaultCommand(ElevatorCommands.setpointMove(elevator));
       endEffector.setDefaultCommand(EndEffectorCommands.moveToSetpointCommand(endEffector));
     }
@@ -257,7 +257,7 @@ public class RobotContainer
     if(
       Math.hypot(driverXbox.getRightX(),-driverXbox.getRightY()) <= deadband) {
      System.out.println("deadband area");
-     return 0.001;
+     return 0.0;
       } else {
     if(angle >= 30 && angle < 90){
        System.out.println("section 2");
@@ -289,7 +289,7 @@ public class RobotContainer
     if(
       Math.hypot(driverXbox.getRightX(),-driverXbox.getRightY()) <= deadband) {
      System.out.println("deadband area");
-     return 0.001;
+     return 0.0;
       } else {
     if(angle >= 30 && angle < 90){
        System.out.println("section 2");
