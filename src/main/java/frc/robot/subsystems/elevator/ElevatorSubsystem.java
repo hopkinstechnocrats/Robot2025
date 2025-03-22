@@ -94,7 +94,7 @@ public class ElevatorSubsystem extends SubsystemBase{
       nt_changed.setDouble(m_setpoint);
       nt_object_b.setInteger(m_counter);
 
-      System.out.println("EL -- Change setpoint");
+      System.out.println("EL -- Change setpoint to " + m_setpoint);
       
     }
 

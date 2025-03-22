@@ -229,9 +229,10 @@ public class RobotContainer
 
 */  operatorController.povUp().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.Stowage));
 
-    operatorController.b().onTrue(ElevatorCommands.twoPointMove(elevator, Constants.elevatorConstants.L2Height, 0.07, 1.0));
-    operatorController.x().onTrue(ElevatorCommands.twoPointMove(elevator, Constants.elevatorConstants.L3Height, 0.07, 1.0));
-    operatorController.y().onTrue(ElevatorCommands.twoPointMove(elevator, Constants.elevatorConstants.L4Height, 0.07, 1.0));
+    operatorController.b().onTrue(ElevatorCommands.setSetpoint(elevator, Constants.elevatorConstants.L2Height));  
+    //operatorController.b().onTrue(ElevatorCommands.twoPointMove(elevator, Constants.elevatorConstants.L2Height, 0.07, 1.0));
+    operatorController.x().onTrue(ElevatorCommands.twoPointMove(elevator, Constants.elevatorConstants.L4Height, Constants.elevatorConstants.L2Height, 1.0));
+    operatorController.y().onTrue(ElevatorCommands.twoPointMove(elevator, Constants.elevatorConstants.L3Height, 0.07, 1.0));
     operatorController.povDown().onTrue(ElevatorCommands.setSetpoint(elevator, 0.07));
 }
   /**
