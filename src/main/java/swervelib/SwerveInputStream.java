@@ -898,7 +898,7 @@ public class SwerveInputStream implements Supplier<ChassisSpeeds>
       }
       case ANGULAR_VELOCITY ->
       {
-        omegaRadiansPerSecond = applyOmegaCube(applyRotationalScalar(applyDeadband(controllerOmega.get()
+        omegaRadiansPerSecond = applyOmegaCube(applyRotationalScalar(applyDeadband(-controllerOmega.get()
                                                                                                   .getAsDouble()))) *
                                 swerveDrive.getMaximumChassisAngularVelocity();
         speeds = new ChassisSpeeds(vxMetersPerSecond, vyMetersPerSecond, omegaRadiansPerSecond);
