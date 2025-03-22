@@ -253,62 +253,75 @@ public class RobotContainer
 
   public Double headingX(){
     final double deadband = 0.5;
-    final double angle =((Math.atan2(driverXbox.getRightX(),-driverXbox.getRightY())) /Math.PI) * 180; // in degrees
+    final double angle =((Math.atan2(-driverXbox.getRightY(), driverXbox.getRightX())) /Math.PI) * 180; // in degrees
     if(
       Math.hypot(driverXbox.getRightX(),-driverXbox.getRightY()) <= deadband) {
-     System.out.println("deadband area");
+     System.out.println(angle);
      return 0.0;
       } else {
     if(angle >= 30 && angle < 90){
-       System.out.println("section 2");
-      return 0.5;}
+       System.out.println(angle);
+      return 0.5;
+    }
     if(angle >= 90 && angle < 150){
-       System.out.println("section 3");
+      System.out.println(angle);
        return -0.5;
       } 
     if(angle >= 150 && angle < 210){
-       System.out.println("section 4");
-       return -1.0;} 
+      System.out.println(angle);
+       return -1.0;
+      } 
     if(angle >= 210 && angle < 270){
-       System.out.println("section 5");
-       return -0.5 ;} 
+      System.out.println(angle);
+       return -0.5 ;
+      } 
     if(angle >= 270 && angle < 330){
-       System.out.println("section 6");
-       return 0.5;}
-    if(angle >=330 || angle < 30)
-       System.out.println("section 1");
-       return 1.0;}
-      
+      System.out.println(angle);
+       return 0.5;
+
+      }
+    if(angle >=330 || angle < 30){
+      System.out.println(angle);
+       return 1.0;
+    }
+    else{
+      return 0.0;
+    }
+  }
 }
 
 
   public Double headingY(){
     final double deadband = 0.5;
-    final double angle =((Math.atan2(driverXbox.getRightX(),-driverXbox.getRightY())) /Math.PI) * 180; // in degrees
+    final double angle =((Math.atan2(-driverXbox.getRightY(), driverXbox.getRightX())) /Math.PI) * 180; // in degrees
 
-    if(
-      Math.hypot(driverXbox.getRightX(),-driverXbox.getRightY()) <= deadband) {
+    if(Math.hypot(driverXbox.getRightX(),-driverXbox.getRightY()) <= deadband) {
      System.out.println("deadband area");
      return 0.0;
-      } else {
-    if(angle >= 30 && angle < 90){
-       System.out.println("section 2");
-      return Math.sqrt(3)/2;} 
+    } 
+    else {
+      if(angle >= 30 && angle < 90){
+      return Math.sqrt(3)/2;
+     } 
     if(angle >= 90 && angle < 150){
-       System.out.println("section 3");
-       return Math.sqrt(3)/2;} 
+      return -Math.sqrt(3)/2;
+      } 
     if(angle >= 150 && angle < 210){
-       System.out.println("section 4");
-       return 0.0;}
-    if(angle >= 210 && angle < 270){
-       System.out.println("section 5");
-       return -Math.sqrt(3)/2;} 
-    if(angle >= 270 && angle < 330){
-       System.out.println("section 6");
-       return -Math.sqrt(3)/2;} 
-    if(angle >=330 || angle < 30)
-       System.out.println("section 1");
        return 0.0;
       }
+    if(angle >= 210 && angle < 270){
+       return -Math.sqrt(3)/2;
+
+      } 
+    if(angle >= 270 && angle < 330){
+       return Math.sqrt(3)/2;
+      } 
+    if(angle >=330 || angle < 30){
+       return 0.0;
+      }
+      else{
+        return 0.0;
+      }
+    }  
 }
 }
