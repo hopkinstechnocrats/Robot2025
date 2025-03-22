@@ -250,4 +250,65 @@ public class RobotContainer
   {
     drivebase.setMotorBrake(brake);
   }
+
+  public Double headingX(){
+    final double deadband = 0.5;
+    final double angle =((Math.atan2(driverXbox.getRightX(),-driverXbox.getRightY())) /Math.PI) * 180; // in degrees
+    if(
+      Math.hypot(driverXbox.getRightX(),-driverXbox.getRightY()) <= deadband) {
+     System.out.println("deadband area");
+     return 0.001;
+      } else {
+    if(angle >= 30 && angle < 90){
+       System.out.println("section 2");
+      return 0.5;} else {
+    if(angle >= 90 && angle < 150){
+       System.out.println("section 3");
+       return -0.5;
+      } else {
+    if(angle >= 150 && angle < 210){
+       System.out.println("section 4");
+       return -1.0;} else {
+    if(angle >= 210 && angle < 270){
+       System.out.println("section 5");
+       return -0.5 ;} else {
+    if(angle >= 270 && angle < 330){
+       System.out.println("section 6");
+       return 0.5;} else {
+    if(angle >=330 || angle < 30)
+       System.out.println("section 1");
+       return 1.0;
+      }}}}}}
+}
+
+
+  public Double headingY(){
+    final double deadband = 0.5;
+    final double angle =((Math.atan2(driverXbox.getRightX(),-driverXbox.getRightY())) /Math.PI) * 180; // in degrees
+
+    if(
+      Math.hypot(driverXbox.getRightX(),-driverXbox.getRightY()) <= deadband) {
+     System.out.println("deadband area");
+     return 0.001;
+      } else {
+    if(angle >= 30 && angle < 90){
+       System.out.println("section 2");
+      return Math.sqrt(3)/2;} else {
+    if(angle >= 90 && angle < 150){
+       System.out.println("section 3");
+       return Math.sqrt(3)/2;} else {
+    if(angle >= 150 && angle < 210){
+       System.out.println("section 4");
+       return 0.0;} else {
+    if(angle >= 210 && angle < 270){
+       System.out.println("section 5");
+       return -Math.sqrt(3)/2;} else {
+    if(angle >= 270 && angle < 330){
+       System.out.println("section 6");
+       return -Math.sqrt(3)/2;} else {
+    if(angle >=330 || angle < 30)
+       System.out.println("section 1");
+       return 0.0;
+      }}}}}}
+}
 }
