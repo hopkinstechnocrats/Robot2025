@@ -1,0 +1,15 @@
+current version of angles:
+    final double angle =((Math.atan2(-driverXbox.getRightY(), driverXbox.getRightX())) /Math.PI) * 180; // in degrees
+
+atan2 returns value between -pi and pi
+    we are currently converting this value into degrees, so we can keep using degrees for our sections.
+so, we need to fix out sections to incorporate use (-180, 180) instead of (0, 360), or i guess we can +180 the angle value
+
+
+expected joystick degrees, robot heading degrees, coordinate pairs (x,y) for our sections
+section 1: [-30, 30]                0   (cos(0), sin(0))
+section 2: [30, 90]                 60  (cos(60), sin(60))
+section 3: [90, 150]                120 (cos(120), sin(120))
+section 4: [angle>150, angle<-150]  180 (cos(180), sin(180))
+section 5: [-90, -150]              240 (cos(240), sin(240))
+section 6: [-30, -90]               300 (cos(300), sin(300))
