@@ -252,82 +252,22 @@ public class RobotContainer
   }
 
   public Double headingX(){
-    final double deadband = 0.5;
-    final double angle =(((Math.atan2(-driverXbox.getRightY(), driverXbox.getRightX())) + Math.PI) /Math.PI) * 180; // in degrees
-    if(
-      Math.hypot(driverXbox.getRightX(),-driverXbox.getRightY()) <= deadband) {
-     System.out.println(angle);
-     return 0.0;
-      } else {
-    if(angle >= 0 && angle < 60){
-       System.out.println(angle);
-       System.out.println("section 1");
-      return Math.cos(0);
-    }
-    if(angle >= 60 && angle < 120){
-      System.out.println(angle);
-      System.out.println("section 2");
-       return Math.cos(60);
-      } 
-    if(angle >= 120 && angle < 180){
-      System.out.println(angle);
-      System.out.println("section 3");
-       return Math.cos(120);
-      } 
-    if(angle >= 180 && angle < 240){
-      System.out.println(angle);
-      System.out.println("section 4");
-       return Math.cos(180) ;
-      } 
-    if(angle >= 240 && angle < 300){
-      System.out.println(angle);
-      System.out.println("section up");
-       return Math.cos(300);
-
-      }
-    if(angle >=300 && angle < 360){
-      System.out.println(angle);
-      System.out.println("section 6");
-       return Math.cos(300);
-    }
-    else{
-      return 0.0;
-    }
-  }
+    final double num_sections = 6;
+    final double rad_per_section = (2.0*Math.PI/num_sections);
+    final double section =((Math.atan2(-driverXbox.getRightY(), driverXbox.getRightX())))/rad_per_section; // in from -2.5 to +3.5
+    final int section_rounded = Math.round((float) section);
+    final double angle = section_rounded * rad_per_section;
+    return Math.cos(angle);
+    
 }
 
 
   public Double headingY(){
-    final double deadband = 0.5;
-    final double angle =((Math.atan2(-driverXbox.getRightY(), driverXbox.getRightX())) /Math.PI) * 180; // in degrees
-
-    if(Math.hypot(driverXbox.getRightX(),-driverXbox.getRightY()) <= deadband) {
-     System.out.println("deadband area");
-     return 0.0;
-    } 
-    else {
-      if(angle >= 0 && angle < 60){
-      return Math.sin(0);
-     } 
-    if(angle >= 60 && angle < 120){
-      return Math.sin(60);
-      } 
-    if(angle >= 120 && angle < 180){
-       return Math.sin(120);
-      }
-    if(angle >= 180 && angle < 240){
-       return Math.sin(180);
-
-      } 
-    if(angle >= 240 && angle < 300){
-       return Math.sin(300);
-      } 
-    if(angle >=300 && angle < 0){
-       return Math.sin(300);
-      }
-      else{
-        return 0.0;
-      }
-    }  
+    final double num_sections = 6;
+    final double rad_per_section = (2.0*Math.PI/num_sections);
+    final double section =((Math.atan2(-driverXbox.getRightY(), driverXbox.getRightX())))/rad_per_section; // in from -2.5 to +3.5
+    final int section_rounded = Math.round((float) section);
+    final double angle = section_rounded * rad_per_section;
+    return -Math.sin(angle);  
 }
 }
