@@ -281,8 +281,8 @@ public class RobotContainer
       } 
     if(angle >= 240 && angle < 300){
       System.out.println(angle);
-      System.out.println("section 5");
-       return Math.cos(240);
+      System.out.println("section up");
+       return Math.cos(300);
 
       }
     if(angle >=300 && angle < 360){
@@ -320,7 +320,7 @@ public class RobotContainer
 
       } 
     if(angle >= 240 && angle < 300){
-       return Math.sin(240);
+       return Math.sin(300);
       } 
     if(angle >=300 && angle < 0){
        return Math.sin(300);
