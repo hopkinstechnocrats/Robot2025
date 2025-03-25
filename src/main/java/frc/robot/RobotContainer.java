@@ -259,36 +259,36 @@ public class RobotContainer
      System.out.println(angle);
      return 0.0;
       } else {
-    if(angle >= 30 && angle < 90){
+    if(angle >= 0 && angle < 60){
        System.out.println(angle);
-       System.out.println("section 2");
-      return 0.5;
+       System.out.println("section 1");
+      return Math.cos(0);
     }
-    if(angle >= 90 && angle < 150){
+    if(angle >= 60 && angle < 120){
+      System.out.println(angle);
+      System.out.println("section 2");
+       return Math.cos(60);
+      } 
+    if(angle >= 120 && angle < 180){
       System.out.println(angle);
       System.out.println("section 3");
-       return -0.5;
+       return Math.cos(120);
       } 
-    if(angle >= 150 && angle < 210){
+    if(angle >= 180 && angle < 240){
       System.out.println(angle);
       System.out.println("section 4");
-       return -1.0;
+       return Math.cos(180) ;
       } 
-    if(angle >= 210 && angle < 270){
+    if(angle >= 240 && angle < 300){
       System.out.println(angle);
       System.out.println("section 5");
-       return -0.5 ;
-      } 
-    if(angle >= 270 && angle < 330){
-      System.out.println(angle);
-      System.out.println("section 6");
-       return 0.5;
+       return Math.cos(240);
 
       }
-    if(angle >=330 || angle < 30){
+    if(angle >=300 && angle < 360){
       System.out.println(angle);
-      System.out.println("section 1");
-       return 1.0;
+      System.out.println("section 6");
+       return Math.cos(300);
     }
     else{
       return 0.0;
@@ -306,24 +306,24 @@ public class RobotContainer
      return 0.0;
     } 
     else {
-      if(angle >= 30 && angle < 90){
-      return Math.sqrt(3)/2;
+      if(angle >= 0 && angle < 60){
+      return Math.sin(0);
      } 
-    if(angle >= 90 && angle < 150){
-      return -Math.sqrt(3)/2;
+    if(angle >= 60 && angle < 120){
+      return Math.sin(60);
       } 
-    if(angle >= 150 && angle < 210){
-       return 0.0;
+    if(angle >= 120 && angle < 180){
+       return Math.sin(120);
       }
-    if(angle >= 210 && angle < 270){
-       return -Math.sqrt(3)/2;
+    if(angle >= 180 && angle < 240){
+       return Math.sin(180);
 
       } 
-    if(angle >= 270 && angle < 330){
-       return Math.sqrt(3)/2;
+    if(angle >= 240 && angle < 300){
+       return Math.sin(240);
       } 
-    if(angle >=330 || angle < 30){
-       return 0.0;
+    if(angle >=300 && angle < 0){
+       return Math.sin(300);
       }
       else{
         return 0.0;
