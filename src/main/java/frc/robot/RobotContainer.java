@@ -28,12 +28,16 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.endeffector.EndEffectorCommands;
 import frc.robot.subsystems.Climber;
 import frc.robot.commands.ClimbCommands;
 import frc.robot.commands.elevator.ElevatorCommands;
+import frc.robot.commands.elevator.DoubleSetpoint;
+import frc.robot.commands.elevator.ChangeSetpointCommand;
+import frc.robot.commands.elevator.DoubleSetpoint;
 import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
@@ -231,8 +235,8 @@ public class RobotContainer
 
     operatorController.b().onTrue(ElevatorCommands.setSetpoint(elevator, Constants.elevatorConstants.L2Height));  
     //operatorController.b().onTrue(ElevatorCommands.twoPointMove(elevator, Constants.elevatorConstants.L2Height, 0.07, 1.0));
-    operatorController.x().onTrue(ElevatorCommands.twoPointMove(elevator, Constants.elevatorConstants.L4Height, Constants.elevatorConstants.L2Height, 1.0));
-    operatorController.y().onTrue(ElevatorCommands.twoPointMove(elevator, Constants.elevatorConstants.L3Height, 0.07, 1.0));
+    operatorController.x().onTrue(new DoubleSetpoint(elevator, Constants.elevatorConstants.L3Height, Constants.elevatorConstants.L2Height, 1));
+    operatorController.b().onTrue(ElevatorCommands.setSetpoint(elevator, Constants.elevatorConstants.L3Height));
     operatorController.povDown().onTrue(ElevatorCommands.setSetpoint(elevator, 0.07));
 }
   /**

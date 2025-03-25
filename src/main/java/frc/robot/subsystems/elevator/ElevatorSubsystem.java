@@ -63,12 +63,13 @@ public class ElevatorSubsystem extends SubsystemBase{
         leftMotor.setControl(new Follower(rightMotor.getDeviceID(), true));
         pidController = new PIDController(Constants.elevatorConstants.kP,
             Constants.elevatorConstants.kI, Constants.elevatorConstants.kD);
-        pidController.setTolerance(0.1);
+        pidController.setTolerance(0.5);
 
         //rightMotor.setPosition(0.0,0.5);
         //leftMotor.setPosition(0.0,0.5);
      
     }
+
      public void moveToSetpoint(){
         pidController.setSetpoint(m_setpoint);
         final double measurement = rightMotor.getPosition().getValueAsDouble() - m_offset;
@@ -96,6 +97,10 @@ public class ElevatorSubsystem extends SubsystemBase{
 
       System.out.println("EL -- Change setpoint to " + m_setpoint);
       
+    }
+
+    public boolean atSetpoint(){
+      return pidController.atSetpoint();
     }
 
         

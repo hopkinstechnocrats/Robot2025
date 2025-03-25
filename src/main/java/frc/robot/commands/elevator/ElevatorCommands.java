@@ -46,8 +46,4 @@ public class ElevatorCommands extends Command{
          elevator);
     }
 
-    public static Command twoPointMove(ElevatorSubsystem elevator, Double setpoint1, Double setpoint2, Double waitTime){
-        return new SequentialCommandGroup(setSetpoint(elevator, setpoint1), setSetpoint(elevator, setpoint2));
-    }
-
 } 
