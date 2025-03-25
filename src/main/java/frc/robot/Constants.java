@@ -75,7 +75,7 @@ public final class Constants
     public static final double kI = 0.025 / 10;
     public static final double kD = 0;
     public static final double minMotorHeight = 0.5; //rotations below which we stop down power (actually positive)
-    public static final double motorPowerLimit = .2; //percent of max 1 (DO NOT SET TO NEAR 1)
+    public static final double motorPowerLimit = .4; //percent of max 1 (DO NOT SET TO NEAR 1)
     public static final double inchesPerRevolution = 1.751 * Math.PI;
     public static final double rotationsPerRevolution = 12/*gear ratio*/;
     public static final double rotationsPerInch = rotationsPerRevolution/inchesPerRevolution / 3 /*elevator stages (divided by 3 because its a cascade elevator)*/; //how many encoder ticks per inch of elevator movement
