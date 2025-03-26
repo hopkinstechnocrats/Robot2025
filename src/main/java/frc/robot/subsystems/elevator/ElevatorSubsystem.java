@@ -94,7 +94,7 @@ public class ElevatorSubsystem extends SubsystemBase{
       m_setpoint = -setpoint * elevatorConstants.rotationsPerInch; //setpoint is in rotations
       nt_changed.setDouble(m_setpoint);
       nt_object_b.setInteger(m_counter);
-
+    
       System.out.println("EL -- Change setpoint to " + m_setpoint);
       
     }

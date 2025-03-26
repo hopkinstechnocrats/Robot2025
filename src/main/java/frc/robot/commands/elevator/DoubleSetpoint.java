@@ -10,9 +10,9 @@ public class DoubleSetpoint extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new ChangeSetpointCommand(elevator, setpoint1),
-      new WaitCommand(wait),
-      new ChangeSetpointCommand(elevator, setpoint2)
+      new ChangeSetpointCommand(elevator, setpoint1)
+      .andThen(new WaitCommand(wait)).andThen(null)
+      .andThen(new ChangeSetpointCommand(elevator, setpoint2))
     );
   }
 }
