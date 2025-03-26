@@ -252,22 +252,37 @@ public class RobotContainer
   }
 
   public Double headingX(){
+    final double deadband = 0.50;
     final double num_sections = 6;
     final double rad_per_section = (2.0*Math.PI/num_sections);
     final double section =((Math.atan2(-driverXbox.getRightY(), driverXbox.getRightX())))/rad_per_section; // in from -2.5 to +3.5
     final int section_rounded = Math.round((float) section);
     final double angle = section_rounded * rad_per_section;
-    return Math.cos(angle);
+    System.out.println(angle);
+    if( Math.hypot(driverXbox.getRightX(),-driverXbox.getRightY()) <= deadband){
+      System.out.println("inside deadband");
+      return 0.0;
+    } else {
+    return Math.cos(angle+(Math.PI/2));
+    }
     
 }
 
 
   public Double headingY(){
+  
+    final double deadband = 0.50;
     final double num_sections = 6;
     final double rad_per_section = (2.0*Math.PI/num_sections);
     final double section =((Math.atan2(-driverXbox.getRightY(), driverXbox.getRightX())))/rad_per_section; // in from -2.5 to +3.5
     final int section_rounded = Math.round((float) section);
     final double angle = section_rounded * rad_per_section;
-    return -Math.sin(angle);  
+    System.out.println(angle);
+    if( Math.hypot(driverXbox.getRightX(),-driverXbox.getRightY()) <= deadband){
+      System.out.println("inside deadband");
+      return 0.0;
+    } else {
+    return -Math.sin(angle+(Math.PI/2)) ;  
+}
 }
 }
