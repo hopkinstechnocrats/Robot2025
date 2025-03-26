@@ -231,12 +231,23 @@ public class RobotContainer
     operatorController.leftTrigger().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.LeftScoreL4));
     operatorController.rightTrigger().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.RightScoreL4));
 
-*/  operatorController.povUp().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.Stowage));
+*/  
+    operatorController.povUp().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.Stowage));
 
-    operatorController.b().onTrue(ElevatorCommands.setSetpoint(elevator, Constants.elevatorConstants.L2Height));  
-    //operatorController.b().onTrue(ElevatorCommands.twoPointMove(elevator, Constants.elevatorConstants.L2Height, 0.07, 1.0));
-    operatorController.x().onTrue(new DoubleSetpoint(elevator, Constants.elevatorConstants.L3Height, Constants.elevatorConstants.L2Height, 1));
-    operatorController.b().onTrue(ElevatorCommands.setSetpoint(elevator, Constants.elevatorConstants.L3Height));
+    operatorController.a().onTrue(new DoubleSetpoint(elevator, Constants.elevatorConstants.L4Height, 
+    Constants.elevatorConstants.L2Height, 1));
+    // A || DANGER. DO NOT PRESS UNLESS READY TO DISABLE ROBOT WHILE TESTING. USE EXTREME CAUTION WHEN PRESSING THIS BUTTON.
+    // This button is meant to test a strange error we noticed. It is NOT meant to be used outside of that purpose.
+    operatorController.b().onTrue(ElevatorCommands.setSetpoint(elevator, Constants.elevatorConstants.L3Height)
+    .andThen(ElevatorCommands.setSetpoint(elevator, Constants.elevatorConstants.L2Height)));
+    // B || .andThen -- old controls specifically ^
+    operatorController.x().onTrue(new DoubleSetpoint(elevator, Constants.elevatorConstants.L3Height, 
+    Constants.elevatorConstants.L2Height, 1));
+    // X || .andThen -- in command specifically ^
+    operatorController.y().onTrue(new ChangeSetpointCommand(elevator, Constants.elevatorConstants.L3Height)
+    .andThen(new ChangeSetpointCommand(elevator, Constants.elevatorConstants.L2Height)));
+    // Y || .andThen -- with the file command ^
+
     operatorController.povDown().onTrue(ElevatorCommands.setSetpoint(elevator, 0.07));
 }
   /**
