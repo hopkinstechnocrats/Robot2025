@@ -219,6 +219,9 @@ public class RobotContainer
       driverXbox.rightTrigger().whileTrue(ClimbCommands.retractClimber(climber));
 
       driverXbox.rightBumper().whileTrue(ClimbCommands.spinVictor(climber));
+      driverXbox.leftBumper().onTrue(new RunCommand(() -> increaseOffset()));
+        driverXbox.leftTrigger().onTrue(new RunCommand(() ->decreaseOffset()));
+        driverXbox.povUp().onTrue(new RunCommand(() -> resetOffset()));
     }
 
     operatorController.leftBumper().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.LeftScore));
@@ -251,6 +254,20 @@ public class RobotContainer
     drivebase.setMotorBrake(brake);
   }
 
+  public double offset = 0.0;
+
+  public void increaseOffset(){
+    offset = offset + Math.PI/36;
+  }
+
+  public void decreaseOffset(){
+    offset = offset - Math.PI/36;
+  }
+
+  public void resetOffset(){
+    offset = 0.0;
+  }
+
   public Double headingX(){
     final double deadband = 0.50;
     final double num_sections = 6;
@@ -263,7 +280,7 @@ public class RobotContainer
       System.out.println("inside deadband");
       return 0.0;
     } else {
-    return Math.cos(angle+(Math.PI/2));
+    return Math.cos(angle+(Math.PI/2)+offset);
     }
     
 }
@@ -281,7 +298,7 @@ public class RobotContainer
       System.out.println("inside deadband");
       return 0.0;
     } else {
-    return -Math.sin(angle+(Math.PI/2)) ;  
+    return -Math.sin(angle+(Math.PI/2)+offset) ;  
 }
 }
 }
