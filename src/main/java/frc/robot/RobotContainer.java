@@ -277,7 +277,6 @@ public class RobotContainer
     final double section =((Math.atan2(-driverXbox.getRightY(), driverXbox.getRightX())))/rad_per_section; // in from -2.5 to +3.5
     final int section_rounded = Math.round((float) section);
     final double angle = section_rounded * rad_per_section;
-    System.out.println(angle);
     if( Math.hypot(driverXbox.getRightX(),-driverXbox.getRightY()) <= deadband){
       System.out.println("inside deadband");
       return 0.0;
