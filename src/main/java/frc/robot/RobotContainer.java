@@ -280,7 +280,7 @@ public class RobotContainer
       System.out.println("inside deadband");
       return 0.0;
     } else {
-    return Math.cos(angle+(Math.PI/2)+offset);
+    return Math.cos(angle+((Math.PI*2)/3)+offset);
     }
     
 }
@@ -298,7 +298,7 @@ public class RobotContainer
       System.out.println("inside deadband");
       return 0.0;
     } else {
-    return -Math.sin(angle+(Math.PI/2)+offset) ;  
+    return -Math.sin(angle+((Math.PI*2)/3)+offset) ;  
 }
 }
 }
