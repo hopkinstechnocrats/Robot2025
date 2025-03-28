@@ -31,6 +31,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.Constants.endEffectorConstants;
+import frc.robot.commands.endeffector.DoubleEESetpoint;
 import frc.robot.commands.endeffector.EndEffectorCommands;
 import frc.robot.subsystems.Climber;
 import frc.robot.commands.ClimbCommands;
@@ -211,44 +213,25 @@ public class RobotContainer
       driverXbox.rightBumper().whileTrue(ClimbCommands.spinVictor(climber));
     }
 
-    /*if (operatorController.getLeftX() != 0) { // Function to toggle ee scoring direction
-      System.out.println("LR -- Left/right input initiated");
-      if (operatorController.getLeftX() <= 0) 
-      {
-        robot_score_left = true; 
-        System.out.println("LR -- Robot goes left");
-      } else 
-      {
-        robot_score_left = false;
-        System.out.println("LR -- Robot goes right");
-      }
-    }*/
+    // Temporary left/right toggle
+    operatorController.rightBumper().onTrue(EndEffectorCommands.leftToggle(endEffector, operatorController, robot_score_left));
 
-    operatorController.rightBumper().onTrue(EndEffectorCommands.test(endEffector, operatorController, robot_score_left));
-
-/*  operatorController.leftBumper().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.LeftScore));
-    operatorController.rightBumper().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.RightScore));
-    operatorController.leftTrigger().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.LeftScoreL4));
-    operatorController.rightTrigger().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.RightScoreL4));
-
-*/  
+    // Reset commands
     operatorController.povUp().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.Stowage));
+    operatorController.povDown().onTrue(ElevatorCommands.setSetpoint(elevator, Constants.elevatorConstants.StartHeight));
 
-    operatorController.a().onTrue(new DoubleSetpoint(elevator, Constants.elevatorConstants.L4Height, 
-    Constants.elevatorConstants.L2Height, 1));
-    // A || DANGER. DO NOT PRESS UNLESS READY TO DISABLE ROBOT WHILE TESTING. USE EXTREME CAUTION WHEN PRESSING THIS BUTTON.
-    // This button is meant to test a strange error we noticed. It is NOT meant to be used outside of that purpose.
-    operatorController.b().onTrue(ElevatorCommands.setSetpoint(elevator, Constants.elevatorConstants.L3Height)
-    .andThen(ElevatorCommands.setSetpoint(elevator, Constants.elevatorConstants.L2Height)));
-    // B || .andThen -- old controls specifically ^
+    // Elevator button commands
+    operatorController.a().onTrue(new DoubleSetpoint(elevator, Constants.elevatorConstants.L2HeightEnd, 
+    Constants.elevatorConstants.StartHeight));
+    operatorController.b().onTrue(new DoubleSetpoint(elevator, Constants.elevatorConstants.L2Height, 
+    Constants.elevatorConstants.StartHeight));
     operatorController.x().onTrue(new DoubleSetpoint(elevator, Constants.elevatorConstants.L3Height, 
-    Constants.elevatorConstants.L2Height, 1));
-    // X || .andThen -- in command specifically ^
-    operatorController.y().onTrue(new ChangeSetpointCommand(elevator, Constants.elevatorConstants.L3Height)
-    .andThen(new ChangeSetpointCommand(elevator, Constants.elevatorConstants.L2Height)));
-    // Y || .andThen -- with the file command ^
+    Constants.elevatorConstants.StartHeight));
+    operatorController.y().onTrue(new DoubleSetpoint(elevator, Constants.elevatorConstants.L4Height, 
+    Constants.elevatorConstants.StartHeight));
 
-    operatorController.povDown().onTrue(ElevatorCommands.setSetpoint(elevator, 0.07));
+    // End effector commands
+    operatorController.leftBumper().onTrue(new DoubleEESetpoint(endEffector, endEffectorConstants.LeftScore, endEffectorConstants.Stowage));
 }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

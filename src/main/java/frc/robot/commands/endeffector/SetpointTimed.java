@@ -1,47 +1,47 @@
-package frc.robot.commands.elevator;
+package frc.robot.commands.endeffector;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.elevator.ElevatorSubsystem;
+import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.Constants;
 
-public class ChangeSetpointCommand extends Command {
+public class SetpointTimed extends Command {
 
-    private final ElevatorSubsystem m_elevator;
+    private final EndEffectorSubsystem m_endeffector;
     private double m_setpoint;
 
-    public ChangeSetpointCommand(ElevatorSubsystem elevator, double setpoint) {
+    public SetpointTimed(EndEffectorSubsystem endeffector, double setpoint) {
         // Use addRequirements() here to declare subsystem dependencies.
-        m_elevator = elevator;
+        m_endeffector = endeffector;
         m_setpoint = setpoint;
-        addRequirements(m_elevator);
+        addRequirements(m_endeffector);
     }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("Change Setpoint Command Started");
+    System.out.println("EE Change Setpoint Command Started");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
 
-    m_elevator.changeSetpoint(m_setpoint);
-    m_elevator.moveToSetpoint();
+    m_endeffector.changeSetpoint(m_setpoint);
+    m_endeffector.moveToSetpoint();
 
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    System.out.println("Change Setpoint Command Ended");
+    System.out.println("EE Change Setpoint Command Ended");
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    System.out.println("Are we at setpoint? " + m_elevator.atSetpoint());
-    return m_elevator.atSetpoint();
+    System.out.println("EE Are we at setpoint? " + m_endeffector.atSetpoint());
+    return m_endeffector.atSetpoint();
   }
 }

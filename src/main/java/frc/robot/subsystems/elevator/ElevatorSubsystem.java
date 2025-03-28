@@ -20,6 +20,7 @@ public class ElevatorSubsystem extends SubsystemBase{
     private TalonFX leftMotor;
     private Double m_setpoint = 0.0; // Rotations pre-gearbox
     private Double m_offset = 0.0; //Also rotations
+    private Double m_measurement = 0.0; // rotations
     private Long m_counter = 0L;
     private final PIDController pidController;
     final ElevatorFeedforward ff = new ElevatorFeedforward(Constants.elevatorConstants.kS,
@@ -72,17 +73,17 @@ public class ElevatorSubsystem extends SubsystemBase{
 
      public void moveToSetpoint(){
         pidController.setSetpoint(m_setpoint);
-        final double measurement = rightMotor.getPosition().getValueAsDouble() - m_offset;
+        m_measurement = rightMotor.getPosition().getValueAsDouble() - m_offset;
         double command = MathUtil.clamp(
          /*  -ff.calculate(m_setpoint, 1) +*/ /*negative is up, positive is down */ 
-         pidController.calculate(measurement), -elevatorConstants.motorPowerLimit, elevatorConstants.motorPowerLimit);  
-        if(measurement > -elevatorConstants.minMotorHeight)
+         pidController.calculate(m_measurement), -elevatorConstants.motorPowerLimit, elevatorConstants.motorPowerLimit);  
+        if(m_measurement > -elevatorConstants.minMotorHeight)
         {
           command = MathUtil.clamp(command, -elevatorConstants.motorPowerLimit, 0.0);
         }
          m_counter++;
         rightMotor.set(command);
-        nt_measurement.setDouble(measurement);
+        nt_measurement.setDouble(m_measurement);
         nt_setpoint.setDouble(m_setpoint);
         nt_offset.setDouble(m_offset);
         nt_command.setDouble(command);
@@ -100,7 +101,9 @@ public class ElevatorSubsystem extends SubsystemBase{
     }
 
     public boolean atSetpoint(){
-      return pidController.atSetpoint();
+      System.out.println("Setpoint = " + m_setpoint + "  Actual = " + m_measurement);
+      //return pidController.atSetpoint();
+      return (Math.abs(m_measurement - m_setpoint) < 0.5);
     }
 
         

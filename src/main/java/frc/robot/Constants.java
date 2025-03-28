@@ -79,6 +79,7 @@ public final class Constants
     public static final double inchesPerRevolution = 1.751 * Math.PI;
     public static final double rotationsPerRevolution = 12/*gear ratio*/;
     public static final double rotationsPerInch = rotationsPerRevolution/inchesPerRevolution / 3 /*elevator stages (divided by 3 because its a cascade elevator)*/; //how many encoder ticks per inch of elevator movement
+    public static final double StartHeight = 0.07;
     public static final double L2Height = 7.625 + 13 + 2; //position when scoring on L2 inches
     public static final double L3Height = 13.25 + 23 + 2; //position when scoring on L3 inches
     public static final double L4Height = 21.75 + 38 + 6 + 0.8; //position when scoring on L4 inches

@@ -25,6 +25,7 @@ public class EndEffectorSubsystem extends SubsystemBase{
     private Double m_setpoint = 0.0; // Rotations pre-gearbox
     private Double m_offset = 0.0; //Also rotations
     private Long m_counter = 0L;
+    private Double m_measurement = 0.0;
     private final PIDController pidController;
 //    private final ArmFeedforward feedforwards;
     private CANcoder throughbore;
@@ -72,15 +73,15 @@ public class EndEffectorSubsystem extends SubsystemBase{
     }
      public void moveToSetpoint(){
         pidController.setSetpoint(m_setpoint);
-        final double measurement = throughbore.getPosition().getValueAsDouble();
-        final double PIDcommand = pidController.calculate(measurement);
-        final double FFcommand =  Math.sin(measurement * 2 * Math.PI) * 0.03054;
+        m_measurement = throughbore.getPosition().getValueAsDouble();
+        final double PIDcommand = pidController.calculate(m_measurement);
+        final double FFcommand =  Math.sin(m_measurement * 2 * Math.PI) * 0.03054;
         double command = MathUtil.clamp( 
         PIDcommand  + -FFcommand, -endEffectorConstants.motorPowerLimit, endEffectorConstants.motorPowerLimit);  
 
          m_counter++;
         motor.set(command);
-        nt_measurement.setDouble(measurement);
+        nt_measurement.setDouble(m_measurement);
         nt_setpoint.setDouble(m_setpoint);
         nt_offset.setDouble(m_offset);
         nt_command.setDouble(command);
@@ -100,25 +101,7 @@ public class EndEffectorSubsystem extends SubsystemBase{
       
     }
 
-    public void changeSetpointComplex(boolean left, boolean level){
-
-        //setpoint is in rotations
-        System.out.println("CS Initiate");
-        if (level = true) { //This is checking if the elevator is going to level 4
-            if (left = true) m_setpoint = Constants.endEffectorConstants.LeftScoreL4; 
-            else m_setpoint = Constants.endEffectorConstants.RightScoreL4;
-            System.out.println("CS -- Change to l4");
-        } else {
-            if (left = true) m_setpoint = Constants.endEffectorConstants.LeftScore;
-            else m_setpoint = Constants.endEffectorConstants.RightScore;
-            System.out.println("CS -- Normal change left/right");
-        }
-        nt_changed.setDouble(m_setpoint);
-        nt_object_b.setInteger(m_counter);
-      
-    }
-
-    public void test(CommandXboxController operator, boolean left){
+    public void leftToggle(CommandXboxController operator, boolean left){
 
         System.out.println("TS -- Left/right input");
         if (operator.getLeftX() <= -0.8) 
@@ -131,6 +114,12 @@ public class EndEffectorSubsystem extends SubsystemBase{
         System.out.println("TS -- Right send");
         }
       
+    }
+
+    public boolean atSetpoint(){
+        System.out.println("Setpoint = " + m_setpoint + "  Actual = " + m_measurement);
+        //return pidController.atSetpoint();
+        return (Math.abs(m_measurement - m_setpoint) < 0.05);
     }
 
   

@@ -22,18 +22,10 @@ public class EndEffectorCommands extends Command {
             endEffector);
     }
 
-    public static Command setComplexCommand(EndEffectorSubsystem endEffector, boolean left, boolean level){
-        return Commands.run(
-                () -> {
-                    endEffector.changeSetpointComplex(left, level); // Passing in left & level, calculating direction in sybsystem itself
-                },
-            endEffector);
-    }
-
-    public static Command test(EndEffectorSubsystem endEffector, CommandXboxController operator, boolean left){
+    public static Command leftToggle(EndEffectorSubsystem endEffector, CommandXboxController operator, boolean left){
         return Commands.runOnce(
                 () -> {
-                    endEffector.test(operator, left);
+                    endEffector.leftToggle(operator, left);
                 },
             endEffector);
     }
