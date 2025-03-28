@@ -207,20 +207,13 @@ public class RobotContainer
     } else
     {
       driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
-      driverXbox.x().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
-     driverXbox.y().whileTrue((driveFieldOrientedAnglularVelocity_slow));
-      driverXbox.b().whileTrue(
-          drivebase.driveToPose(
-              new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))
-                              );
+     driverXbox.leftTrigger().whileTrue((driveFieldOrientedAnglularVelocity_slow));
       driverXbox.start().whileTrue(Commands.none());
       driverXbox.back().whileTrue(Commands.none());
-
-      driverXbox.rightTrigger().whileTrue(ClimbCommands.retractClimber(climber));
-
-      driverXbox.rightBumper().whileTrue(ClimbCommands.spinVictor(climber));
-      driverXbox.leftBumper().onTrue(new RunCommand(() -> increaseOffset()));
-        driverXbox.leftTrigger().onTrue(new RunCommand(() ->decreaseOffset()));
+      driverXbox.x().whileTrue(ClimbCommands.retractClimber(climber));
+      driverXbox.b().whileTrue(ClimbCommands.spinVictor(climber));
+      driverXbox.leftBumper().onTrue(Commands.none());
+      driverXbox.rightBumper().onTrue(Commands.none());
         driverXbox.povUp().onTrue(new RunCommand(() -> resetOffset()));
     }
 
@@ -269,6 +262,8 @@ public class RobotContainer
   }
 
   public Double headingX(){
+    boolean driveRightBumper = driverXbox.rightBumper().getAsBoolean();
+    boolean driveLeftBumper = driverXbox.leftBumper().getAsBoolean();
     final double deadband = 0.50;
     final double num_sections = 6;
     final double rad_per_section = (2.0*Math.PI/num_sections);
@@ -276,6 +271,9 @@ public class RobotContainer
     final int section_rounded = Math.round((float) section);
     final double angle = section_rounded * rad_per_section;
     System.out.println(angle);
+    if(driveRightBumper = true){return Math.PI * 0.36111111111;/*returns 65 degrees to the right */}else 
+    if(driveLeftBumper = true){return Math.PI * 1.63888888888;/*65 to the left */}
+    else 
     if( Math.hypot(driverXbox.getRightX(),-driverXbox.getRightY()) <= deadband){
       System.out.println("inside deadband");
       return 0.0;
@@ -287,13 +285,17 @@ public class RobotContainer
 
 
   public Double headingY(){
-  
+    boolean driveRightBumper = driverXbox.rightBumper().getAsBoolean();
+    boolean driveLeftBumper = driverXbox.leftBumper().getAsBoolean();
     final double deadband = 0.50;
     final double num_sections = 6;
     final double rad_per_section = (2.0*Math.PI/num_sections);
     final double section =((Math.atan2(-driverXbox.getRightY(), driverXbox.getRightX())))/rad_per_section; // in from -2.5 to +3.5
     final int section_rounded = Math.round((float) section);
     final double angle = section_rounded * rad_per_section;
+  if(driveRightBumper = true){return Math.PI * 0.36111111111;/*returns 65 degrees to the right */}else 
+if(driveLeftBumper = true){return Math.PI * 1.63888888888;/*65 to the left */}
+else 
     if( Math.hypot(driverXbox.getRightX(),-driverXbox.getRightY()) <= deadband){
       System.out.println("inside deadband");
       return 0.0;
