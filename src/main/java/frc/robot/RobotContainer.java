@@ -271,15 +271,18 @@ public class RobotContainer
     final int section_rounded = Math.round((float) section);
     final double angle = section_rounded * rad_per_section;
     System.out.println(angle);
-    if(driveRightBumper = true){return Math.PI * 0.36111111111;/*returns 65 degrees to the right */}else 
+    if(driveRightBumper = true){return Math.PI * 0.36111111111;/*returns 65 degrees to the right */}
+    else {
     if(driveLeftBumper = true){return Math.PI * 1.63888888888;/*65 to the left */}
-    else 
+    else {
     if( Math.hypot(driverXbox.getRightX(),-driverXbox.getRightY()) <= deadband){
       System.out.println("inside deadband");
       return 0.0;
     } else {
     return Math.cos(angle+((Math.PI*2)/3)+offset);
     }
+  }
+}
     
 }
 
@@ -293,14 +296,17 @@ public class RobotContainer
     final double section =((Math.atan2(-driverXbox.getRightY(), driverXbox.getRightX())))/rad_per_section; // in from -2.5 to +3.5
     final int section_rounded = Math.round((float) section);
     final double angle = section_rounded * rad_per_section;
-  if(driveRightBumper = true){return Math.PI * 0.36111111111;/*returns 65 degrees to the right */}else 
-if(driveLeftBumper = true){return Math.PI * 1.63888888888;/*65 to the left */}
-else 
+  if(driveRightBumper = true){return Math.PI * 0.36111111111;/*returns 65 degrees to the right */}
+  else {
+  if(driveLeftBumper = true){return Math.PI * 1.63888888888;/*65 to the left */}
+  else {
     if( Math.hypot(driverXbox.getRightX(),-driverXbox.getRightY()) <= deadband){
       System.out.println("inside deadband");
       return 0.0;
     } else {
     return -Math.sin(angle+((Math.PI*2)/3)+offset) ;  
+}
+}
 }
 }
 }
