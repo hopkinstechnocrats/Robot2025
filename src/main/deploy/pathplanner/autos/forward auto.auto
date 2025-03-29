@@ -5,6 +5,12 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "resetOdometry"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Drive Straight"

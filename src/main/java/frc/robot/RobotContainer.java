@@ -13,6 +13,7 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.reduxrobotics.canand.CanandEventLoop;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -130,7 +131,9 @@ public class RobotContainer
     CanandEventLoop.getInstance();
     configureBindings();
     DriverStation.silenceJoystickConnectionWarning(true);
-    NamedCommands.registerCommand("test", Commands.print("I EXIST"));
+    //NamedCommands.registerCommand("test", Commands.print("I EXIST"));
+
+    NamedCommands.registerCommand("resetOdometry", Commands.runOnce(drivebase::zeroGyro));
     boolean isCompetition = false;
     m_chooser = AutoBuilder.buildAutoChooser();
 
@@ -241,7 +244,9 @@ public class RobotContainer
   public Command getAutonomousCommand()
   {
     // Run selected auto
-    return m_chooser.getSelected();
+    //TODO: use selector instead of returning a specific auto
+    //return m_chooser.getSelected();
+    return new PathPlannerAuto("forward auto");
 
   }
 
