@@ -212,8 +212,6 @@ public class RobotContainer
       driverXbox.back().whileTrue(new RunCommand(() -> decreaseOffset()));
       driverXbox.x().whileTrue(ClimbCommands.retractClimber(climber));
       driverXbox.y().whileTrue(ClimbCommands.spinVictor(climber));
-      driverXbox.leftBumper().onTrue(new RunCommand(() -> leftCoral()));
-      driverXbox.rightBumper().onTrue(new RunCommand(() -> rightCoral()));
       driverXbox.povUp().onTrue(new RunCommand(() -> resetOffset()));
     }
 
@@ -261,26 +259,21 @@ public class RobotContainer
     offset = 0.0;
   }
 
-  public void leftCoral(){
-    offset = offset + ((Math.PI/360)*295);
-  }
-  public void rightCoral(){
-    offset = offset + ((Math.PI/360)*65);
-  }
 
   public Double headingX(){
     final double deadband = 0.50;
     final double num_sections = 6;
     final double rad_per_section = (2.0*Math.PI/num_sections);
-    final double section =((Math.atan2(-driverXbox.getRightY(), driverXbox.getRightX())))/rad_per_section; // in from -2.5 to +3.5
+    final double section =((((Math.atan2(-driverXbox.getRightY(), driverXbox.getRightX())))/rad_per_section)+0.5); // in from -2.5 to +3.5
     final int section_rounded = Math.round((float) section);
     final double angle = section_rounded * rad_per_section;
-    System.out.println(angle);
+    // System.out.println(angle);
+    System.out.println(section_rounded);
     if( Math.hypot(driverXbox.getRightX(),-driverXbox.getRightY()) <= deadband){
       System.out.println("inside deadband");
       return 0.0;
     } else {
-    return Math.cos(angle+((Math.PI*2)/3)+offset);
+    return Math.cos(angle);
     }
   }
 
@@ -291,14 +284,13 @@ public class RobotContainer
     final double deadband = 0.50;
     final double num_sections = 6;
     final double rad_per_section = (2.0*Math.PI/num_sections);
-    final double section =((Math.atan2(-driverXbox.getRightY(), driverXbox.getRightX())))/rad_per_section; // in from -2.5 to +3.5
+    final double section =((((Math.atan2(-driverXbox.getRightY(), driverXbox.getRightX())))/rad_per_section)+0.5); // in from -2.5 to +3.5
     final int section_rounded = Math.round((float) section);
     final double angle = section_rounded * rad_per_section;
     if( Math.hypot(driverXbox.getRightX(),-driverXbox.getRightY()) <= deadband){
-      System.out.println("inside deadband");
       return 0.0;
     } else {
-    return -Math.sin(angle+((Math.PI*2)/3)+offset);
+    return -Math.sin(angle);
 } 
 }
 }
