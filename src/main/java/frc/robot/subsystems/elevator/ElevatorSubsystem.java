@@ -10,6 +10,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Constants.elevatorConstants;
 
@@ -45,6 +46,9 @@ public class ElevatorSubsystem extends SubsystemBase{
         nt_changed = table.getEntry("Setpoint set [rot]");
         nt_object_a = table.getEntry("Points North");
         nt_object_b = table.getEntry("Points South");
+        SmartDashboard.putNumber("kP", Constants.elevatorConstants.kP);
+        SmartDashboard.putNumber("kD", Constants.elevatorConstants.kD);
+        SmartDashboard.putNumber("kI", Constants.elevatorConstants.kI);
         final ElevatorFeedforward ff;
 
         rightMotor = new TalonFX(11);
@@ -104,6 +108,11 @@ public class ElevatorSubsystem extends SubsystemBase{
       System.out.println("Setpoint = " + m_setpoint + "  Actual = " + m_measurement);
       //return pidController.atSetpoint();
       return (Math.abs(m_measurement - m_setpoint) < 0.5);
+    }
+
+    public double getSetpoint(){
+      //return pidController.atSetpoint();
+      return (m_measurement);
     }
 
         

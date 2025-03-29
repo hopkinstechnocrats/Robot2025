@@ -1,16 +1,15 @@
 package frc.robot.commands.elevator;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.elevatorConstants;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
-import frc.robot.Constants;
 
-public class ChangeSetpointCommand extends Command {
+public class ElevatorSetpoint extends Command {
 
     private final ElevatorSubsystem m_elevator;
     private double m_setpoint;
 
-    public ChangeSetpointCommand(ElevatorSubsystem elevator, double setpoint) {
+    public ElevatorSetpoint(ElevatorSubsystem elevator, double setpoint) {
         // Use addRequirements() here to declare subsystem dependencies.
         m_elevator = elevator;
         m_setpoint = setpoint;
@@ -36,6 +35,7 @@ public class ChangeSetpointCommand extends Command {
   @Override
   public void end(boolean interrupted) {
     System.out.println("Change Setpoint Command Ended");
+    m_elevator.brake();
   }
 
   // Returns true when the command should end.

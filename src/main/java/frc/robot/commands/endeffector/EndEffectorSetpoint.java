@@ -1,19 +1,24 @@
 package frc.robot.commands.endeffector;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.endEffectorConstants;
 import frc.robot.subsystems.EndEffectorSubsystem;
-import frc.robot.Constants;
 
-public class SetpointTimed extends Command {
+public class EndEffectorSetpoint extends Command {
 
     private final EndEffectorSubsystem m_endeffector;
     private double m_setpoint;
 
-    public SetpointTimed(EndEffectorSubsystem endeffector, double setpoint) {
+    public EndEffectorSetpoint(EndEffectorSubsystem endeffector, boolean left, boolean level, boolean storage) {
         // Use addRequirements() here to declare subsystem dependencies.
         m_endeffector = endeffector;
-        m_setpoint = setpoint;
+        if (storage) {
+          m_setpoint = endEffectorConstants.Stowage;
+        } else if (level) {
+          if (left) m_setpoint = endEffectorConstants.LeftScoreL4; else m_setpoint = endEffectorConstants.RightScoreL4; 
+        } else {
+          if (left) m_setpoint = endEffectorConstants.LeftScore; else m_setpoint = endEffectorConstants.RightScore; 
+        }
         addRequirements(m_endeffector);
     }
 

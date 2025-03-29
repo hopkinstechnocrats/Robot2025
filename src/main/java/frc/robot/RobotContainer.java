@@ -31,15 +31,16 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.Constants.elevatorConstants;
 import frc.robot.Constants.endEffectorConstants;
-import frc.robot.commands.endeffector.DoubleEESetpoint;
 import frc.robot.commands.endeffector.EndEffectorCommands;
+import frc.robot.commands.endeffector.EndEffectorSetpoint;
 import frc.robot.subsystems.Climber;
 import frc.robot.commands.ClimbCommands;
+import frc.robot.commands.ResetSequential;
+import frc.robot.commands.ScoreSequential;
 import frc.robot.commands.elevator.ElevatorCommands;
-import frc.robot.commands.elevator.DoubleSetpoint;
-import frc.robot.commands.elevator.ChangeSetpointCommand;
-import frc.robot.commands.elevator.DoubleSetpoint;
+import frc.robot.commands.elevator.ElevatorSetpoint;
 import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
@@ -221,17 +222,25 @@ public class RobotContainer
     operatorController.povDown().onTrue(ElevatorCommands.setSetpoint(elevator, Constants.elevatorConstants.StartHeight));
 
     // Elevator button commands
-    operatorController.a().onTrue(new DoubleSetpoint(elevator, Constants.elevatorConstants.L2HeightEnd, 
-    Constants.elevatorConstants.StartHeight));
-    operatorController.b().onTrue(new DoubleSetpoint(elevator, Constants.elevatorConstants.L2Height, 
-    Constants.elevatorConstants.StartHeight));
-    operatorController.x().onTrue(new DoubleSetpoint(elevator, Constants.elevatorConstants.L3Height, 
-    Constants.elevatorConstants.StartHeight));
-    operatorController.y().onTrue(new DoubleSetpoint(elevator, Constants.elevatorConstants.L4Height, 
-    Constants.elevatorConstants.StartHeight));
+    operatorController.a().onTrue(new ResetSequential(elevator, endEffector));
+    //operatorController.b().onTrue(new ScoreSequential(elevator, endEffector, elevatorConstants.L2Height, robot_score_left, false));
+    //operatorController.x().onTrue(new ScoreSequential(elevator, endEffector, elevatorConstants.L3Height, robot_score_left, false));
+    operatorController.x().onTrue(new ScoreSequential(elevator, endEffector, elevatorConstants.L2Height, robot_score_left, true));
+    operatorController.y().onTrue(ElevatorCommands.setSetpoint(elevator, Constants.elevatorConstants.L2Height)); 
+
+    if (Math.abs(operatorController.getLeftX()) > 0.8)
+    System.out.println("TS -- Left/right input");
+    if (operatorController.getLeftX() <= -0.85) 
+    {
+    robot_score_left = true; 
+    System.out.println("TS -- Left send");
+    } else if (operatorController.getLeftX() >= -0.85)
+    {
+    robot_score_left = false;
+    System.out.println("TS -- Right send");
+    }
 
     // End effector commands
-    operatorController.leftBumper().onTrue(new DoubleEESetpoint(endEffector, endEffectorConstants.LeftScore, endEffectorConstants.Stowage));
 }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

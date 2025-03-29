@@ -63,7 +63,6 @@ public class EndEffectorSubsystem extends SubsystemBase{
         throughbore = new CANcoder(21);
 
         motor.setNeutralMode(NeutralModeValue.Brake);
-      
 
         pidController = new PIDController(Constants.endEffectorConstants.kP,
             Constants.endEffectorConstants.kI, Constants.endEffectorConstants.kD);
