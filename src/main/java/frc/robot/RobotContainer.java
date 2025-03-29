@@ -221,12 +221,23 @@ public class RobotContainer
     operatorController.povUp().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.Stowage));
     operatorController.povDown().onTrue(ElevatorCommands.setSetpoint(elevator, Constants.elevatorConstants.StartHeight));
 
+    /*
     // Elevator button commands
     operatorController.a().onTrue(new ResetSequential(elevator, endEffector));
     //operatorController.b().onTrue(new ScoreSequential(elevator, endEffector, elevatorConstants.L2Height, robot_score_left, false));
     //operatorController.x().onTrue(new ScoreSequential(elevator, endEffector, elevatorConstants.L3Height, robot_score_left, false));
     operatorController.x().onTrue(new ScoreSequential(elevator, endEffector, elevatorConstants.L2Height, robot_score_left, true));
-    operatorController.y().onTrue(ElevatorCommands.setSetpoint(elevator, Constants.elevatorConstants.L2Height)); 
+    operatorController.y().onTrue(ElevatorCommands.setSetpoint(elevator, Constants.elevatorConstants.L2Height));
+    operatorController.b().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.RightScore));
+ */
+    operatorController.leftBumper().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.LeftScore));
+    operatorController.rightBumper().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.RightScore));
+    operatorController.leftTrigger().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.LeftScoreL4));
+    operatorController.rightTrigger().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.RightScoreL4));
+    operatorController.b().onTrue(ElevatorCommands.setSetpoint(elevator, Constants.elevatorConstants.L2Height));  
+    operatorController.x().onTrue(ElevatorCommands.setSetpoint(elevator, Constants.elevatorConstants.L3Height));  
+    operatorController.y().onTrue(ElevatorCommands.setSetpoint(elevator, Constants.elevatorConstants.L4Height));  
+    operatorController.a().onTrue(ElevatorCommands.setSetpoint(elevator, Constants.elevatorConstants.L2HeightEnd));
 
     if (Math.abs(operatorController.getLeftX()) > 0.8)
     System.out.println("TS -- Left/right input");

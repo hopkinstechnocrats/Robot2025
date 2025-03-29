@@ -56,7 +56,7 @@ public final class Constants
   }
 
   public static class endEffectorConstants{
-    public static final double kP = 0.2*8;
+    public static final double kP = 0.2*8 / 16;
     public static final double kI = 0.025 / 2;
     public static final double kD = 0;
     public static final double motorPowerLimit = .1; //percent of max 1 (DO NOT SET TO NEAR 1)
@@ -71,9 +71,9 @@ public final class Constants
     public static final double kEEAbsEncoderOffset = -0.07;
   }
   public final class elevatorConstants{
-    public static final double kP = 0.0;
-    public static final double kI = 0.0;
-    public static final double kD = 0.0;
+    public static final double kP = 0.2*8;
+    public static final double kI = 0.025 / 2;
+    public static final double kD = 0;
     public static final double minMotorHeight = 0.5; //rotations below which we stop down power (actually positive)
     public static final double motorPowerLimit = .2; //percent of max 1 (DO NOT SET TO NEAR 1)
     public static final double inchesPerRevolution = 1.751 * Math.PI;
