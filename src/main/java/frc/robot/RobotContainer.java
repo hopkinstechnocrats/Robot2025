@@ -273,7 +273,7 @@ public class RobotContainer
       System.out.println("inside deadband");
       return 0.0;
     } else {
-    return Math.cos(angle);
+    return Math.cos(angle); // TODO add 120 degrees to angle
     }
   }
 
