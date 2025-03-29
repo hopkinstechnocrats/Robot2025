@@ -207,14 +207,14 @@ public class RobotContainer
     } else
     {
       driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
-     driverXbox.leftTrigger().whileTrue((driveFieldOrientedAnglularVelocity_slow));
+      driverXbox.leftTrigger().whileTrue((driveFieldOrientedAnglularVelocity_slow));
       driverXbox.start().whileTrue(new RunCommand(() -> increaseOffset()));
       driverXbox.back().whileTrue(new RunCommand(() -> decreaseOffset()));
       driverXbox.x().whileTrue(ClimbCommands.retractClimber(climber));
       driverXbox.y().whileTrue(ClimbCommands.spinVictor(climber));
-      driverXbox.leftBumper().onTrue(Commands.none());
-      driverXbox.rightBumper().onTrue(Commands.none());
-        driverXbox.povUp().onTrue(new RunCommand(() -> resetOffset()));
+      driverXbox.leftBumper().onTrue(new RunCommand(() -> leftCoral()));
+      driverXbox.rightBumper().onTrue(new RunCommand(() -> rightCoral()));
+      driverXbox.povUp().onTrue(new RunCommand(() -> resetOffset()));
     }
 
     operatorController.leftBumper().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.LeftScore));
@@ -261,8 +261,14 @@ public class RobotContainer
     offset = 0.0;
   }
 
+  public void leftCoral(){
+    offset = offset + ((Math.PI/360)*295);
+  }
+  public void rightCoral(){
+    offset = offset + ((Math.PI/360)*65);
+  }
+
   public Double headingX(){
-    boolean bumpers = driverXbox.rightBumper().getAsBoolean();
     final double deadband = 0.50;
     final double num_sections = 6;
     final double rad_per_section = (2.0*Math.PI/num_sections);
@@ -270,7 +276,6 @@ public class RobotContainer
     final int section_rounded = Math.round((float) section);
     final double angle = section_rounded * rad_per_section;
     System.out.println(angle);
-    if(bumpers = true){return 1.63888888888;} else {
     if( Math.hypot(driverXbox.getRightX(),-driverXbox.getRightY()) <= deadband){
       System.out.println("inside deadband");
       return 0.0;
@@ -278,7 +283,7 @@ public class RobotContainer
     return Math.cos(angle+((Math.PI*2)/3)+offset);
     }
   }
-}
+
 
 
 
@@ -289,16 +294,11 @@ public class RobotContainer
     final double section =((Math.atan2(-driverXbox.getRightY(), driverXbox.getRightX())))/rad_per_section; // in from -2.5 to +3.5
     final int section_rounded = Math.round((float) section);
     final double angle = section_rounded * rad_per_section;
-    boolean bumpers = driverXbox.rightBumper().getAsBoolean();
-    if(bumpers = true){
-      System.out.println("Bumpers on");
-      return -1.63888888888;}  else {
     if( Math.hypot(driverXbox.getRightX(),-driverXbox.getRightY()) <= deadband){
       System.out.println("inside deadband");
       return 0.0;
     } else {
     return -Math.sin(angle+((Math.PI*2)/3)+offset);
 } 
-}
 }
 }
