@@ -290,7 +290,9 @@ public class RobotContainer
     final int section_rounded = Math.round((float) section);
     final double angle = section_rounded * rad_per_section;
     boolean bumpers = driverXbox.rightBumper().getAsBoolean();
-    if(bumpers = true){return -1.63888888888;} else { //TODO flawed logic!!!!!!!
+    if(bumpers = true){
+      System.out.println("Bumpers on");
+      return -1.63888888888;}  else {
     if( Math.hypot(driverXbox.getRightX(),-driverXbox.getRightY()) <= deadband){
       System.out.println("inside deadband");
       return 0.0;
