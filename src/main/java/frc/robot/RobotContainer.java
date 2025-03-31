@@ -273,7 +273,7 @@ public class RobotContainer
       System.out.println("inside deadband");
       return 0.0;
     } else {
-    return Math.cos(angle); // TODO add 120 degrees to angle
+    return Math.cos(angle+ ((4*Math.PI)/3)) ; // TODO add 120 degrees to angle
     }
   }
 
@@ -290,7 +290,7 @@ public class RobotContainer
     if( Math.hypot(driverXbox.getRightX(),-driverXbox.getRightY()) <= deadband){
       return 0.0;
     } else {
-    return -Math.sin(angle);
+    return -Math.sin(angle+ ((4*Math.PI)/3));
 } 
 }
 }
