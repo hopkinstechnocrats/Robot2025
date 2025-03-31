@@ -8,11 +8,13 @@ public class ElevatorSetpoint extends Command {
 
     private final ElevatorSubsystem m_elevator;
     private double m_setpoint;
+    private double m_speed;
 
-    public ElevatorSetpoint(ElevatorSubsystem elevator, double setpoint) {
+    public ElevatorSetpoint(ElevatorSubsystem elevator, double setpoint, double speed) {
         // Use addRequirements() here to declare subsystem dependencies.
         m_elevator = elevator;
         m_setpoint = setpoint;
+        m_speed = speed;
         addRequirements(m_elevator);
     }
 
@@ -27,7 +29,7 @@ public class ElevatorSetpoint extends Command {
   public void execute() {
 
     m_elevator.changeSetpoint(m_setpoint);
-    m_elevator.moveToSetpoint();
+    m_elevator.moveToSetpoint(m_speed);
 
   }
 

@@ -1,3 +1,4 @@
+
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
@@ -56,7 +57,7 @@ public final class Constants
   }
 
   public static class endEffectorConstants{
-    public static final double kP = 0.2*8 / 16;
+    public static final double kP = 0.2*8;
     public static final double kI = 0.025 / 2;
     public static final double kD = 0;
     public static final double motorPowerLimit = .1; //percent of max 1 (DO NOT SET TO NEAR 1)
@@ -71,15 +72,16 @@ public final class Constants
     public static final double kEEAbsEncoderOffset = -0.07;
   }
   public final class elevatorConstants{
-    public static final double kP = 0.2*8;
-    public static final double kI = 0.025 / 2;
+    public static final double kP = 0.2;
+    public static final double kI = 0.025 / 10;
     public static final double kD = 0;
     public static final double minMotorHeight = 0.5; //rotations below which we stop down power (actually positive)
-    public static final double motorPowerLimit = .2; //percent of max 1 (DO NOT SET TO NEAR 1)
+    public static final double motorPowerLimit = .4; //percent of max 1 (DO NOT SET TO NEAR 1)
+    public static final double motorPowerResetLimit = .25; //percent of power used when elevator is going down
     public static final double inchesPerRevolution = 1.751 * Math.PI;
     public static final double rotationsPerRevolution = 12/*gear ratio*/;
     public static final double rotationsPerInch = rotationsPerRevolution/inchesPerRevolution / 3 /*elevator stages (divided by 3 because its a cascade elevator)*/; //how many encoder ticks per inch of elevator movement
-    public static final double StartHeight = 0.07;
+    public static final double startHeight = 0.07; //Effectively zero, just slightly higher to prevent elevator slamming into frame
     public static final double L2Height = 7.625 + 13 + 2; //position when scoring on L2 inches
     public static final double L3Height = 13.25 + 23 + 2; //position when scoring on L3 inches
     public static final double L4Height = 21.75 + 38 + 6 + 0.8; //position when scoring on L4 inches

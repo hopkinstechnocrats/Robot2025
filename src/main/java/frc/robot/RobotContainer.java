@@ -219,16 +219,14 @@ public class RobotContainer
 
     // Reset commands
     operatorController.povUp().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.Stowage));
-    operatorController.povDown().onTrue(ElevatorCommands.setSetpoint(elevator, Constants.elevatorConstants.StartHeight));
+    operatorController.povDown().onTrue(new ElevatorSetpoint(elevator, 0.5, elevatorConstants.motorPowerResetLimit));
 
     /*
     // Elevator button commands
     operatorController.a().onTrue(new ResetSequential(elevator, endEffector));
-    //operatorController.b().onTrue(new ScoreSequential(elevator, endEffector, elevatorConstants.L2Height, robot_score_left, false));
-    //operatorController.x().onTrue(new ScoreSequential(elevator, endEffector, elevatorConstants.L3Height, robot_score_left, false));
-    operatorController.x().onTrue(new ScoreSequential(elevator, endEffector, elevatorConstants.L2Height, robot_score_left, true));
-    operatorController.y().onTrue(ElevatorCommands.setSetpoint(elevator, Constants.elevatorConstants.L2Height));
-    operatorController.b().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.RightScore));
+    operatorController.b().onTrue(new ScoreSequential(elevator, endEffector, elevatorConstants.L2Height, robot_score_left, false));
+    operatorController.x().onTrue(new ScoreSequential(elevator, endEffector, elevatorConstants.L3Height, robot_score_left, false));
+    operatorController.y().onTrue(new ScoreSequential(elevator, endEffector, elevatorConstants.L4Height, robot_score_left, true));
  */
     operatorController.leftBumper().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.LeftScore));
     operatorController.rightBumper().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.RightScore));

@@ -75,15 +75,15 @@ public class ElevatorSubsystem extends SubsystemBase{
      
     }
 
-     public void moveToSetpoint(){
+     public void moveToSetpoint(double speed){
         pidController.setSetpoint(m_setpoint);
         m_measurement = rightMotor.getPosition().getValueAsDouble() - m_offset;
         double command = MathUtil.clamp(
          /*  -ff.calculate(m_setpoint, 1) +*/ /*negative is up, positive is down */ 
-         pidController.calculate(m_measurement), -elevatorConstants.motorPowerLimit, elevatorConstants.motorPowerLimit);  
+         pidController.calculate(m_measurement), -speed, speed);  
         if(m_measurement > -elevatorConstants.minMotorHeight)
         {
-          command = MathUtil.clamp(command, -elevatorConstants.motorPowerLimit, 0.0);
+          command = MathUtil.clamp(command, -speed, 0.0);
         }
          m_counter++;
         rightMotor.set(command);
