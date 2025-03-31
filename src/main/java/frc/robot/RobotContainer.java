@@ -210,8 +210,8 @@ public class RobotContainer
       driverXbox.leftTrigger().whileTrue((driveFieldOrientedAnglularVelocity_slow));
       driverXbox.start().whileTrue(new RunCommand(() -> increaseOffset()));
       driverXbox.back().whileTrue(new RunCommand(() -> decreaseOffset()));
-      driverXbox.x().whileTrue(ClimbCommands.retractClimber(climber));
-      driverXbox.y().whileTrue(ClimbCommands.spinVictor(climber));
+      driverXbox.rightTrigger().whileTrue(ClimbCommands.retractClimber(climber));
+      driverXbox.rightBumper().whileTrue(ClimbCommands.spinVictor(climber));
       driverXbox.povUp().onTrue(new RunCommand(() -> resetOffset()));
     }
 
