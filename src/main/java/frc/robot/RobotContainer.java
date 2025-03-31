@@ -88,8 +88,8 @@ public class RobotContainer
   /**
    * Clone's the angular velocity input stream and converts it to a fieldRelative input stream.
    */
-  SwerveInputStream driveDirectAngle = driveAngularVelocity.copy().withControllerHeadingAxis(driverXbox::getRightX,
-                                                                                             driverXbox::getRightY)
+  SwerveInputStream driveDirectAngle = driveAngularVelocity.copy().withControllerHeadingAxis(() -> headingX(),
+                                                                                             () -> headingY())
                                                            .headingWhile(true);
 
   SwerveInputStream driveDirectAngle_slow = driveAngularVelocity.copy().withControllerHeadingAxis(driverXbox::getRightX,
@@ -165,7 +165,7 @@ public class RobotContainer
     {
 
       climber.setDefaultCommand(ClimbCommands.brake(climber));
-      drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
+      drivebase.setDefaultCommand(driveFieldOrientedDirectAngle);
       elevator.setDefaultCommand(ElevatorCommands.setpointMove(elevator));
       endEffector.setDefaultCommand(EndEffectorCommands.moveToSetpointCommand(endEffector));
     }
@@ -206,18 +206,12 @@ public class RobotContainer
     } else
     {
       driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
-      driverXbox.x().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
-     driverXbox.y().whileTrue((driveFieldOrientedAnglularVelocity_slow));
-      driverXbox.b().whileTrue(
-          drivebase.driveToPose(
-              new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))
-                              );
-      driverXbox.start().whileTrue(Commands.none());
-      driverXbox.back().whileTrue(Commands.none());
-
+      driverXbox.leftTrigger().whileTrue((driveFieldOrientedAnglularVelocity_slow));
+      driverXbox.start().whileTrue(new RunCommand(() -> increaseOffset()));
+      driverXbox.back().whileTrue(new RunCommand(() -> decreaseOffset()));
       driverXbox.rightTrigger().whileTrue(ClimbCommands.retractClimber(climber));
-
       driverXbox.rightBumper().whileTrue(ClimbCommands.spinVictor(climber));
+      driverXbox.povUp().onTrue(new RunCommand(() -> resetOffset()));
     }
 
     operatorController.leftBumper().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.LeftScore));
@@ -249,4 +243,53 @@ public class RobotContainer
   {
     drivebase.setMotorBrake(brake);
   }
+
+  public double offset = 0.0;
+
+  public void increaseOffset(){
+    offset = offset + Math.PI/36;
+  }
+
+  public void decreaseOffset(){
+    offset = offset - Math.PI/36;
+  }
+
+  public void resetOffset(){
+    offset = 0.0;
+  }
+
+
+  public Double headingX(){
+    final double deadband = 0.50;
+    final double num_sections = 6;
+    final double rad_per_section = (2.0*Math.PI/num_sections);
+    final double section =((((Math.atan2(-driverXbox.getRightY(), driverXbox.getRightX())))/rad_per_section)+0.5); // in from -2.5 to +3.5
+    final int section_rounded = Math.round((float) section);
+    final double angle = section_rounded * rad_per_section;
+    // System.out.println(angle);
+    System.out.println(section_rounded);
+    if( Math.hypot(driverXbox.getRightX(),-driverXbox.getRightY()) <= deadband){
+      System.out.println("inside deadband");
+      return 0.0;
+    } else {
+    return Math.cos(angle+ ((4*Math.PI)/3)) ; // TODO add 120 degrees to angle
+    }
+  }
+
+
+
+
+  public Double headingY(){
+    final double deadband = 0.50;
+    final double num_sections = 6;
+    final double rad_per_section = (2.0*Math.PI/num_sections);
+    final double section =((((Math.atan2(-driverXbox.getRightY(), driverXbox.getRightX())))/rad_per_section)+0.5); // in from -2.5 to +3.5
+    final int section_rounded = Math.round((float) section);
+    final double angle = section_rounded * rad_per_section;
+    if( Math.hypot(driverXbox.getRightX(),-driverXbox.getRightY()) <= deadband){
+      return 0.0;
+    } else {
+    return -Math.sin(angle+ ((4*Math.PI)/3));
+} 
+}
 }
