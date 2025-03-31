@@ -134,6 +134,23 @@ public class RobotContainer
 
   }
 
+  @Override
+  public void periodic()
+  {
+    System.out.println("Periodic running");
+    if (Math.abs(operatorController.getLeftX()) > 0.2)
+    System.out.println("Go left/right");
+    if (operatorController.getLeftX() <= -0.85) 
+    {
+    robot_score_left = true; 
+    System.out.println("EE Left");
+    } else if (operatorController.getLeftX() >= -0.85)
+    {
+    robot_score_left = false;
+    System.out.println("EE Right");
+    }
+  }
+
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
    * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary predicate, or via the
@@ -221,33 +238,11 @@ public class RobotContainer
     operatorController.povUp().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.Stowage));
     operatorController.povDown().onTrue(new ElevatorSetpoint(elevator, 0.5, elevatorConstants.motorPowerResetLimit));
 
-    /*
     // Elevator button commands
     operatorController.a().onTrue(new ResetSequential(elevator, endEffector));
     operatorController.b().onTrue(new ScoreSequential(elevator, endEffector, elevatorConstants.L2Height, robot_score_left, false));
     operatorController.x().onTrue(new ScoreSequential(elevator, endEffector, elevatorConstants.L3Height, robot_score_left, false));
     operatorController.y().onTrue(new ScoreSequential(elevator, endEffector, elevatorConstants.L4Height, robot_score_left, true));
- */
-    operatorController.leftBumper().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.LeftScore));
-    operatorController.rightBumper().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.RightScore));
-    operatorController.leftTrigger().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.LeftScoreL4));
-    operatorController.rightTrigger().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.RightScoreL4));
-    operatorController.b().onTrue(ElevatorCommands.setSetpoint(elevator, Constants.elevatorConstants.L2Height));  
-    operatorController.x().onTrue(ElevatorCommands.setSetpoint(elevator, Constants.elevatorConstants.L3Height));  
-    operatorController.y().onTrue(ElevatorCommands.setSetpoint(elevator, Constants.elevatorConstants.L4Height));  
-    operatorController.a().onTrue(ElevatorCommands.setSetpoint(elevator, Constants.elevatorConstants.L2HeightEnd));
-
-    if (Math.abs(operatorController.getLeftX()) > 0.8)
-    System.out.println("TS -- Left/right input");
-    if (operatorController.getLeftX() <= -0.85) 
-    {
-    robot_score_left = true; 
-    System.out.println("TS -- Left send");
-    } else if (operatorController.getLeftX() >= -0.85)
-    {
-    robot_score_left = false;
-    System.out.println("TS -- Right send");
-    }
 
     // End effector commands
 }
