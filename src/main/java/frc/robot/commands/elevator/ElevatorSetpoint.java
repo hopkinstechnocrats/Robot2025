@@ -21,7 +21,6 @@ public class ElevatorSetpoint extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("Change Setpoint Command Started");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -36,14 +35,12 @@ public class ElevatorSetpoint extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    System.out.println("Change Setpoint Command Ended");
     m_elevator.brake();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    System.out.println("Are we at setpoint? " + m_elevator.atSetpoint());
     return m_elevator.atSetpoint();
   }
 }

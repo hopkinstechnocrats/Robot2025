@@ -21,12 +21,4 @@ public class EndEffectorCommands extends Command {
                 },
             endEffector);
     }
-
-    public static Command leftToggle(EndEffectorSubsystem endEffector, CommandXboxController operator, boolean left){
-        return Commands.runOnce(
-                () -> {
-                    endEffector.leftToggle(operator, left);
-                },
-            endEffector);
-    }
 } 

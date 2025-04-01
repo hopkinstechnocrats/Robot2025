@@ -100,18 +100,9 @@ public class EndEffectorSubsystem extends SubsystemBase{
       
     }
 
-    public void leftToggle(CommandXboxController operator, boolean left){
+    public boolean leftEE(boolean left){
 
-        System.out.println("TS -- Left/right input");
-        if (operator.getLeftX() <= -0.8) 
-        {
-        left = true; 
-        System.out.println("TS -- Left send");
-        } else if (operator.getLeftX() >= -0.8)
-        {
-        left = false;
-        System.out.println("TS -- Right send");
-        }
+        return true;
       
     }
 

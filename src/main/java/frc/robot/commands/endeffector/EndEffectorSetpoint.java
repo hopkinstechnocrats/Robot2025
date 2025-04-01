@@ -25,7 +25,6 @@ public class EndEffectorSetpoint extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("EE Change Setpoint Command Started");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -40,13 +39,11 @@ public class EndEffectorSetpoint extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    System.out.println("EE Change Setpoint Command Ended");
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    System.out.println("EE Are we at setpoint? " + m_endeffector.atSetpoint());
     return m_endeffector.atSetpoint();
   }
 }

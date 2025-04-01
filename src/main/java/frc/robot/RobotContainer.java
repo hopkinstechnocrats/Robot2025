@@ -134,23 +134,6 @@ public class RobotContainer
 
   }
 
-  @Override
-  public void periodic()
-  {
-    System.out.println("Periodic running");
-    if (Math.abs(operatorController.getLeftX()) > 0.2)
-    System.out.println("Go left/right");
-    if (operatorController.getLeftX() <= -0.85) 
-    {
-    robot_score_left = true; 
-    System.out.println("EE Left");
-    } else if (operatorController.getLeftX() >= -0.85)
-    {
-    robot_score_left = false;
-    System.out.println("EE Right");
-    }
-  }
-
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
    * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary predicate, or via the
@@ -232,7 +215,6 @@ public class RobotContainer
     }
 
     // Temporary left/right toggle
-    operatorController.rightBumper().onTrue(EndEffectorCommands.leftToggle(endEffector, operatorController, robot_score_left));
 
     // Reset commands
     operatorController.povUp().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.Stowage));
