@@ -74,7 +74,6 @@ public class RobotContainer
 
 
   private final SendableChooser<Command> m_chooser = new SendableChooser<>();
-  private Boolean robot_score_left = true;
 
   /**
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
@@ -232,9 +231,9 @@ public class RobotContainer
 
     // Elevator button commands
     operatorController.a().onTrue(new ResetSequential(elevator, endEffector));
-    operatorController.b().onTrue(new ScoreSequential(elevator, endEffector, elevatorConstants.L2Height, robot_score_left, false));
-    operatorController.x().onTrue(new ScoreSequential(elevator, endEffector, elevatorConstants.L3Height, robot_score_left, false));
-    operatorController.y().onTrue(new ScoreSequential(elevator, endEffector, elevatorConstants.L4Height, robot_score_left, true));
+    operatorController.b().onTrue(new ScoreSequential(elevator, endEffector, elevatorConstants.L2Height, false));
+    operatorController.x().onTrue(new ScoreSequential(elevator, endEffector, elevatorConstants.L3Height, false));
+    operatorController.y().onTrue(new ScoreSequential(elevator, endEffector, elevatorConstants.L4Height, true));
 
     // End effector commands
 }

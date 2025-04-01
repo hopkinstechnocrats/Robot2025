@@ -9,16 +9,12 @@ public class EndEffectorSetpoint extends Command {
     private final EndEffectorSubsystem m_endeffector;
     private double m_setpoint;
 
-    public EndEffectorSetpoint(EndEffectorSubsystem endeffector, boolean left, boolean level, boolean storage) {
+    public EndEffectorSetpoint(EndEffectorSubsystem endeffector, boolean level, boolean storage) {
         // Use addRequirements() here to declare subsystem dependencies.
         m_endeffector = endeffector;
         if (storage) {
           m_setpoint = endEffectorConstants.Stowage;
-        } else if (level) {
-          if (left) m_setpoint = endEffectorConstants.LeftScoreL4; else m_setpoint = endEffectorConstants.RightScoreL4; 
-        } else {
-          if (left) m_setpoint = endEffectorConstants.LeftScore; else m_setpoint = endEffectorConstants.RightScore; 
-        }
+        } else if (level) m_setpoint = endEffectorConstants.LeftScoreL4; else m_setpoint = endEffectorConstants.LeftScore; 
         addRequirements(m_endeffector);
     }
 
