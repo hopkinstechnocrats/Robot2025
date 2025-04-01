@@ -11,6 +11,7 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.reduxrobotics.canand.CanandEventLoop;
 
@@ -71,9 +72,10 @@ public class RobotContainer
   final Command m_forwardAuto = autos.forwardAuto(drivebase);
   final Command m_pushLeftAuto = autos.pushLeftAuto(drivebase);
 
-  private final SendableChooser<Command> m_chooser = new SendableChooser<>();
 
+  private final SendableChooser<Command> m_chooser = new SendableChooser<>();
   private Boolean robot_score_left = true;
+
   /**
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
    */
@@ -85,18 +87,32 @@ public class RobotContainer
                                                             .scaleTranslation(0.8)
                                                             .allianceRelativeControl(false);
 
+  SwerveInputStream driveAngularVelocity_slow = SwerveInputStream.of(drivebase.getSwerveDrive(),
+                                                            () -> driverXbox.getLeftY() * -1 * 0.5 ,
+                                                            () -> driverXbox.getLeftX() * -1 * 0.5 )
+                                                        .withControllerRotationAxis(driverXbox::getRightX)
+                                                        .deadband(OperatorConstants.DEADBAND)
+                                                        .scaleTranslation(0.8)
+                                                        .allianceRelativeControl(false);
+                                                      
   /**
    * Clone's the angular velocity input stream and converts it to a fieldRelative input stream.
    */
-  SwerveInputStream driveDirectAngle = driveAngularVelocity.copy().withControllerHeadingAxis(driverXbox::getRightX,
-                                                                                             driverXbox::getRightY)
+  SwerveInputStream driveDirectAngle = driveAngularVelocity.copy().withControllerHeadingAxis(() -> headingX(),
+                                                                                             () -> headingY())
                                                            .headingWhile(true);
 
+  SwerveInputStream driveDirectAngle_slow = driveAngularVelocity.copy().withControllerHeadingAxis(driverXbox::getRightX,
+                                                                                             driverXbox::getRightY)
+                                                           .headingWhile(true);
   /**
    * Clone's the angular velocity input stream and converts it to a robotRelative input stream.
    */
   SwerveInputStream driveRobotOriented = driveAngularVelocity.copy().robotRelative(true)
                                                              .allianceRelativeControl(false);
+  SwerveInputStream driveRobotOriented_slow = driveAngularVelocity.copy().robotRelative(true)
+                                                             .allianceRelativeControl(false);
+
 
   SwerveInputStream driveAngularVelocityKeyboard = SwerveInputStream.of(drivebase.getSwerveDrive(),
                                                                         () -> -driverXbox.getLeftY(),
@@ -126,11 +142,9 @@ public class RobotContainer
     DriverStation.silenceJoystickConnectionWarning(true);
     NamedCommands.registerCommand("test", Commands.print("I EXIST"));
     boolean isCompetition = false;
+    m_chooser = AutoBuilder.buildAutoChooser();
 
-
-    m_chooser.setDefaultOption("Move Forward", m_forwardAuto);
-    m_chooser.addOption("Push robot to left out", m_pushLeftAuto);
-    SmartDashboard.putData(m_chooser);
+    SmartDashboard.putData("Auto Chooser", m_chooser);
 
   }
 
@@ -145,6 +159,7 @@ public class RobotContainer
   {
     Command driveFieldOrientedDirectAngle      = drivebase.driveFieldOriented(driveDirectAngle);
     Command driveFieldOrientedAnglularVelocity = drivebase.driveFieldOriented(driveAngularVelocity);
+    Command driveFieldOrientedAnglularVelocity_slow = drivebase.driveFieldOriented(driveAngularVelocity_slow);
     Command driveRobotOrientedAngularVelocity  = drivebase.driveFieldOriented(driveRobotOriented);
     Command driveSetpointGen = drivebase.driveWithSetpointGeneratorFieldRelative(
         driveDirectAngle);
@@ -160,7 +175,7 @@ public class RobotContainer
     {
 
       climber.setDefaultCommand(ClimbCommands.brake(climber));
-      drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
+      drivebase.setDefaultCommand(driveFieldOrientedDirectAngle);
       elevator.setDefaultCommand(ElevatorCommands.setpointMove(elevator));
       endEffector.setDefaultCommand(EndEffectorCommands.moveToSetpointCommand(endEffector));
     }
@@ -201,17 +216,12 @@ public class RobotContainer
     } else
     {
       driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
-      driverXbox.x().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
-      driverXbox.b().whileTrue(
-          drivebase.driveToPose(
-              new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))
-                              );
-      driverXbox.start().whileTrue(Commands.none());
-      driverXbox.back().whileTrue(Commands.none());
-
+      driverXbox.leftTrigger().whileTrue((driveFieldOrientedAnglularVelocity_slow));
+      driverXbox.start().whileTrue(new RunCommand(() -> increaseOffset()));
+      driverXbox.back().whileTrue(new RunCommand(() -> decreaseOffset()));
       driverXbox.rightTrigger().whileTrue(ClimbCommands.retractClimber(climber));
-
       driverXbox.rightBumper().whileTrue(ClimbCommands.spinVictor(climber));
+      driverXbox.povUp().onTrue(new RunCommand(() -> resetOffset()));
     }
 
     // Temporary left/right toggle
@@ -244,4 +254,53 @@ public class RobotContainer
   {
     drivebase.setMotorBrake(brake);
   }
+
+  public double offset = 0.0;
+
+  public void increaseOffset(){
+    offset = offset + Math.PI/36;
+  }
+
+  public void decreaseOffset(){
+    offset = offset - Math.PI/36;
+  }
+
+  public void resetOffset(){
+    offset = 0.0;
+  }
+
+
+  public Double headingX(){
+    final double deadband = 0.50;
+    final double num_sections = 6;
+    final double rad_per_section = (2.0*Math.PI/num_sections);
+    final double section =((((Math.atan2(-driverXbox.getRightY(), driverXbox.getRightX())))/rad_per_section)+0.5); // in from -2.5 to +3.5
+    final int section_rounded = Math.round((float) section);
+    final double angle = section_rounded * rad_per_section;
+    // System.out.println(angle);
+    System.out.println(section_rounded);
+    if( Math.hypot(driverXbox.getRightX(),-driverXbox.getRightY()) <= deadband){
+      System.out.println("inside deadband");
+      return 0.0;
+    } else {
+    return Math.cos(angle+ ((4*Math.PI)/3)) ; // TODO add 120 degrees to angle
+    }
+  }
+
+
+
+
+  public Double headingY(){
+    final double deadband = 0.50;
+    final double num_sections = 6;
+    final double rad_per_section = (2.0*Math.PI/num_sections);
+    final double section =((((Math.atan2(-driverXbox.getRightY(), driverXbox.getRightX())))/rad_per_section)+0.5); // in from -2.5 to +3.5
+    final int section_rounded = Math.round((float) section);
+    final double angle = section_rounded * rad_per_section;
+    if( Math.hypot(driverXbox.getRightX(),-driverXbox.getRightY()) <= deadband){
+      return 0.0;
+    } else {
+    return -Math.sin(angle+ ((4*Math.PI)/3));
+} 
+}
 }
