@@ -11,16 +11,21 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.endEffectorConstants;
+import frc.robot.RobotContainer.*;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class EndEffectorSubsystem extends SubsystemBase{
     private TalonFX motor;
     private Double m_setpoint = 0.0; // Rotations pre-gearbox
     private Double m_offset = 0.0; //Also rotations
     private Long m_counter = 0L;
+    private Double m_measurement = 0.0;
     private final PIDController pidController;
 //    private final ArmFeedforward feedforwards;
     private CANcoder throughbore;
@@ -58,7 +63,6 @@ public class EndEffectorSubsystem extends SubsystemBase{
         throughbore = new CANcoder(21);
 
         motor.setNeutralMode(NeutralModeValue.Brake);
-      
 
         pidController = new PIDController(Constants.endEffectorConstants.kP,
             Constants.endEffectorConstants.kI, Constants.endEffectorConstants.kD);
@@ -68,15 +72,15 @@ public class EndEffectorSubsystem extends SubsystemBase{
     }
      public void moveToSetpoint(){
         pidController.setSetpoint(m_setpoint);
-        final double measurement = throughbore.getPosition().getValueAsDouble();
-        final double PIDcommand = pidController.calculate(measurement);
-        final double FFcommand =  Math.sin(measurement * 2 * Math.PI) * 0.03054;
+        m_measurement = throughbore.getPosition().getValueAsDouble();
+        final double PIDcommand = pidController.calculate(m_measurement);
+        final double FFcommand =  Math.sin(m_measurement * 2 * Math.PI) * 0.03054;
         double command = MathUtil.clamp( 
         PIDcommand  + -FFcommand, -endEffectorConstants.motorPowerLimit, endEffectorConstants.motorPowerLimit);  
 
          m_counter++;
         motor.set(command);
-        nt_measurement.setDouble(measurement);
+        nt_measurement.setDouble(m_measurement);
         nt_setpoint.setDouble(m_setpoint);
         nt_offset.setDouble(m_offset);
         nt_command.setDouble(command);
@@ -90,10 +94,22 @@ public class EndEffectorSubsystem extends SubsystemBase{
 
     public void changeSetpoint(double setpoint){
       
-      m_setpoint = setpoint; //setpoint is in rotations
-      nt_changed.setDouble(m_setpoint);
-      nt_object_b.setInteger(m_counter);
+        m_setpoint = setpoint; //setpoint is in rotations
+        nt_changed.setDouble(m_setpoint);
+        nt_object_b.setInteger(m_counter);
       
+    }
+
+    public boolean leftEE(boolean left){
+
+        return true;
+      
+    }
+
+    public boolean atSetpoint(){
+        System.out.println("Setpoint = " + m_setpoint + "  Actual = " + m_measurement);
+        //return pidController.atSetpoint();
+        return (Math.abs(m_measurement - m_setpoint) < 0.05);
     }
 
   

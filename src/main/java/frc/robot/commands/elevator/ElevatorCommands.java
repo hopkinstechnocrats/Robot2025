@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.commands.elevator;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.elevatorConstants;
@@ -32,7 +32,7 @@ public class ElevatorCommands extends Command{
     public static Command setpointMove(ElevatorSubsystem elevator){
         return Commands.run(
           () ->   {
-              elevator.moveToSetpoint();
+              elevator.moveToSetpoint(elevatorConstants.motorPowerLimit);
           },
             elevator);
     }

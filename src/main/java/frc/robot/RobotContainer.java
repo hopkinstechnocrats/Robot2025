@@ -29,13 +29,20 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.Constants.elevatorConstants;
+import frc.robot.Constants.endEffectorConstants;
 import frc.robot.commands.endeffector.EndEffectorCommands;
+import frc.robot.commands.endeffector.EndEffectorSetpoint;
 import frc.robot.subsystems.Climber;
 import frc.robot.commands.ClimbCommands;
+import frc.robot.commands.ResetSequential;
+import frc.robot.commands.ScoreSequential;
+import frc.robot.commands.elevator.ElevatorCommands;
+import frc.robot.commands.elevator.ElevatorSetpoint;
 import frc.robot.subsystems.EndEffectorSubsystem;
-import frc.robot.commands.ElevatorCommands;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
@@ -65,7 +72,10 @@ public class RobotContainer
   final Command m_forwardAuto = autos.forwardAuto(drivebase);
   final Command m_pushLeftAuto = autos.pushLeftAuto(drivebase);
 
-  private final SendableChooser<Command> m_chooser;
+
+  private final SendableChooser<Command> m_chooser = new SendableChooser<>();
+  private Boolean robot_score_left = true;
+
   /**
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
    */
@@ -214,19 +224,20 @@ public class RobotContainer
       driverXbox.povUp().onTrue(new RunCommand(() -> resetOffset()));
     }
 
-    operatorController.leftBumper().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.LeftScore));
-    operatorController.rightBumper().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.RightScore));
-    operatorController.leftTrigger().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.LeftScoreL4));
-    operatorController.rightTrigger().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.RightScoreL4));
-    operatorController.povUp().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.Stowage));
-    operatorController.b().onTrue(ElevatorCommands.setSetpoint(elevator, Constants.elevatorConstants.L2Height));  
-    operatorController.x().onTrue(ElevatorCommands.setSetpoint(elevator, Constants.elevatorConstants.L3Height));  
-    operatorController.y().onTrue(ElevatorCommands.setSetpoint(elevator, Constants.elevatorConstants.L4Height));  
-    operatorController.a().onTrue(ElevatorCommands.setSetpoint(elevator, Constants.elevatorConstants.L2HeightEnd));  
-    operatorController.povDown().onTrue(ElevatorCommands.setSetpoint(elevator, 0.07));
-  }
-  
+    // Temporary left/right toggle
 
+    // Reset commands
+    operatorController.povUp().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.Stowage));
+    operatorController.povDown().onTrue(new ElevatorSetpoint(elevator, 0.5, elevatorConstants.motorPowerResetLimit));
+
+    // Elevator button commands
+    operatorController.a().onTrue(new ResetSequential(elevator, endEffector));
+    operatorController.b().onTrue(new ScoreSequential(elevator, endEffector, elevatorConstants.L2Height, robot_score_left, false));
+    operatorController.x().onTrue(new ScoreSequential(elevator, endEffector, elevatorConstants.L3Height, robot_score_left, false));
+    operatorController.y().onTrue(new ScoreSequential(elevator, endEffector, elevatorConstants.L4Height, robot_score_left, true));
+
+    // End effector commands
+}
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *

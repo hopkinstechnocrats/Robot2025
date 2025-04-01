@@ -10,6 +10,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Constants.elevatorConstants;
 
@@ -20,6 +21,7 @@ public class ElevatorSubsystem extends SubsystemBase{
     private TalonFX leftMotor;
     private Double m_setpoint = 0.0; // Rotations pre-gearbox
     private Double m_offset = 0.0; //Also rotations
+    private Double m_measurement = 0.0; // rotations
     private Long m_counter = 0L;
     private final PIDController pidController;
     final ElevatorFeedforward ff = new ElevatorFeedforward(Constants.elevatorConstants.kS,
@@ -44,6 +46,9 @@ public class ElevatorSubsystem extends SubsystemBase{
         nt_changed = table.getEntry("Setpoint set [rot]");
         nt_object_a = table.getEntry("Points North");
         nt_object_b = table.getEntry("Points South");
+        SmartDashboard.putNumber("kP", Constants.elevatorConstants.kP);
+        SmartDashboard.putNumber("kD", Constants.elevatorConstants.kD);
+        SmartDashboard.putNumber("kI", Constants.elevatorConstants.kI);
         final ElevatorFeedforward ff;
 
         rightMotor = new TalonFX(11);
@@ -63,25 +68,26 @@ public class ElevatorSubsystem extends SubsystemBase{
         leftMotor.setControl(new Follower(rightMotor.getDeviceID(), true));
         pidController = new PIDController(Constants.elevatorConstants.kP,
             Constants.elevatorConstants.kI, Constants.elevatorConstants.kD);
-        pidController.setTolerance(0.1);
+        pidController.setTolerance(0.5);
 
         //rightMotor.setPosition(0.0,0.5);
         //leftMotor.setPosition(0.0,0.5);
      
     }
-     public void moveToSetpoint(){
+
+     public void moveToSetpoint(double speed){
         pidController.setSetpoint(m_setpoint);
-        final double measurement = rightMotor.getPosition().getValueAsDouble() - m_offset;
+        m_measurement = rightMotor.getPosition().getValueAsDouble() - m_offset;
         double command = MathUtil.clamp(
          /*  -ff.calculate(m_setpoint, 1) +*/ /*negative is up, positive is down */ 
-         pidController.calculate(measurement), -elevatorConstants.motorPowerLimit, elevatorConstants.motorPowerLimit);  
-        if(measurement > -elevatorConstants.minMotorHeight)
+         pidController.calculate(m_measurement), -speed, speed);  
+        if(m_measurement > -elevatorConstants.minMotorHeight)
         {
-          command = MathUtil.clamp(command, -elevatorConstants.motorPowerLimit, 0.0);
+          command = MathUtil.clamp(command, -speed, 0.0);
         }
          m_counter++;
         rightMotor.set(command);
-        nt_measurement.setDouble(measurement);
+        nt_measurement.setDouble(m_measurement);
         nt_setpoint.setDouble(m_setpoint);
         nt_offset.setDouble(m_offset);
         nt_command.setDouble(command);
@@ -93,7 +99,20 @@ public class ElevatorSubsystem extends SubsystemBase{
       m_setpoint = -setpoint * elevatorConstants.rotationsPerInch; //setpoint is in rotations
       nt_changed.setDouble(m_setpoint);
       nt_object_b.setInteger(m_counter);
+    
+      System.out.println("EL -- Change setpoint to " + m_setpoint);
       
+    }
+
+    public boolean atSetpoint(){
+      System.out.println("Setpoint = " + m_setpoint + "  Actual = " + m_measurement);
+      //return pidController.atSetpoint();
+      return (Math.abs(m_measurement - m_setpoint) < 0.5);
+    }
+
+    public double getSetpoint(){
+      //return pidController.atSetpoint();
+      return (m_measurement);
     }
 
         
