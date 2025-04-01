@@ -59,6 +59,7 @@ public class EndEffectorSubsystem extends SubsystemBase{
 
         motor.setNeutralMode(NeutralModeValue.Brake);
       
+        m_offset = throughbore.getPosition().getValueAsDouble();
 
         pidController = new PIDController(Constants.endEffectorConstants.kP,
             Constants.endEffectorConstants.kI, Constants.endEffectorConstants.kD);
@@ -69,6 +70,7 @@ public class EndEffectorSubsystem extends SubsystemBase{
      public void moveToSetpoint(){
         pidController.setSetpoint(m_setpoint);
         final double measurement = throughbore.getPosition().getValueAsDouble();
+        System.out.println(measurement);
         final double PIDcommand = pidController.calculate(measurement);
         final double FFcommand =  Math.sin(measurement * 2 * Math.PI) * 0.03054;
         double command = MathUtil.clamp( 
