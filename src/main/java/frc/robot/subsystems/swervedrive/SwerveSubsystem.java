@@ -36,6 +36,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -93,15 +94,21 @@ public class SwerveSubsystem extends SubsystemBase
     inst = NetworkTableInstance.getDefault();
     table = inst.getTable("ll_debug");
     robotYaw = table.getEntry("Robot Yaw Degrees");
+    boolean blueAlliance = true;
+    if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red){
+        blueAlliance = false;
+    }
+
+    Pose2d startingPose = blueAlliance ? new Pose2d(
+            new Translation2d(Meter.of(1), Meter.of(4)), Rotation2d.fromDegrees(0))
+            : new Pose2d(new Translation2d(Meter.of(1), Meter.of(4)), Rotation2d.fromDegrees(180));
 
     // Configure the Telemetry before creating the SwerveDrive to avoid unnecessary objects being created.
     SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
     try
     {
       swerveDrive = new SwerveParser(directory).createSwerveDrive(Constants.MAX_SPEED,
-                                                                  new Pose2d(new Translation2d(Meter.of(1),
-                                                                                               Meter.of(4)),
-                                                                             Rotation2d.fromDegrees(90)));
+                                                                  startingPose);
       // Alternative method if you don't want to supply the conversion factor via JSON files.
       // swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumSpeed, angleConversionFactor, driveConversionFactor);
     } catch (Exception e)
