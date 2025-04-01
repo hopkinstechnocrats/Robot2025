@@ -15,10 +15,11 @@ public class ResetSequential extends SequentialCommandGroup {
     double setpoint = elevator.getSetpoint();
 
       addCommands(
-      new ElevatorSetpoint(elevator, (setpoint - 10), elevatorConstants.motorPowerResetLimit)
-      .andThen(new ElevatorSetpoint(elevator, (setpoint - 20), elevatorConstants.motorPowerResetLimit))
-      .alongWith(new EndEffectorSetpoint(endeffector, false, true))
-      .andThen(new ElevatorSetpoint(elevator, elevatorConstants.startHeight, elevatorConstants.motorPowerResetLimit))
+      new ElevatorSetpoint(elevator, elevatorConstants.L3Height, elevatorConstants.motorPowerResetLimit)
+      .andThen(new ElevatorSetpoint(elevator, elevatorConstants.L2Height, elevatorConstants.motorPowerResetLimit)
+      .alongWith(new EndEffectorSetpoint(endeffector, false, true)))
+      .andThen(new ElevatorSetpoint(elevator, elevatorConstants.startHeight, elevatorConstants.motorPowerResetLimit)
+      .alongWith(new EndEffectorSetpoint(endeffector, false, true)))
     );
   }
 }

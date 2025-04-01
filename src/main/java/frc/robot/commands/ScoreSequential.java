@@ -14,8 +14,8 @@ public class ScoreSequential extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
       addCommands(
       new ElevatorSetpoint(elevator, setpoint - 20, elevatorConstants.motorPowerLimit)
-      .andThen(new ElevatorSetpoint(elevator, setpoint, elevatorConstants.motorPowerLimit))
-      .alongWith(new EndEffectorSetpoint(endeffector, level, false))
+      .andThen(new ElevatorSetpoint(elevator, setpoint, elevatorConstants.motorPowerLimit)
+      .alongWith(new EndEffectorSetpoint(endeffector, level, false)))
     );
   }
 }
