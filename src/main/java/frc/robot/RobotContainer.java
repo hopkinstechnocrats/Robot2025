@@ -73,7 +73,7 @@ public class RobotContainer
   final Command m_pushLeftAuto = autos.pushLeftAuto(drivebase);
 
 
-  private final SendableChooser<Command> m_chooser = new SendableChooser<>();
+  private SendableChooser<Command> m_chooser = new SendableChooser<>();
 
   /**
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
@@ -111,7 +111,6 @@ public class RobotContainer
                                                              .allianceRelativeControl(false);
   SwerveInputStream driveRobotOriented_slow = driveAngularVelocity.copy().robotRelative(true)
                                                              .allianceRelativeControl(false);
-
 
   SwerveInputStream driveAngularVelocityKeyboard = SwerveInputStream.of(drivebase.getSwerveDrive(),
                                                                         () -> -driverXbox.getLeftY(),
@@ -277,9 +276,9 @@ public class RobotContainer
     final int section_rounded = Math.round((float) section);
     final double angle = section_rounded * rad_per_section;
     // System.out.println(angle);
-    System.out.println(section_rounded);
+    // System.out.println(section_rounded);
     if( Math.hypot(driverXbox.getRightX(),-driverXbox.getRightY()) <= deadband){
-      System.out.println("inside deadband");
+      // System.out.println("inside deadband");
       return 0.0;
     } else {
     return Math.cos(angle+ ((4*Math.PI)/3)) ; // TODO add 120 degrees to angle
