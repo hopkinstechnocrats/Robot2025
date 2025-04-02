@@ -51,7 +51,7 @@ public class RobotContainer
 {
 
   final private Autos autos = new Autos();
-
+  double coralOffset = 0;
   // Replace with CommandPS4Controller or CommandJoystick if needed
   final CommandXboxController driverXbox = new CommandXboxController(0);
   final CommandXboxController operatorController = new CommandXboxController(1);
@@ -212,6 +212,7 @@ public class RobotContainer
       driverXbox.rightTrigger().whileTrue(ClimbCommands.retractClimber(climber));
       driverXbox.rightBumper().whileTrue(ClimbCommands.spinVictor(climber));
       driverXbox.povUp().onTrue(new RunCommand(() -> resetOffset()));
+      driverXbox.b().onTrue()
     }
 
     operatorController.leftBumper().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.LeftScore));
@@ -239,6 +240,9 @@ public class RobotContainer
 
   }
 
+  public Command coralStationLeft(){
+    coralOffset + 65 * (math.PI/180)
+  }
   public void setMotorBrake(boolean brake)
   {
     drivebase.setMotorBrake(brake);
