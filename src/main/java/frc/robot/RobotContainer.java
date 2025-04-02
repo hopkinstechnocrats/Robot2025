@@ -212,7 +212,8 @@ public class RobotContainer
       driverXbox.rightTrigger().whileTrue(ClimbCommands.retractClimber(climber));
       driverXbox.rightBumper().whileTrue(ClimbCommands.spinVictor(climber));
       driverXbox.povUp().onTrue(new RunCommand(() -> resetOffset()));
-      driverXbox.b().onTrue()
+      driverXbox.b().whileTrue(new RunCommand(() -> coralStationRight()));
+      driverXbox.x().whileTrue(new RunCommand(() -> coralStationLeft()));
     }
 
     operatorController.leftBumper().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.LeftScore));
@@ -241,7 +242,10 @@ public class RobotContainer
   }
 
   public Command coralStationLeft(){
-    coralOffset + 65 * (math.PI/180)
+    return new RunCommand(() -> coralOffset = coralOffset - 65.0 * (Math.PI/180));
+  }
+  public Command coralStationRight(){
+    return new RunCommand(() -> coralOffset = coralOffset + 65.0 * (Math.PI/180));
   }
   public void setMotorBrake(boolean brake)
   {
@@ -276,7 +280,7 @@ public class RobotContainer
       System.out.println("inside deadband");
       return 0.0;
     } else {
-    return Math.cos(angle+ ((4*Math.PI)/3)) ; // TODO add 120 degrees to angle
+    return Math.cos(angle+ ((4*Math.PI)/3) + coralOffset) ; // TODO add 120 degrees to angle
     }
   }
 
