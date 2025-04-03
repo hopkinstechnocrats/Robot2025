@@ -75,7 +75,9 @@ public class RobotContainer
 
 
   private SendableChooser<Command> m_chooser = new SendableChooser<>();
+
   private Boolean robot_score_left = true;
+
 
   /**
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
@@ -86,7 +88,7 @@ public class RobotContainer
                                                             .withControllerRotationAxis(driverXbox::getRightX)
                                                             .deadband(OperatorConstants.DEADBAND)
                                                             .scaleTranslation(0.8)
-                                                            .allianceRelativeControl(false);
+                                                            .allianceRelativeControl(true);
 
   SwerveInputStream driveAngularVelocity_slow = SwerveInputStream.of(drivebase.getSwerveDrive(),
                                                             () -> driverXbox.getLeftY() * -1 * 0.5 ,
@@ -94,7 +96,7 @@ public class RobotContainer
                                                         .withControllerRotationAxis(driverXbox::getRightX)
                                                         .deadband(OperatorConstants.DEADBAND)
                                                         .scaleTranslation(0.8)
-                                                        .allianceRelativeControl(false);
+                                                        .allianceRelativeControl(true);
                                                       
   /**
    * Clone's the angular velocity input stream and converts it to a fieldRelative input stream.
@@ -113,7 +115,6 @@ public class RobotContainer
                                                              .allianceRelativeControl(false);
   SwerveInputStream driveRobotOriented_slow = driveAngularVelocity_slow.copy().robotRelative(true)
                                                              .allianceRelativeControl(false);
-
 
   SwerveInputStream driveAngularVelocityKeyboard = SwerveInputStream.of(drivebase.getSwerveDrive(),
                                                                         () -> -driverXbox.getLeftY(),
@@ -178,8 +179,6 @@ public class RobotContainer
 
       climber.setDefaultCommand(ClimbCommands.brake(climber));
       drivebase.setDefaultCommand(driveFieldOrientedDirectAngle);
-      elevator.setDefaultCommand(ElevatorCommands.setpointMove(elevator));
-      endEffector.setDefaultCommand(EndEffectorCommands.moveToSetpointCommand(endEffector));
     }
 
     if (Robot.isSimulation())
@@ -224,19 +223,24 @@ public class RobotContainer
       driverXbox.rightTrigger().whileTrue(ClimbCommands.retractClimber(climber));
       driverXbox.rightBumper().whileTrue(ClimbCommands.spinVictor(climber));
       driverXbox.povUp().onTrue(new RunCommand(() -> resetOffset()));
-    }
+      driverXbox.leftBumper().whileTrue((driveFieldOrientedAnglularVelocity));
+      }
 
     // Temporary left/right toggle
 
     // Reset commands
-    operatorController.povUp().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.Stowage));
-    operatorController.povDown().onTrue(new ElevatorSetpoint(elevator, 0.5, elevatorConstants.motorPowerResetLimit));
+    operatorController.povDown().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.Stowage));
+    operatorController.a().onTrue(new ElevatorSetpoint(elevator, 0.5, elevatorConstants.motorPowerResetLimit));
 
-    // Elevator button commands
-    operatorController.a().onTrue(new ResetSequential(elevator, endEffector));
-    operatorController.b().onTrue(new ScoreSequential(elevator, endEffector, elevatorConstants.L2Height, robot_score_left, false));
-    operatorController.x().onTrue(new ScoreSequential(elevator, endEffector, elevatorConstants.L3Height, robot_score_left, false));
-    operatorController.y().onTrue(new ScoreSequential(elevator, endEffector, elevatorConstants.L4Height, robot_score_left, true));
+    // Elevator up commands
+    operatorController.b().onTrue(new ScoreSequential(elevator, endEffector, elevatorConstants.L2Height, false));
+    operatorController.x().onTrue(new ScoreSequential(elevator, endEffector, elevatorConstants.L3Height, false));
+    operatorController.y().onTrue(new ScoreSequential(elevator, endEffector, elevatorConstants.L4Height, true));
+
+    // Elevator down commands
+    operatorController.povRight().onTrue(new ResetSequential(elevator, endEffector, elevatorConstants.L2Height));
+    operatorController.povLeft().onTrue(new ResetSequential(elevator, endEffector, elevatorConstants.L3Height));
+    operatorController.povUp().onTrue(new ResetSequential(elevator, endEffector, elevatorConstants.L4Height));
 
     // End effector commands
 }
@@ -280,9 +284,9 @@ public class RobotContainer
     final int section_rounded = Math.round((float) section);
     final double angle = section_rounded * rad_per_section;
     // System.out.println(angle);
-    System.out.println(section_rounded);
+    // System.out.println(section_rounded);
     if( Math.hypot(driverXbox.getRightX(),-driverXbox.getRightY()) <= deadband){
-      System.out.println("inside deadband");
+      // System.out.println("inside deadband");
       return 0.0;
     } else {
     return Math.cos(angle+ ((4*Math.PI)/3)) ; // TODO add 120 degrees to angle

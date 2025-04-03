@@ -70,7 +70,14 @@ public class EndEffectorSubsystem extends SubsystemBase{
 
 //        feedforwards = new ArmFeedforward(0.05, 0.19, 1.26); 
     }
+
+    @Override
+    public void periodic() {
+        moveToSetpoint();
+    }
+
      public void moveToSetpoint(){
+        
         pidController.setSetpoint(m_setpoint);
         m_measurement = throughbore.getPosition().getValueAsDouble();
         final double PIDcommand = pidController.calculate(m_measurement);

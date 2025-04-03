@@ -290,7 +290,7 @@ public class SwerveDrive implements AutoCloseable
             getModulePositions(),
             startingPose); // x,y,heading in radians; Vision measurement std dev, higher=less weight
 
-    zeroGyro();
+//    zeroGyro();
 
     // Initialize Telemetry
     if (SwerveDriveTelemetry.verbosity.ordinal() >= TelemetryVerbosity.POSE.ordinal())
