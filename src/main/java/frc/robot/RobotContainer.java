@@ -8,6 +8,7 @@
 //TODO: merge in auto branch
 //TODO: use absolute encoder for end effector
 //TODO: make end effector rights deeper
+//TODO: actively NOT updating libraries
 
 package frc.robot;
 
@@ -75,6 +76,9 @@ public class RobotContainer
 
   private SendableChooser<Command> m_chooser = new SendableChooser<>();
 
+  private Boolean robot_score_left = true;
+
+
   /**
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
    */
@@ -101,15 +105,15 @@ public class RobotContainer
                                                                                              () -> headingY())
                                                            .headingWhile(true);
 
-  SwerveInputStream driveDirectAngle_slow = driveAngularVelocity.copy().withControllerHeadingAxis(driverXbox::getRightX,
-                                                                                             driverXbox::getRightY)
+  SwerveInputStream driveDirectAngle_slow = driveAngularVelocity_slow.copy().withControllerHeadingAxis(() -> headingX() ,
+                                                                                                  () -> headingY() )
                                                            .headingWhile(true);
   /**
    * Clone's the angular velocity input stream and converts it to a robotRelative input stream.
    */
   SwerveInputStream driveRobotOriented = driveAngularVelocity.copy().robotRelative(true)
                                                              .allianceRelativeControl(false);
-  SwerveInputStream driveRobotOriented_slow = driveAngularVelocity.copy().robotRelative(true)
+  SwerveInputStream driveRobotOriented_slow = driveAngularVelocity_slow.copy().robotRelative(true)
                                                              .allianceRelativeControl(false);
 
   SwerveInputStream driveAngularVelocityKeyboard = SwerveInputStream.of(drivebase.getSwerveDrive(),
@@ -156,6 +160,7 @@ public class RobotContainer
   private void configureBindings()
   {
     Command driveFieldOrientedDirectAngle      = drivebase.driveFieldOriented(driveDirectAngle);
+    Command driveFieldOrientedDirectAngle_slow      = drivebase.driveFieldOriented(driveDirectAngle_slow);
     Command driveFieldOrientedAnglularVelocity = drivebase.driveFieldOriented(driveAngularVelocity);
     Command driveFieldOrientedAnglularVelocity_slow = drivebase.driveFieldOriented(driveAngularVelocity_slow);
     Command driveRobotOrientedAngularVelocity  = drivebase.driveFieldOriented(driveRobotOriented);
@@ -212,7 +217,7 @@ public class RobotContainer
     } else
     {
       driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
-      driverXbox.leftTrigger().whileTrue((driveFieldOrientedAnglularVelocity_slow));
+      driverXbox.leftTrigger().whileTrue((driveFieldOrientedDirectAngle_slow));
       driverXbox.start().whileTrue(new RunCommand(() -> increaseOffset()));
       driverXbox.back().whileTrue(new RunCommand(() -> decreaseOffset()));
       driverXbox.rightTrigger().whileTrue(ClimbCommands.retractClimber(climber));
