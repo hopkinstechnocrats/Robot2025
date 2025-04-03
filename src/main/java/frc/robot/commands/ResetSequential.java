@@ -9,14 +9,17 @@ import frc.robot.commands.endeffector.EndEffectorSetpoint;
 
 public class ResetSequential extends SequentialCommandGroup {
   
-  public ResetSequential (ElevatorSubsystem elevator, EndEffectorSubsystem endeffector) {
+  public ResetSequential (ElevatorSubsystem elevator, EndEffectorSubsystem endeffector, double setpoint) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-
-      addCommands(
-      new ElevatorSetpoint(elevator, elevator.getSetpoint() * 0.7, elevatorConstants.motorPowerResetLimit)
-      .andThen(new ElevatorSetpoint(elevator, elevatorConstants.startHeight, elevatorConstants.motorPowerResetLimit))
-      .alongWith(new EndEffectorSetpoint(endeffector, true, true, true))
+    final double drop_dist = 10; // Inches to drop in order to score
+    final double final_dist = 18; // Inches to drop after scoring
+    addCommands(
+      new ElevatorSetpoint(elevator, (setpoint - drop_dist), elevatorConstants.motorPowerResetLimit)
+      .andThen(new ElevatorSetpoint(elevator, (setpoint - final_dist), elevatorConstants.motorPowerResetLimit)
+      .alongWith(new EndEffectorSetpoint(endeffector, false, true)))
+      /*.andThen(new ElevatorSetpoint(elevator, elevatorConstants.startHeight, elevatorConstants.motorPowerResetLimit)
+      .alongWith(new EndEffectorSetpoint(endeffector, false, true)))*/
     );
   }
 }

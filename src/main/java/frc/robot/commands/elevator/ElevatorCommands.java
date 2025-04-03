@@ -32,15 +32,15 @@ public class ElevatorCommands extends Command{
     public static Command setpointMove(ElevatorSubsystem elevator){
         return Commands.run(
           () ->   {
-              elevator.moveToSetpoint(elevatorConstants.motorPowerLimit);
+              elevator.moveToSetpoint();
           },
             elevator);
     }
 
-    public static Command setSetpoint(ElevatorSubsystem elevator, Double setpoint){
+    public static Command setSetpoint(ElevatorSubsystem elevator, Double setpoint, double speed){
       return Commands.runOnce(
         () ->   {
-            elevator.changeSetpoint(setpoint);
+            elevator.changeSetpoint(setpoint, speed);
         },
          elevator);
     }

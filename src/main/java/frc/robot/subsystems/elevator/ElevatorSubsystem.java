@@ -23,6 +23,7 @@ public class ElevatorSubsystem extends SubsystemBase{
     private Double m_offset = 0.0; //Also rotations
     private Double m_measurement = 0.0; // rotations
     private Long m_counter = 0L;
+    private double m_speed = elevatorConstants.motorPowerLimit;
     private final PIDController pidController;
     final ElevatorFeedforward ff = new ElevatorFeedforward(Constants.elevatorConstants.kS,
         Constants.elevatorConstants.kG,
@@ -75,15 +76,20 @@ public class ElevatorSubsystem extends SubsystemBase{
      
     }
 
-     public void moveToSetpoint(double speed){
+    @Override
+    public void periodic() {
+        moveToSetpoint();
+    }
+
+     public void moveToSetpoint(){
         pidController.setSetpoint(m_setpoint);
         m_measurement = rightMotor.getPosition().getValueAsDouble() - m_offset;
         double command = MathUtil.clamp(
          /*  -ff.calculate(m_setpoint, 1) +*/ /*negative is up, positive is down */ 
-         pidController.calculate(m_measurement), -speed, speed);  
+          pidController.calculate(m_measurement) - 0.033, -m_speed, m_speed);  
         if(m_measurement > -elevatorConstants.minMotorHeight)
         {
-          command = MathUtil.clamp(command, -speed, 0.0);
+          command = MathUtil.clamp(command, -m_speed, 0.0);
         }
          m_counter++;
         rightMotor.set(command);
@@ -94,25 +100,27 @@ public class ElevatorSubsystem extends SubsystemBase{
         nt_object_a.setInteger(m_counter);
     }
 
-    public void changeSetpoint(double setpoint){
+    public void changeSetpoint(double setpoint, double speed){
       
       m_setpoint = -setpoint * elevatorConstants.rotationsPerInch; //setpoint is in rotations
+      m_speed = speed;
       nt_changed.setDouble(m_setpoint);
       nt_object_b.setInteger(m_counter);
     
-      System.out.println("EL -- Change setpoint to " + m_setpoint);
+      // System.out.println("EL -- Change setpoint to " + m_setpoint);
       
     }
 
     public boolean atSetpoint(){
-      System.out.println("Setpoint = " + m_setpoint + "  Actual = " + m_measurement);
+      //System.out.println("Setpoint = " + m_setpoint + "  Actual = " + m_measurement);
       //return pidController.atSetpoint();
-      return (Math.abs(m_measurement - m_setpoint) < 0.5);
+      return (Math.abs(m_measurement - m_setpoint) < 1);
     }
 
     public double getSetpoint(){
       //return pidController.atSetpoint();
-      return (m_measurement);
+      System.out.println("setpoint in function: " + m_setpoint);
+      return (m_setpoint);
     }
 
         
