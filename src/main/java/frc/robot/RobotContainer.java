@@ -229,6 +229,9 @@ public class RobotContainer
     operatorController.povDown().onTrue(new ElevatorSetpoint(elevator, 0.5, elevatorConstants.motorPowerResetLimit));
 
     // Elevator button commands
+    // A - RESET
+    // B - L2
+    // (L2 + out), (L3 + out), (L2 + in), (L0 + in)
     operatorController.a().onTrue(new ResetSequential(elevator, endEffector));
     operatorController.b().onTrue(new ScoreSequential(elevator, endEffector, elevatorConstants.L2Height, false));
     operatorController.x().onTrue(new ScoreSequential(elevator, endEffector, elevatorConstants.L3Height, false));
