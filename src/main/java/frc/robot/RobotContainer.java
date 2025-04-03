@@ -84,7 +84,7 @@ public class RobotContainer
                                                             .withControllerRotationAxis(driverXbox::getRightX)
                                                             .deadband(OperatorConstants.DEADBAND)
                                                             .scaleTranslation(0.8)
-                                                            .allianceRelativeControl(false);
+                                                            .allianceRelativeControl(true);
 
   SwerveInputStream driveAngularVelocity_slow = SwerveInputStream.of(drivebase.getSwerveDrive(),
                                                             () -> driverXbox.getLeftY() * -1 * 0.5 ,
@@ -92,7 +92,7 @@ public class RobotContainer
                                                         .withControllerRotationAxis(driverXbox::getRightX)
                                                         .deadband(OperatorConstants.DEADBAND)
                                                         .scaleTranslation(0.8)
-                                                        .allianceRelativeControl(false);
+                                                        .allianceRelativeControl(true);
                                                       
   /**
    * Clone's the angular velocity input stream and converts it to a fieldRelative input stream.
@@ -218,7 +218,8 @@ public class RobotContainer
       driverXbox.rightTrigger().whileTrue(ClimbCommands.retractClimber(climber));
       driverXbox.rightBumper().whileTrue(ClimbCommands.spinVictor(climber));
       driverXbox.povUp().onTrue(new RunCommand(() -> resetOffset()));
-    }
+      driverXbox.leftBumper().whileTrue((driveFieldOrientedAnglularVelocity));
+      }
 
     // Temporary left/right toggle
 
