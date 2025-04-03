@@ -12,8 +12,9 @@ public class ScoreSequential extends SequentialCommandGroup {
   public ScoreSequential(ElevatorSubsystem elevator, EndEffectorSubsystem endeffector, double setpoint, boolean level) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-      addCommands(
-      new ElevatorSetpoint(elevator, setpoint - 20, elevatorConstants.motorPowerLimit)
+    final double score_offset = 20;
+    addCommands(
+      new ElevatorSetpoint(elevator, (setpoint - score_offset), elevatorConstants.motorPowerLimit)
       .andThen(new ElevatorSetpoint(elevator, setpoint, elevatorConstants.motorPowerLimit)
       .alongWith(new EndEffectorSetpoint(endeffector, level, false)))
     );

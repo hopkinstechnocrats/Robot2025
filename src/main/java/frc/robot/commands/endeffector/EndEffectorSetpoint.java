@@ -28,7 +28,6 @@ public class EndEffectorSetpoint extends Command {
   public void execute() {
 
     m_endeffector.changeSetpoint(m_setpoint);
-    m_endeffector.moveToSetpoint();
 
   }
 

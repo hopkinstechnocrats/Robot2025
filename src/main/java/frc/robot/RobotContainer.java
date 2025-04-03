@@ -174,8 +174,6 @@ public class RobotContainer
 
       climber.setDefaultCommand(ClimbCommands.brake(climber));
       drivebase.setDefaultCommand(driveFieldOrientedDirectAngle);
-      elevator.setDefaultCommand(ElevatorCommands.setpointMove(elevator));
-      endEffector.setDefaultCommand(EndEffectorCommands.moveToSetpointCommand(endEffector));
     }
 
     if (Robot.isSimulation())
@@ -225,14 +223,18 @@ public class RobotContainer
     // Temporary left/right toggle
 
     // Reset commands
-    operatorController.povUp().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.Stowage));
-    operatorController.povDown().onTrue(new ElevatorSetpoint(elevator, 0.5, elevatorConstants.motorPowerResetLimit));
+    operatorController.povDown().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.Stowage));
+    operatorController.a().onTrue(new ElevatorSetpoint(elevator, 0.5, elevatorConstants.motorPowerResetLimit));
 
-    // Elevator button commands
-    operatorController.a().onTrue(new ResetSequential(elevator, endEffector));
+    // Elevator up commands
     operatorController.b().onTrue(new ScoreSequential(elevator, endEffector, elevatorConstants.L2Height, false));
     operatorController.x().onTrue(new ScoreSequential(elevator, endEffector, elevatorConstants.L3Height, false));
     operatorController.y().onTrue(new ScoreSequential(elevator, endEffector, elevatorConstants.L4Height, true));
+
+    // Elevator down commands
+    operatorController.povRight().onTrue(new ResetSequential(elevator, endEffector, elevatorConstants.L2Height));
+    operatorController.povLeft().onTrue(new ResetSequential(elevator, endEffector, elevatorConstants.L3Height));
+    operatorController.povUp().onTrue(new ResetSequential(elevator, endEffector, elevatorConstants.L4Height));
 
     // End effector commands
 }

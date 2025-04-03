@@ -27,8 +27,7 @@ public class ElevatorSetpoint extends Command {
   @Override
   public void execute() {
 
-    m_elevator.changeSetpoint(m_setpoint);
-    m_elevator.moveToSetpoint(m_speed);
+    m_elevator.changeSetpoint(m_setpoint, m_speed);
 
   }
 
