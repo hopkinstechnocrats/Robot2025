@@ -76,7 +76,7 @@ public final class Constants
     public static final double kI = 0.025 * 8;
     public static final double kD = 0;
     public static final double minMotorHeight = 0.5; //rotations below which we stop down power (actually positive)
-    public static final double motorPowerLimit = .2; //percent of max 1 (DO NOT SET TO NEAR 1)
+    public static final double motorPowerLimit = .3; //percent of max 1 (DO NOT SET TO NEAR 1)
     public static final double motorPowerResetLimit = .1; //percent of power used when elevator is going down
     public static final double inchesPerRevolution = 1.751 * Math.PI;
     public static final double rotationsPerRevolution = 12/*gear ratio*/;
