@@ -746,19 +746,21 @@ public class SwerveSubsystem extends SubsystemBase
         LimelightHelpers.SetRobotOrientation("limelight", swerveDrive.getYaw().getDegrees(),0, 0, 0, 0, 0);
         LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
 
+        if(mt2 != null){
         // if our angular velocity is greater than 360 degrees per second, ignore vision updates
-        if(Math.abs(swerveDrive.getGyro().getYawAngularVelocity().in(DegreesPerSecond)) > 360)
-        {
-            doRejectUpdate = true;
-        }
-        if(mt2.tagCount == 0)
-        {
-            doRejectUpdate = true;
-        }
-        if(!doRejectUpdate)
-        {
-            swerveDrive.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,999999));
-            swerveDrive.addVisionMeasurement(mt2.pose, mt2.timestampSeconds);
+            if(Math.abs(swerveDrive.getGyro().getYawAngularVelocity().in(DegreesPerSecond)) > 360)
+            {
+                doRejectUpdate = true;
+            }
+            if(mt2.tagCount == 0 || mt2 == null)
+            {
+                doRejectUpdate = true;
+            }
+            if(!doRejectUpdate)
+            {
+                swerveDrive.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,999999));
+                swerveDrive.addVisionMeasurement(mt2.pose, mt2.timestampSeconds);
+            }
         }
     }
 
