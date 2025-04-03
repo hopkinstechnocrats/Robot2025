@@ -15,7 +15,6 @@ public class Climber extends SubsystemBase{
     public Climber(){
         climbMotor = new TalonFX(14);
         climbMotor.setNeutralMode(NeutralModeValue.Brake);
-        climbMotor.setVoltage(4);
     }
 
     public void extend(){

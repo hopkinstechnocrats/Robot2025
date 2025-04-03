@@ -148,6 +148,9 @@ public class RobotContainer
 
     SmartDashboard.putData("Auto Chooser", m_chooser);
 
+    NamedCommands.registerCommand("Brake Climber", ClimbCommands.brake(climber));
+    NamedCommands.registerCommand("Brake Elevator", ElevatorCommands.brake(elevator));
+
   }
 
   /**
