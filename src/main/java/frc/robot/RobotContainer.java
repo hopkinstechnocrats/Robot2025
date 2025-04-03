@@ -73,7 +73,7 @@ public class RobotContainer
   final Command m_pushLeftAuto = autos.pushLeftAuto(drivebase);
 
 
-  private final SendableChooser<Command> m_chooser = new SendableChooser<>();
+  private SendableChooser<Command> m_chooser = new SendableChooser<>();
   private Boolean robot_score_left = true;
 
   /**
