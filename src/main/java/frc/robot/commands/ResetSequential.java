@@ -15,8 +15,8 @@ public class ResetSequential extends SequentialCommandGroup {
     double setpoint = elevator.getSetpoint();
 
       addCommands(
-      new ElevatorSetpoint(elevator, elevatorConstants.L3Height, elevatorConstants.motorPowerResetLimit)
-      .andThen(new ElevatorSetpoint(elevator, elevatorConstants.L2Height, elevatorConstants.motorPowerResetLimit)
+      new ElevatorSetpoint(elevator, (setpoint - 10), elevatorConstants.motorPowerResetLimit)
+      .andThen(new ElevatorSetpoint(elevator, (setpoint - 18), elevatorConstants.motorPowerResetLimit)
       .alongWith(new EndEffectorSetpoint(endeffector, false, true)))
       .andThen(new ElevatorSetpoint(elevator, elevatorConstants.startHeight, elevatorConstants.motorPowerResetLimit)
       .alongWith(new EndEffectorSetpoint(endeffector, false, true)))
