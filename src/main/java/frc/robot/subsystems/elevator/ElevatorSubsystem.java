@@ -54,10 +54,6 @@ public class ElevatorSubsystem extends SubsystemBase{
 
         rightMotor = new TalonFX(11);
         leftMotor = new TalonFX(12);
-
-        rightMotor.setVoltage(4);
-        leftMotor.setVoltage(4);
-
         //rightMotor.setPosition(0.0);
         //leftMotor.setPosition(0.0);
 

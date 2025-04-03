@@ -58,7 +58,6 @@ public class EndEffectorSubsystem extends SubsystemBase{
         nt_PID = table.getEntry("PID command [-1 to 1]");
 
         motor = new TalonFX(endEffectorConstants.eeCANID);
-        motor.setVoltage(4);
 
         throughbore = new CANcoder(21);
 

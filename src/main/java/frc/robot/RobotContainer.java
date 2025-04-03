@@ -147,7 +147,6 @@ public class RobotContainer
     m_chooser = AutoBuilder.buildAutoChooser();
 
     SmartDashboard.putData("Auto Chooser", m_chooser);
-
   }
 
   /**
