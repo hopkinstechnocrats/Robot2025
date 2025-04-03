@@ -5,18 +5,6 @@
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "Brake Elevator"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Brake Climber"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "Center"
