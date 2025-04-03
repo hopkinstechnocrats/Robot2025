@@ -13,10 +13,12 @@ public class ResetSequential extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     double setpoint = elevator.getSetpoint();
+    final double drop_dist = 10; // Inches to drop in order to score
+    final double final_dist = 18; // Inches to drop after scoring
 
       addCommands(
-      new ElevatorSetpoint(elevator, (setpoint - 10), elevatorConstants.motorPowerResetLimit)
-      .andThen(new ElevatorSetpoint(elevator, (setpoint - 18), elevatorConstants.motorPowerResetLimit)
+      new ElevatorSetpoint(elevator, (setpoint - drop_dist), elevatorConstants.motorPowerResetLimit)
+      .andThen(new ElevatorSetpoint(elevator, (setpoint - final_dist), elevatorConstants.motorPowerResetLimit)
       .alongWith(new EndEffectorSetpoint(endeffector, false, true)))
       .andThen(new ElevatorSetpoint(elevator, elevatorConstants.startHeight, elevatorConstants.motorPowerResetLimit)
       .alongWith(new EndEffectorSetpoint(endeffector, false, true)))
