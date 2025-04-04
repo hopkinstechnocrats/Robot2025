@@ -66,7 +66,7 @@ public class EndEffectorSubsystem extends SubsystemBase{
         pidController = new PIDController(Constants.endEffectorConstants.kP,
             Constants.endEffectorConstants.kI, Constants.endEffectorConstants.kD);
         pidController.setTolerance(0.1);
-
+        pidController.setIntegratorRange(-endEffectorConstants.motorPowerLimit/4, endEffectorConstants.motorPowerLimit/4);
 //        feedforwards = new ArmFeedforward(0.05, 0.19, 1.26); 
     }
 
@@ -113,7 +113,6 @@ public class EndEffectorSubsystem extends SubsystemBase{
     }
 
     public boolean atSetpoint(){
-        System.out.println("Setpoint = " + m_setpoint + "  Actual = " + m_measurement);
         //return pidController.atSetpoint();
         return (Math.abs(m_measurement - m_setpoint) < 0.05);
     }

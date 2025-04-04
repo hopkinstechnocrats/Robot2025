@@ -115,7 +115,6 @@ public class ElevatorSubsystem extends SubsystemBase{
 
     public double getSetpoint(){
       //return pidController.atSetpoint();
-      System.out.println("setpoint in function: " + m_setpoint);
       return (m_setpoint);
     }
 

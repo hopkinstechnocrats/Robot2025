@@ -58,7 +58,7 @@ public final class Constants
 
   public static class endEffectorConstants{
     public static final double kP = 0.2*8;
-    public static final double kI = 0.025 / 2;
+    public static final double kI = 2.5;
     public static final double kD = 0;
     public static final double motorPowerLimit = .1; //percent of max 1 (DO NOT SET TO NEAR 1)
     public static final double rotationsPerRevolution = 16*2*2 /*gear ratio, 16:1 gear box and 2 2:1 belts*/;
