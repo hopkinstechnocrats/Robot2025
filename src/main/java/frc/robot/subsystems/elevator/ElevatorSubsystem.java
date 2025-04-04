@@ -66,6 +66,7 @@ public class ElevatorSubsystem extends SubsystemBase{
         pidController = new PIDController(Constants.elevatorConstants.kP,
             Constants.elevatorConstants.kI, Constants.elevatorConstants.kD);
         pidController.setTolerance(0.5);
+        pidController.setIntegratorRange(-Constants.elevatorConstants.motorPowerLimit/2, Constants.elevatorConstants.motorPowerLimit/2);
 
         //rightMotor.setPosition(0.0,0.5);
         //leftMotor.setPosition(0.0,0.5);
@@ -82,7 +83,7 @@ public class ElevatorSubsystem extends SubsystemBase{
         m_measurement = rightMotor.getPosition().getValueAsDouble() - m_offset;
         double command = MathUtil.clamp(
          /*  -ff.calculate(m_setpoint, 1) +*/ /*negative is up, positive is down */ 
-          pidController.calculate(m_measurement) - 0.033, -m_speed, m_speed);  
+          pidController.calculate(m_measurement), -m_speed, m_speed)-0.04;  
         if(m_measurement > -elevatorConstants.minMotorHeight)
         {
           command = MathUtil.clamp(command, -m_speed, 0.0);
