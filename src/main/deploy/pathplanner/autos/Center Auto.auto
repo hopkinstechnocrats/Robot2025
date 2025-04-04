@@ -9,6 +9,18 @@
           "data": {
             "pathName": "Center"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L4 Pre-Score"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L4 Score"
+          }
         }
       ]
     }
