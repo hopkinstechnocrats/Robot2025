@@ -23,13 +23,19 @@ public class AutoSequential extends Command{
 
     @Override
     public void initialize(){
-        m_endEffectorSubsystem.changeSetpoint(m_EESetpoint);
         m_elevatorSubsystem.changeSetpoint(m_EVSetpoint, Constants.elevatorConstants.motorPowerLimit);
     }
 
     @Override
+    public void execute(){
+        if(m_elevatorSubsystem.atSetpoint()){
+            m_endEffectorSubsystem.changeSetpoint(m_EESetpoint);
+        }
+    }
+
+    @Override
     public boolean isFinished(){
-        if(m_elevatorSubsystem.atSetpoint() && m_endEffectorSubsystem.atSetpoint()){
+        if(m_endEffectorSubsystem.atSetpoint() && m_elevatorSubsystem.atSetpoint()){
             return true;
         }
         else{

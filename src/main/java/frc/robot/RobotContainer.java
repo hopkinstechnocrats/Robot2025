@@ -38,6 +38,7 @@ import frc.robot.Constants.endEffectorConstants;
 import frc.robot.commands.endeffector.EndEffectorCommands;
 import frc.robot.commands.endeffector.EndEffectorSetpoint;
 import frc.robot.subsystems.Climber;
+import frc.robot.commands.AutoSequential;
 import frc.robot.commands.ClimbCommands;
 import frc.robot.commands.ResetSequential;
 import frc.robot.commands.ScoreSequential;
@@ -147,6 +148,15 @@ public class RobotContainer
     m_chooser = AutoBuilder.buildAutoChooser();
 
     SmartDashboard.putData("Auto Chooser", m_chooser);
+
+
+    NamedCommands.registerCommand("L4 Pre-Score", 
+        new ScoreSequential(elevator, endEffector, Constants.elevatorConstants.L4Height, true));
+
+    NamedCommands.registerCommand("L4 Score", 
+            new ResetSequential(elevator, endEffector, Constants.elevatorConstants.L4Height));
+
+
   }
 
   /**
