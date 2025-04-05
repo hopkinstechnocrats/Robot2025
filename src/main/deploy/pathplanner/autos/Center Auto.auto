@@ -11,15 +11,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "sequential",
           "data": {
-            "name": "L4 Pre-Score"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "L4 Score"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "L4 Pre-Score"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "L4 Score"
+                }
+              }
+            ]
           }
         }
       ]

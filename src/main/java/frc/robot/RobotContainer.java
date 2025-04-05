@@ -112,10 +112,10 @@ public class RobotContainer
   /**
    * Clone's the angular velocity input stream and converts it to a robotRelative input stream.
    */
-  SwerveInputStream driveRobotOriented = driveAngularVelocity.copy().robotRelative(true)
-                                                             .allianceRelativeControl(false);
-  SwerveInputStream driveRobotOriented_slow = driveAngularVelocity_slow.copy().robotRelative(true)
-                                                             .allianceRelativeControl(false);
+  SwerveInputStream driveRobotOriented = driveAngularVelocity.copy().robotRelative(false)
+                                                             .allianceRelativeControl(true);
+  SwerveInputStream driveRobotOriented_slow = driveAngularVelocity_slow.copy().robotRelative(false)
+                                                             .allianceRelativeControl(true);
 
   SwerveInputStream driveAngularVelocityKeyboard = SwerveInputStream.of(drivebase.getSwerveDrive(),
                                                                         () -> -driverXbox.getLeftY(),
@@ -154,7 +154,7 @@ public class RobotContainer
         new ScoreSequential(elevator, endEffector, Constants.elevatorConstants.L4Height, true));
 
     NamedCommands.registerCommand("L4 Score", 
-            new ResetSequential(elevator, endEffector, Constants.elevatorConstants.L4Height));
+            new ResetSequential(elevator, endEffector, Constants.elevatorConstants.L4Height, 15, 25));
 
 
   }
@@ -247,9 +247,9 @@ public class RobotContainer
     operatorController.y().onTrue(new ScoreSequential(elevator, endEffector, elevatorConstants.L4Height, true));
 
     // Elevator down commands
-    operatorController.povRight().onTrue(new ResetSequential(elevator, endEffector, elevatorConstants.L2Height));
-    operatorController.povLeft().onTrue(new ResetSequential(elevator, endEffector, elevatorConstants.L3Height));
-    operatorController.povUp().onTrue(new ResetSequential(elevator, endEffector, elevatorConstants.L4Height));
+    operatorController.povRight().onTrue(new ResetSequential(elevator, endEffector, elevatorConstants.L2Height, 10, 18));
+    operatorController.povLeft().onTrue(new ResetSequential(elevator, endEffector, elevatorConstants.L3Height, 12, 20));
+    operatorController.povUp().onTrue(new ResetSequential(elevator, endEffector, elevatorConstants.L4Height, 15, 25));
 
     // End effector commands
 }

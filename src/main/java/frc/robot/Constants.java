@@ -26,7 +26,7 @@ public final class Constants
   public static final double ROBOT_MASS = (148 - 20.3) * 0.453592; // 32lbs * kg per pound
   public static final Matter CHASSIS    = new Matter(new Translation3d(0, 0, Units.inchesToMeters(8)), ROBOT_MASS);
   public static final double LOOP_TIME  = 0.13; //s, 20ms + 110ms sprk max velocity lag
-  public static final double MAX_SPEED  = Units.feetToMeters(8);
+  public static final double MAX_SPEED  = Units.feetToMeters(8) * 1.5;
 
   //TODO: put actual servo id here
   public static final int servoID = 2;
@@ -72,7 +72,7 @@ public final class Constants
     public static final double kEEAbsEncoderOffset = -0.07;
   }
   public final class elevatorConstants{
-    public static final double kP = 0.4;
+    public static final double kP = 0.32;
     public static final double kI = 0.025 * 8;
     public static final double kD = 0;
     public static final double minMotorHeight = 0.5; //rotations below which we stop down power (actually positive)
