@@ -13,7 +13,7 @@ public class ScoreSequential extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     final double score_offset = 20;
-    System.out.println("called");
+    // System.out.println("called");
     addCommands(
       new ElevatorSetpoint(elevator, (setpoint - score_offset), elevatorConstants.motorPowerLimit)
       .andThen(new ElevatorSetpoint(elevator, setpoint, elevatorConstants.motorPowerLimit)
