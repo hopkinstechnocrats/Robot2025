@@ -63,6 +63,7 @@ public class RobotContainer
   // Replace with CommandPS4Controller or CommandJoystick if needed
   final CommandXboxController driverXbox = new CommandXboxController(0);
   final CommandXboxController operatorController = new CommandXboxController(1);
+  final CommandXboxController LEDtestController = new CommandXboxController(2);
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve"));
@@ -240,8 +241,8 @@ public class RobotContainer
     operatorController.povRight().onTrue(new ResetSequential(elevator, endEffector, elevatorConstants.L2Height));
     operatorController.povLeft().onTrue(new ResetSequential(elevator, endEffector, elevatorConstants.L3Height));
     operatorController.povUp().onTrue(new ResetSequential(elevator, endEffector, elevatorConstants.L4Height));
-
-    // End effector commands
+    // LED controls
+    //LEDtestController.rightBumper().onTrue();
 }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
