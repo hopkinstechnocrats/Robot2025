@@ -46,6 +46,7 @@ import frc.robot.commands.elevator.ElevatorSetpoint;
 import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
 import java.io.File;
 import swervelib.SwerveInputStream;
 import frc.robot.autos.Autos;
@@ -242,7 +243,7 @@ public class RobotContainer
     operatorController.povLeft().onTrue(new ResetSequential(elevator, endEffector, elevatorConstants.L3Height));
     operatorController.povUp().onTrue(new ResetSequential(elevator, endEffector, elevatorConstants.L4Height));
     // LED controls
-    //LEDtestController.rightBumper().onTrue();
+    LEDtestController.rightBumper().onTrue(LEDSubsystem.setLEDs(0, 255, 0, 0, LEDSubsystem.LEDOffset, 20));
 }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
