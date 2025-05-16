@@ -7,12 +7,16 @@ import com.ctre.phoenix.led.CANdle.VBatOutputMode;
 import com.ctre.phoenix.led.CANdleConfiguration;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 
 public class LEDSubsystem{ 
     public static int LEDOffset = 8;
-
+    Subsystem lEDSubsystem = new Subsystem() {
+        
+    };
     private CANdle candle;
-} // I have no idea why this bracket is broken
+ // I have no idea why this bracket is broken
 
 public LEDSubsystem() {
     System.out.println("Initializing CANdle");
@@ -28,11 +32,7 @@ public LEDSubsystem() {
     candle.configAllSettings(configAll, 100);
 } // This one is too
 
-public static Command setLEDs(int r,
- int g,
- int b,
- int w,
- int startIdx,
- int count) {
-
- } // Seriously why?
+public static void setLEDs() {
+    
+}
+}
