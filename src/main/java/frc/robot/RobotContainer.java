@@ -232,14 +232,22 @@ public class RobotContainer
     operatorController.a().onTrue(new ElevatorSetpoint(elevator, 0.5, elevatorConstants.motorPowerResetLimit));
 
     // Elevator up commands
-    operatorController.b().onTrue(new ScoreSequential(elevator, endEffector, elevatorConstants.L2Height, false));
-    operatorController.x().onTrue(new ScoreSequential(elevator, endEffector, elevatorConstants.L3Height, false));
-    operatorController.y().onTrue(new ScoreSequential(elevator, endEffector, elevatorConstants.L4Height, true));
+    //operatorController.b().onTrue(new ScoreSequential(elevator, endEffector, elevatorConstants.L2Height, false));
+    //operatorController.x().onTrue(new ScoreSequential(elevator, endEffector, elevatorConstants.L3Height, false));
+    //operatorController.y().onTrue(new ScoreSequential(elevator, endEffector, elevatorConstants.L4Height, true));
+
+    operatorController.leftBumper().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.LeftScore));
+    operatorController.rightBumper().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.RightScore));
 
     // Elevator down commands
-    operatorController.povRight().onTrue(new ResetSequential(elevator, endEffector, elevatorConstants.L2Height));
-    operatorController.povLeft().onTrue(new ResetSequential(elevator, endEffector, elevatorConstants.L3Height));
-    operatorController.povUp().onTrue(new ResetSequential(elevator, endEffector, elevatorConstants.L4Height));
+    //operatorController.povRight().onTrue(new ResetSequential(elevator, endEffector, elevatorConstants.L2Height));
+    //operatorController.povLeft().onTrue(new ResetSequential(elevator, endEffector, elevatorConstants.L3Height));
+    //operatorController.povUp().onTrue(new ResetSequential(elevator, endEffector, elevatorConstants.L4Height));
+    operatorController.povRight().onTrue(ElevatorCommands.setSetpoint(elevator, Constants.elevatorConstants.L2Height, Constants.elevatorConstants.motorPowerLimit));
+    operatorController.povLeft().onTrue(ElevatorCommands.setSetpoint(elevator, Constants.elevatorConstants.L3Height, Constants.elevatorConstants.motorPowerLimit));
+    operatorController.povUp().onTrue(ElevatorCommands.setSetpoint(elevator, Constants.elevatorConstants.L4Height, Constants.elevatorConstants.motorPowerLimit));
+
+
 
     // End effector commands
 }
