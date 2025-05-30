@@ -228,8 +228,10 @@ public class RobotContainer
     // Temporary left/right toggle
 
     // Reset commands
-    operatorController.povDown().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.Stowage));
+    operatorController.povDown().onTrue(ElevatorCommands.setSetpoint(elevator, Constants.elevatorConstants.startHeight, Constants.elevatorConstants.motorPowerLimit));
     operatorController.a().onTrue(new ElevatorSetpoint(elevator, 0.5, elevatorConstants.motorPowerResetLimit));
+    operatorController.a().onTrue(new EndEffectorSetpoint(endEffector, false, true));
+
 
     // Elevator up commands
     //operatorController.b().onTrue(new ScoreSequential(elevator, endEffector, elevatorConstants.L2Height, false));
