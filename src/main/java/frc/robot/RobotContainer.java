@@ -39,6 +39,7 @@ import frc.robot.commands.endeffector.EndEffectorCommands;
 import frc.robot.commands.endeffector.EndEffectorSetpoint;
 import frc.robot.subsystems.Climber;
 import frc.robot.commands.ClimbCommands;
+import frc.robot.commands.LEDCommands;
 import frc.robot.commands.ResetSequential;
 import frc.robot.commands.ScoreSequential;
 import frc.robot.commands.elevator.ElevatorCommands;
@@ -71,6 +72,7 @@ public class RobotContainer
   private final EndEffectorSubsystem endEffector = new EndEffectorSubsystem();
   private final ElevatorSubsystem elevator = new ElevatorSubsystem();
   private final Climber climber = new Climber();
+  private final LEDSubsystem leds = new LEDSubsystem();
 
   final Command m_forwardAuto = autos.forwardAuto(drivebase);
   final Command m_pushLeftAuto = autos.pushLeftAuto(drivebase);
@@ -243,7 +245,7 @@ public class RobotContainer
     operatorController.povLeft().onTrue(new ResetSequential(elevator, endEffector, elevatorConstants.L3Height));
     operatorController.povUp().onTrue(new ResetSequential(elevator, endEffector, elevatorConstants.L4Height));
     // LED controls
-    LEDtestController.rightBumper().onTrue(LEDSubsystem.setLEDs(0, 255, 0, 0, LEDSubsystem.LEDOffset, 20));
+    LEDtestController.x().onTrue(LEDCommands.setLEDs(0, 255, 0, 0, LEDSubsystem.LEDOffset, 20));
 }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
