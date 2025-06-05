@@ -245,7 +245,7 @@ public class RobotContainer
     operatorController.povLeft().onTrue(new ResetSequential(elevator, endEffector, elevatorConstants.L3Height));
     operatorController.povUp().onTrue(new ResetSequential(elevator, endEffector, elevatorConstants.L4Height));
     // LED controls
-    LEDtestController.x().onTrue(LEDCommands.setLEDs(0, 255, 0, 0, LEDSubsystem.LEDOffset, 20));
+    LEDtestController.x().onTrue(LEDCommands.setLEDs(0, 255, 0, 0, LEDSubsystem.LEDOffset, 20, leds));
 }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

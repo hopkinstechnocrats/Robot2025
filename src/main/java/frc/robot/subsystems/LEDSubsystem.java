@@ -13,11 +13,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LEDSubsystem extends SubsystemBase{ 
     public static int LEDOffset = 8;
-    public static Subsystem ledsubsystem = new Subsystem() {
-        
-    };
     public static CANdle candle;
- // I have no idea why this bracket is broken
+ 
 
 public LEDSubsystem() {
     System.out.println("Initializing CANdle");
@@ -33,7 +30,8 @@ public LEDSubsystem() {
     candle.configAllSettings(configAll, 100);
 } 
 
-public static ErrorCode setLEDs(){
+public ErrorCode setLEDs(int r, int g, int b, int w, int startIdx, int count, Subsystem leds){
+    candle.setLEDs(r, g, b, w, startIdx, count);
     return ErrorCode.OK;
 }   
 }

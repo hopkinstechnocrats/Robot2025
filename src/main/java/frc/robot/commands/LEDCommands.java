@@ -14,10 +14,11 @@ public class LEDCommands {
  int b,
  int w,
  int startIdx,
- int count) {
+ int count,
+ LEDSubsystem leds) {
 return Commands.runOnce(() -> {
-             LEDSubsystem.setLEDs();
- }, LEDSubsystem.ledsubsystem);
+             leds.setLEDs(r, g, b, w, startIdx, count, leds);
+ }, leds);
  }
 }
 
