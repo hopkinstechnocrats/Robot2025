@@ -19,14 +19,14 @@ public class LEDSubsystem extends SubsystemBase{
 public LEDSubsystem() {
     System.out.println("Initializing CANdle");
 
-    CANdle candle = new CANdle(20, "rio");
+    candle = new CANdle(20, "rio");
 
      CANdleConfiguration configAll = new CANdleConfiguration();
-    configAll.statusLedOffWhenActive = false;
-    configAll.disableWhenLOS = false;
-    configAll.stripType = LEDStripType.RGB;
-    configAll.brightnessScalar = 0.5;
-    configAll.vBatOutputMode = VBatOutputMode.Modulated;
+    //configAll.statusLedOffWhenActive = false;
+    //configAll.disableWhenLOS = false;
+    configAll.stripType = LEDStripType.RGBW;
+    //configAll.brightnessScalar = 0.5;
+    //configAll.vBatOutputMode = VBatOutputMode.Modulated;
     candle.configAllSettings(configAll, 100);
 } 
 
