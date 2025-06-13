@@ -24,7 +24,7 @@ public LEDSubsystem() {
      CANdleConfiguration configAll = new CANdleConfiguration();
     //configAll.statusLedOffWhenActive = false;
     //configAll.disableWhenLOS = false;
-    configAll.stripType = LEDStripType.RGBW;
+    configAll.stripType = LEDStripType.RGB;
     //configAll.brightnessScalar = 0.5;
     //configAll.vBatOutputMode = VBatOutputMode.Modulated;
     candle.configAllSettings(configAll, 100);
