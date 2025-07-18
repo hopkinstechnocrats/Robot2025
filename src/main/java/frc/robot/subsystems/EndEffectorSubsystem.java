@@ -113,7 +113,7 @@ public class EndEffectorSubsystem extends SubsystemBase{
     }
 
     public boolean atSetpoint(){
-        System.out.println("Setpoint = " + m_setpoint + "  Actual = " + m_measurement);
+        //System.out.println("Setpoint = " + m_setpoint + "  Actual = " + m_measurement);
         //return pidController.atSetpoint();
         return (Math.abs(m_measurement - m_setpoint) < 0.05);
     }
