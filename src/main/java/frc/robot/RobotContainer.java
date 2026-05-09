@@ -41,10 +41,10 @@ import frc.robot.subsystems.Climber;
 import frc.robot.commands.ClimbCommands;
 import frc.robot.commands.ResetSequential;
 import frc.robot.commands.ScoreSequential;
-import frc.robot.commands.elevator.ElevatorCommands;
-import frc.robot.commands.elevator.ElevatorSetpoint;
+//import frc.robot.commands.elevator.ElevatorCommands;
+//import frc.robot.commands.elevator.ElevatorSetpoint;
 import frc.robot.subsystems.EndEffectorSubsystem;
-import frc.robot.subsystems.elevator.ElevatorSubsystem;
+//import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
 import swervelib.SwerveInputStream;
@@ -66,9 +66,9 @@ public class RobotContainer
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve"));
-  private final EndEffectorSubsystem endEffector = new EndEffectorSubsystem();
-  private final ElevatorSubsystem elevator = new ElevatorSubsystem();
-  private final Climber climber = new Climber();
+  //private final EndEffectorSubsystem endEffector = new EndEffectorSubsystem();
+  //private final ElevatorSubsystem elevator = new ElevatorSubsystem();
+  //private final Climber climber = new Climber();
 
   final Command m_forwardAuto = autos.forwardAuto(drivebase);
   final Command m_pushLeftAuto = autos.pushLeftAuto(drivebase);
@@ -176,7 +176,7 @@ public class RobotContainer
     } else
     {
 
-      climber.setDefaultCommand(ClimbCommands.brake(climber));
+      //climber.setDefaultCommand(ClimbCommands.brake(climber));
       drivebase.setDefaultCommand(driveFieldOrientedDirectAngle);
     }
 
@@ -219,8 +219,8 @@ public class RobotContainer
       driverXbox.leftTrigger().whileTrue((driveFieldOrientedDirectAngle_slow));
       driverXbox.start().whileTrue(new RunCommand(() -> increaseOffset()));
       driverXbox.back().whileTrue(new RunCommand(() -> decreaseOffset()));
-      driverXbox.rightTrigger().whileTrue(ClimbCommands.retractClimber(climber));
-      driverXbox.rightBumper().whileTrue(ClimbCommands.spinVictor(climber));
+      //driverXbox.rightTrigger().whileTrue(ClimbCommands.retractClimber(climber));
+      //driverXbox.rightBumper().whileTrue(ClimbCommands.spinVictor(climber));
       driverXbox.povUp().onTrue(new RunCommand(() -> resetOffset()));
       driverXbox.leftBumper().whileTrue((driveFieldOrientedAnglularVelocity));
       }
@@ -228,18 +228,18 @@ public class RobotContainer
     // Temporary left/right toggle
 
     // Reset commands
-    operatorController.povDown().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.Stowage));
-    operatorController.a().onTrue(new ElevatorSetpoint(elevator, 0.5, elevatorConstants.motorPowerResetLimit));
+   // operatorController.povDown().onTrue(EndEffectorCommands.changeSetpointCommand(endEffector, Constants.endEffectorConstants.Stowage));
+    //operatorController.a().onTrue(new ElevatorSetpoint(elevator, 0.5, elevatorConstants.motorPowerResetLimit));
 
     // Elevator up commands
-    operatorController.b().onTrue(new ScoreSequential(elevator, endEffector, elevatorConstants.L2Height, false));
-    operatorController.x().onTrue(new ScoreSequential(elevator, endEffector, elevatorConstants.L3Height, false));
-    operatorController.y().onTrue(new ScoreSequential(elevator, endEffector, elevatorConstants.L4Height, true));
+    //operatorController.b().onTrue(new ScoreSequential(elevator, endEffector, elevatorConstants.L2Height, false));
+    //operatorController.x().onTrue(new ScoreSequential(elevator, endEffector, elevatorConstants.L3Height, false));
+    //operatorController.y().onTrue(new ScoreSequential(elevator, endEffector, elevatorConstants.L4Height, true));
 
     // Elevator down commands
-    operatorController.povRight().onTrue(new ResetSequential(elevator, endEffector, elevatorConstants.L2Height));
-    operatorController.povLeft().onTrue(new ResetSequential(elevator, endEffector, elevatorConstants.L3Height));
-    operatorController.povUp().onTrue(new ResetSequential(elevator, endEffector, elevatorConstants.L4Height));
+   // operatorController.povRight().onTrue(new ResetSequential(elevator, endEffector, elevatorConstants.L2Height));
+    //operatorController.povLeft().onTrue(new ResetSequential(elevator, endEffector, elevatorConstants.L3Height));
+    //operatorController.povUp().onTrue(new ResetSequential(elevator, endEffector, elevatorConstants.L4Height));
 
     // End effector commands
 }

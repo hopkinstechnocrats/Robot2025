@@ -1,4 +1,4 @@
-package frc.robot.subsystems.elevator;
+/*package frc.robot.subsystems.elevator;
 
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -82,7 +82,7 @@ public class ElevatorSubsystem extends SubsystemBase{
         m_measurement = rightMotor.getPosition().getValueAsDouble() - m_offset;
         double command = MathUtil.clamp(
          /*  -ff.calculate(m_setpoint, 1) +*/ /*negative is up, positive is down */ 
-          pidController.calculate(m_measurement) - 0.033, -m_speed, m_speed);  
+      /*     pidController.calculate(m_measurement) - 0.033, -m_speed, m_speed);  
         if(m_measurement > -elevatorConstants.minMotorHeight)
         {
           command = MathUtil.clamp(command, -m_speed, 0.0);
@@ -134,7 +134,7 @@ public class ElevatorSubsystem extends SubsystemBase{
     }
 
     
-    /*//final PositionVoltage m_request = new PositionVoltage(0).withSlot(0);
+    /*//*final PositionVoltage m_request = new PositionVoltage(0).withSlot(0);
   public void bottom(){
     //rightMotor.setControl(m_request.withPosition(1.5));
     moveToSetpoint(0);
@@ -150,5 +150,4 @@ public class ElevatorSubsystem extends SubsystemBase{
   public void level4(){
     //rightMotor.setControl(m_request.withPosition(4.5));
     moveToSetpoint(30); */
-  }
-
+  //}
