@@ -7,12 +7,12 @@
   "drive": {
     "type": "falcon",
     "id": 7,
-    "canbus": "GertrudeGreyser"
+    "canbus": null
   },
   "angle": {
     "type": "falcon",
     "id": 8,
-    "canbus": "GertrudeGreyser"
+    "canbus": null
   },
   "encoder": {
     "type": "thrifty",
